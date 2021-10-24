@@ -1,6 +1,6 @@
 from hexapod.models import VirtualHexapod
-from tests.kinematics_cases import case1, case2
-from tests.helpers import assert_hexapod_points_equal
+from kinematics_cases import case1, case2
+from helpers import assert_hexapod_points_equal
 
 CASES = [case1, case2]
 
@@ -17,3 +17,7 @@ def test_sample_kinematics():
     for case in CASES:
         assert_kinematics(case, True)
         assert_kinematics(case, False)
+
+for case in CASES:
+    assert_kinematics(case, True)
+ 
