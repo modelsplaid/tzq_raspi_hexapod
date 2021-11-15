@@ -112,6 +112,7 @@ class VirtualHexapod:
     )
 
     def __init__(self, dimensions):
+        print("init of virtualhexapd")
         self._store_attributes(dimensions)
         self._init_legs()
         self._init_local_frame()
@@ -206,6 +207,7 @@ class VirtualHexapod:
     def _init_legs(self):
         self.legs = []
         for i in range(VirtualHexapod.LEG_COUNT):
+            print("init leg # "+str(i))
             linkage = Linkage(
                 self.coxia,
                 self.femur,

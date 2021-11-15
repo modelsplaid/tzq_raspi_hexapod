@@ -138,9 +138,16 @@ class Linkage:
 
         frame_02 = np.matmul(frame_01, frame_12)
         frame_03 = np.matmul(frame_02, frame_23)
+        
+        # tzq print new frame
+   
         new_frame = frame_zrotate_xytranslate(
             self.coxia_axis + self.alpha, self.new_origin.x, self.new_origin.y
         )
+        print("frame_01:"+str(frame_01))
+        #print("frame_12:"+str(frame_12))
+        print("self.new_origin.x: "+str( self.new_origin.x))
+        print("self.new_origin.y: "+str( self.new_origin.y))
 
         # find points wrt to body contact point
         p0 = Vector(0, 0, 0)
@@ -154,6 +161,8 @@ class Linkage:
         p1 = p1.get_point_wrt(new_frame, name=self.name + "-coxia")
         p2 = p2.get_point_wrt(new_frame, name=self.name + "-femur")
         p3 = p3.get_point_wrt(new_frame, name=self.name + "-tibia")
+
+        # tzq added : 
 
         self.all_points = [p0, p1, p2, p3]
         self.ground_contact_point = self.compute_ground_contact()

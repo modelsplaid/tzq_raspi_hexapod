@@ -23,12 +23,12 @@ icon_link_style = {"margin": "0 0 0 0.5em"}
 
 div_header = html.Div(
     [
-        html.A(html.H6("👾"), href=URL_REPO, target="_blank", style=icon_link_style),
-        html.A(html.H6("☕"), href=URL_KOFI, target="_blank", style=icon_link_style),
-        dcc.Link(html.H6("●"), href=PATTERNS_PAGE_PATH, style=icon_link_style),
-        dcc.Link(html.H6("●"), href=IK_PAGE_PATH, style=icon_link_style),
-        dcc.Link(html.H6("●"), href=KINEMATICS_PAGE_PATH, style=icon_link_style),
-        dcc.Link(html.H6("●"), href=ROOT_PATH, style=icon_link_style),
+        html.A(html.H6("1. 👾 "), href=URL_REPO, target="_blank", style=icon_link_style),
+        html.A(html.H6("2. ☕ "), href=URL_KOFI, target="_blank", style=icon_link_style),
+        dcc.Link(html.H6("3. ● "), href=PATTERNS_PAGE_PATH, style=icon_link_style),
+        dcc.Link(html.H6("4. ● "), href=IK_PAGE_PATH, style=icon_link_style),
+        dcc.Link(html.H6("5. ● "), href=KINEMATICS_PAGE_PATH, style=icon_link_style),
+        dcc.Link(html.H6("6. ● "), href=ROOT_PATH, style=icon_link_style),
     ],
     style={"display": "flex", "flex-direction": "row"},
 )
@@ -91,5 +91,5 @@ def display_page(pathname):
 # ....................
 if __name__ == "__main__":
     app.run_server(
-        debug=DEBUG_MODE, dev_tools_ui=DEBUG_MODE, dev_tools_props_check=DEBUG_MODE
+        debug=True#debug=DEBUG_MODE, dev_tools_ui=DEBUG_MODE, dev_tools_props_check=DEBUG_MODE
     )
