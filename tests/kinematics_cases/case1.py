@@ -6,6 +6,15 @@ description = "Kinematics Random Pose #1"
 # Dimensions
 # ********************************
 
+tzq_given_dimensions = {
+    "front": 59,
+    "side": 119,
+    "middle": 183,
+    "coxia": 45,
+    "femur": 75,
+    "tibia": 140,
+}
+
 given_dimensions = {
     "front": 75,
     "side": 100,
