@@ -77,6 +77,13 @@
 #               |      *----------------
 #
 
+
+
+# Joint direction definition: 
+# For joint beta and gamma: positive: move up. negative: move dowm
+# For right side alpha: positive: move forward. negative: move backward.
+# For left side alpha : positive: move backward. negative: move forward.
+
 class VirtualToReal:
     
     #Number of pulses needed to rotate one degree 
@@ -85,8 +92,20 @@ class VirtualToReal:
     #Number of degrees needed to rotate one pulse
     degs_per_pulse = 1.0/pulses_per_deg
     
-    # Pulses for each servo when alpha beta and gamma all equal to one
+    # Pulses for each servo when alpha beta and gamma all equal to zero
     nutural_poses_pulse = {
+    0: {"coxia": 493, "femur": 500, "tibia": 690, "name": "right-middle", "id": 0},
+    1: {"coxia": 317, "femur": 460, "tibia": 685, "name": "right-front", "id": 1},
+    2: {"coxia": 704, "femur": 500, "tibia": 319, "name": "left-front", "id": 2},
+    3: {"coxia": 493, "femur": 500, "tibia": 288, "name": "left-middle", "id": 3},
+    4: {"coxia": 310, "femur": 500, "tibia": 322, "name": "left-back", "id": 4},
+    5: {"coxia": 690, "femur": 520, "tibia": 708, "name": "right-back", "id": 5},
+    }
+
+    # If servo rotation direction same as model joint angle, set 1
+    # if opposite set -1.   
+
+    direction_poses_pulse = {
     0: {"coxia": -40, "femur": 19, "tibia": 6, "name": "right-middle", "id": 0},
     1: {"coxia": 33, "femur": 85, "tibia": -60, "name": "right-front", "id": 1},
     2: {"coxia": -20, "femur": 90, "tibia": -13, "name": "left-front", "id": 2},
@@ -95,4 +114,15 @@ class VirtualToReal:
     5: {"coxia": -5, "femur": 17, "tibia": 2, "name": "right-back", "id": 5},
     }
 
+    # joint of our hexa model has different  ids with the real-world servo 
+    # each entry stands for corresponding servo id
+    id_poses_pulse = {
+    0: {"coxia": 13, "femur": 14, "tibia": 15, "name": "right-middle", "id": 0},
+    1: {"coxia": 16, "femur": 17, "tibia": 18, "name": "right-front", "id": 1},
+    2: {"coxia": 7, "femur": 8, "tibia": 9, "name": "left-front", "id": 2},
+    3: {"coxia": 4, "femur": 5, "tibia": 6, "name": "left-middle", "id": 3},
+    4: {"coxia": 1, "femur": 2, "tibia": 3, "name": "left-back", "id": 4},
+    5: {"coxia": 10, "femur": 11, "tibia": 12, "name": "right-back", "id": 5},
+    }
   
+
