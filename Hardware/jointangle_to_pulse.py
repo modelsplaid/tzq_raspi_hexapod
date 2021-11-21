@@ -106,12 +106,12 @@ class VirtualToReal:
     # if opposite set -1.   
     # todo: here
     direction_poses_pulse = {
-    0: {"coxia": 1, "femur": 1, "tibia": 1, "name": "right-middle", "id": 0},
-    1: {"coxia": 1, "femur": 1, "tibia": 1, "name": "right-front", "id": 1},
-    2: {"coxia": 1, "femur": 1, "tibia": 1, "name": "left-front", "id": 2},
-    3: {"coxia": 1, "femur": 1, "tibia": 1, "name": "left-middle", "id": 3},
-    4: {"coxia": 1, "femur": 1, "tibia": 1, "name": "left-back", "id": 4},
-    5: {"coxia": 1, "femur": 1, "tibia": 1, "name": "right-back", "id": 5},
+    0: {"coxia": 1, "femur": 1, "tibia": -1, "name": "right-middle", "id": 0},
+    1: {"coxia": 1, "femur": 1, "tibia": -1, "name": "right-front", "id": 1},
+    2: {"coxia": -1, "femur": -1, "tibia": 1, "name": "left-front", "id": 2},
+    3: {"coxia": -1, "femur": -1, "tibia": 1, "name": "left-middle", "id": 3},
+    4: {"coxia": -1, "femur": -1, "tibia": 1, "name": "left-back", "id": 4},
+    5: {"coxia": 1, "femur": 1, "tibia": -1, "name": "right-back", "id": 5},
     }
 
     # joint of our hexa model has different  ids with the real-world servo 
