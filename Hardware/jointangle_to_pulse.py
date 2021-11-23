@@ -102,21 +102,30 @@ class VirtualToReal:
     5: {"coxia": 690, "femur": 520, "tibia": 708, "name": "right-back", "id": 5},
     }
 
+    nutural_poses_deg = {
+    0: {"coxia": 0, "femur": 0, "tibia": 0, "name": "right-middle", "id": 0},
+    1: {"coxia": 0, "femur": 0, "tibia": 0, "name": "right-front", "id": 1},
+    2: {"coxia": 0, "femur": 0, "tibia": 0, "name": "left-front", "id": 2},
+    3: {"coxia": 0, "femur": 0, "tibia": 0, "name": "left-middle", "id": 3},
+    4: {"coxia": 0, "femur": 0, "tibia": 0, "name": "left-back", "id": 4},
+    5: {"coxia": 0, "femur": 0, "tibia": 0, "name": "right-back", "id": 5},
+    }
+
     # If servo rotation direction same as model joint angle, set 1
     # if opposite set -1.   
     # todo: here
     direction_poses_pulse = {
-    0: {"coxia": 1, "femur": 1, "tibia": 1, "name": "right-middle", "id": 0},
-    1: {"coxia": 1, "femur": 1, "tibia": 1, "name": "right-front", "id": 1},
-    2: {"coxia": 1, "femur": 1, "tibia": 1, "name": "left-front", "id": 2},
-    3: {"coxia": 1, "femur": 1, "tibia": 1, "name": "left-middle", "id": 3},
-    4: {"coxia": 1, "femur": 1, "tibia": 1, "name": "left-back", "id": 4},
-    5: {"coxia": 1, "femur": 1, "tibia": 1, "name": "right-back", "id": 5},
+    0: {"coxia": 1, "femur": 1, "tibia": -1, "name": "right-middle", "id": 0},
+    1: {"coxia": 1, "femur": 1, "tibia": -1, "name": "right-front", "id": 1},
+    2: {"coxia": -1, "femur": -1, "tibia": 1, "name": "left-front", "id": 2},
+    3: {"coxia": -1, "femur": -1, "tibia": 1, "name": "left-middle", "id": 3},
+    4: {"coxia": -1, "femur": -1, "tibia": 1, "name": "left-back", "id": 4},
+    5: {"coxia": 1, "femur": 1, "tibia": -1, "name": "right-back", "id": 5},
     }
 
     # joint of our hexa model has different  ids with the real-world servo 
     # each entry stands for corresponding servo id
-    id_poses_pulse = {
+    servo_id_mapping = {
     0: {"coxia": 13, "femur": 14, "tibia": 15, "name": "right-middle", "id": 0},
     1: {"coxia": 16, "femur": 17, "tibia": 18, "name": "right-front", "id": 1},
     2: {"coxia": 7, "femur": 8, "tibia": 9, "name": "left-front", "id": 2},
@@ -125,4 +134,49 @@ class VirtualToReal:
     5: {"coxia": 10, "femur": 11, "tibia": 12, "name": "right-back", "id": 5},
     }
   
+     # the pulses will send to servo
+    pulses2servos = {
+    0: {"coxia": 0, "femur": 0, "tibia": 0, "name": "right-middle", "id": 0},
+    1: {"coxia": 0, "femur": 0, "tibia": 0, "name": "right-front", "id": 1},
+    2: {"coxia": 0, "femur": 0, "tibia": 0, "name": "left-front", "id": 2},
+    3: {"coxia": 0, "femur": 0, "tibia": 0, "name": "left-middle", "id": 3},
+    4: {"coxia": 0, "femur": 0, "tibia": 0, "name": "left-back", "id": 4},
+    5: {"coxia": 0, "femur": 0, "tibia": 0, "name": "right-back", "id": 5},
+    }
 
+    def join_pose2pulse(self,poses):
+        #1. Loop over each joint angle        
+        #2. Find which joint id maps to which servo id         
+        #3. Decide pulse number based on direction mapping, 
+        #   Num pulses per deg  
+        for i in range(len(poses)): 
+            pose = poses[i]
+            
+            # get input angles   
+            print("Joint angles for pose id: "+str(poses[i]["id"])+ \
+                " coxia: "+ str(pose["coxia"])+ \
+                " femur: "+ str( pose["femur"])+ \
+                " tibia: " + str( pose["tibia"]))                        
+
+            ### convert joint angle to sevo pulse 
+            # compute coxia pulse
+            self.pulses2servos[i]["coxia"] = self.nutural_poses_pulse[i]["coxia"] + \
+                self.direction_poses_pulse[i]["coxia"] * self.pulses_per_deg * pose["coxia"]              
+
+            # compute femur pulse 
+            self.pulses2servos[i]["femur"] = self.nutural_poses_pulse[i]["femur"] + \
+                self.direction_poses_pulse[i]["femur"] * self.pulses_per_deg * pose["femur"]               
+
+            # compute tibia pulse 
+            self.pulses2servos[i]["tibia"] = self.nutural_poses_pulse[i]["tibia"] + \
+                self.direction_poses_pulse[i]["tibia"] * self.pulses_per_deg * pose["tibia"]              
+
+        return self.pulses2servos
+
+    def jointDeg2Pulse(joint_deg,joint_id):
+        a = 0
+
+if __name__ == "__main__": 
+    v2r = VirtualToReal() 
+    print("pulses: ")
+    print(v2r.join_pose2pulse(v2r.nutural_poses_deg))
