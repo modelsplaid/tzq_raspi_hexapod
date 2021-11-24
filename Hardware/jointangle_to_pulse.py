@@ -83,6 +83,10 @@
 # For joint beta and gamma: positive: move up. negative: move dowm
 # For right side alpha: positive: move forward. negative: move backward.
 # For left side alpha : positive: move backward. negative: move forward.
+import time
+import sys
+sys.path.append("../")
+from HiwonderSDK import Board
 
 class VirtualToReal:
     
@@ -144,6 +148,7 @@ class VirtualToReal:
     5: {"coxia": 0, "femur": 0, "tibia": 0, "name": "right-back", "id": 5},
     }
 
+    # given joint angle of hexapod, get servo pulse for each joint
     def join_pose2pulse(self,poses):
         #1. Loop over each joint angle        
         #2. Find which joint id maps to which servo id         
@@ -154,9 +159,9 @@ class VirtualToReal:
             
             # get input angles   
             print("Joint angles for pose id: "+str(poses[i]["id"])+ \
-                " coxia: "+ str(pose["coxia"])+ \
-                " femur: "+ str( pose["femur"])+ \
-                " tibia: " + str( pose["tibia"]))                        
+                                " coxia: "+ str(pose["coxia"])+ \
+                                " femur: "+ str( pose["femur"])+ \
+                                " tibia: " + str( pose["tibia"]))                        
 
             ### convert joint angle to sevo pulse 
             # compute coxia pulse
@@ -169,14 +174,32 @@ class VirtualToReal:
 
             # compute tibia pulse 
             self.pulses2servos[i]["tibia"] = self.nutural_poses_pulse[i]["tibia"] + \
-                self.direction_poses_pulse[i]["tibia"] * self.pulses_per_deg * pose["tibia"]              
+                self.direction_poses_pulse[i]["tibia"] * self.pulses_per_deg * pose["tibia"]     
 
         return self.pulses2servos
 
-    def jointDeg2Pulse(joint_deg,joint_id):
-        a = 0
+    # send servo pulse to real bot
+    def SendBusServoPulse(self,time_msec,pulses2Servos):
+        
+        for i in range(len(pulses2Servos)): 
+
+            leg_pose = pulses2Servos[i]
+            leg_servos = self.servo_id_mapping[i]
+
+            coxia_pulse = leg_pose["coxia"]
+            coxia_servo_id = leg_servos["coxia"]
+            Board.setBusServoPulse(coxia_servo_id, coxia_pulse, time_msec)
+
+            femur_pulse = leg_pose["femur"]
+            femur_servo_id = leg_servos["femur"]
+            Board.setBusServoPulse(femur_pulse, femur_servo_id, time_msec)
+
+            tibia_pulse = leg_pose["femur"]
+            tibia_servo_id = leg_servos["femur"]
+            Board.setBusServoPulse(tibia_pulse, tibia_servo_id, time_msec)
 
 if __name__ == "__main__": 
-    v2r = VirtualToReal() 
-    print("pulses: ")
-    print(v2r.join_pose2pulse(v2r.nutural_poses_deg))
+    v2r = VirtualToReal()     
+    time.sleep(0.5)
+    pulses2servos = v2r.join_pose2pulse(v2r.nutural_poses_deg)
+    v2r.SendBusServoPulse(1000,pulses2servos)
