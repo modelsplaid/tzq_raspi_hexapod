@@ -1,18 +1,23 @@
 import sys
 sys.path.append("../")
+
 from copy import deepcopy
+print("4")
 from hexapod.const import BASE_DIMENSIONS
+print("3")
 from hexapod.models import VirtualHexapod
+print("2")
 from hexapod.points import Vector
 from hexapod.ik_solver import ik_solver, ik_solver2
 from hexapod.ik_solver.shared import update_hexapod_points
-
+print("1")
 from tests.ik_cases import case1, case2, case3
 from tests.helpers import assert_poses_equal, assert_two_hexapods_equal
 
+print("going to cases")
 CASES = [case1, case2, case3]
 
-
+print("going to assert_ik_solver")
 def assert_ik_solver(ik_function, case):
     hexapod = VirtualHexapod(case.given_dimensions)
     result_poses, _ = ik_function(hexapod, case.given_ik_parameters)
@@ -41,8 +46,11 @@ def test_sample_ik():
 
 
 def test_points_ik2_assume_ground_targets():
-    for case in CASES:
-        assert_ik_points(case, True)
+    print("---------------------------------------------------------")
+    assert_ik_points(case1, True)
+    # for case in CASES:
+    #     print("---------------------------------------------")
+    #     assert_ik_points(case, True)
 
 
 def test_points_ik2_dont_assume_ground_targets():
@@ -62,3 +70,6 @@ def test_shared_set_points():
     update_hexapod_points(vh, 1, points)
     for leg_point, point in zip(vh.legs[1].all_points, points):
         assert leg_point is point
+
+
+test_points_ik2_assume_ground_targets()

@@ -28,9 +28,12 @@ BASE_IK_PARAMS = {
     "rot_z": 0,
 }
 
+print("instance BASE_POSE")
 BASE_POSE = deepcopy(HEXAPOD_POSE)
 
+print("instance VirtualHexapod")
 BASE_HEXAPOD = VirtualHexapod(BASE_DIMENSIONS)
+print("--------instance BASE_PLOTTER")
 BASE_PLOTTER = HexapodPlotter()
 
 HEXAPOD = deepcopy(BASE_HEXAPOD)
