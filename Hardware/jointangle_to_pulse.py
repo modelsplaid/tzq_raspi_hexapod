@@ -183,19 +183,20 @@ class VirtualToReal:
         
         for i in range(len(pulses2Servos)): 
 
-            leg_pose = int(pulses2Servos[i])
-            leg_servos = int(self.servo_id_mapping[i])
+            
+            leg_pose =   pulses2Servos[i]
+            leg_servos = self.servo_id_mapping[i]
 
-            coxia_pulse = leg_pose["coxia"]
-            coxia_servo_id = leg_servos["coxia"]
+            coxia_pulse = int(leg_pose["coxia"])
+            coxia_servo_id = int(leg_servos["coxia"])
             Board.setBusServoPulse(coxia_servo_id, coxia_pulse, time_msec)
 
-            femur_pulse = leg_pose["femur"]
-            femur_servo_id = leg_servos["femur"]
+            femur_pulse = int(leg_pose["femur"])
+            femur_servo_id = int(leg_servos["femur"])
             Board.setBusServoPulse( femur_servo_id,femur_pulse, time_msec)
 
-            tibia_pulse = leg_pose["femur"]
-            tibia_servo_id = leg_servos["femur"]
+            tibia_pulse = int(leg_pose["femur"])
+            tibia_servo_id = int(leg_servos["femur"])
             Board.setBusServoPulse(tibia_servo_id,tibia_pulse,  time_msec)
 
 if __name__ == "__main__": 
