@@ -4,8 +4,7 @@ sys.path.append("../hexapod/ik_solver")
 
 # inverse kinematics to real hexapod
 import jointangle_to_pulse
-import ik_solver2
-
+from hexapod.ik_solver import ik_solver, ik_solver2
 
 # ********************************
 # Dimensions
