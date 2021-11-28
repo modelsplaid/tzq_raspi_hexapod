@@ -182,18 +182,17 @@ class VirtualToReal:
     def SendBusServoPulse(self,time_msec,pulses2Servos):
         
         for i in range(len(pulses2Servos)): 
-
             
             leg_pose =   pulses2Servos[i]
             leg_servos = self.servo_id_mapping[i]
 
             coxia_pulse = int(leg_pose["coxia"])
             coxia_servo_id = int(leg_servos["coxia"])
-            Board.setBusServoPulse(coxia_servo_id, coxia_pulse, time_msec)
+            Board.setBusServoPulse(coxia_servo_id, coxia_pulse, time_msec)            
 
             femur_pulse = int(leg_pose["femur"])
             femur_servo_id = int(leg_servos["femur"])
-            Board.setBusServoPulse( femur_servo_id,femur_pulse, time_msec)
+            Board.setBusServoPulse( femur_servo_id,femur_pulse, time_msec)            
 
             tibia_pulse = int(leg_pose["tibia"])
             tibia_servo_id = int(leg_servos["tibia"])
@@ -205,7 +204,7 @@ def TestForwardKinematics():
     time.sleep(0.5)
     pulses2servos = v2r.join_pose2pulse(v2r.nutural_poses_deg)
     v2r.SendBusServoPulse(1000,pulses2servos)
-    time.sleep(2)
+    time.sleep(1)
 
     coxia_poses_deg = {
     0: {"coxia": 30, "femur": 0, "tibia": 0, "name": "right-middle", "id": 0},
@@ -218,7 +217,7 @@ def TestForwardKinematics():
 
     pulses2servos = v2r.join_pose2pulse(coxia_poses_deg)
     v2r.SendBusServoPulse(1000,pulses2servos)
-    time.sleep(2)
+    time.sleep(1)
 
     coxia_femur_poses_deg = {
     0: {"coxia": 30, "femur": 30, "tibia": 0, "name": "right-middle", "id": 0},
@@ -230,7 +229,7 @@ def TestForwardKinematics():
     }
     pulses2servos = v2r.join_pose2pulse(coxia_femur_poses_deg)
     v2r.SendBusServoPulse(1000,pulses2servos)
-    time.sleep(2)
+    time.sleep(1)
 
     coxia_femur_tibia_poses_deg = {
     0: {"coxia": 30, "femur": 30, "tibia": 30, "name": "right-middle", "id": 0},
@@ -242,7 +241,7 @@ def TestForwardKinematics():
     }
     pulses2servos = v2r.join_pose2pulse(coxia_femur_tibia_poses_deg)
     v2r.SendBusServoPulse(1000,pulses2servos)    
-    time.sleep(2)
+    time.sleep(1)
     # reset 
     pulses2servos = v2r.join_pose2pulse(v2r.nutural_poses_deg)
     v2r.SendBusServoPulse(1000,pulses2servos)
