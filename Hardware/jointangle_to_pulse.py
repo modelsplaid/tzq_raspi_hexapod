@@ -195,12 +195,53 @@ class VirtualToReal:
             femur_servo_id = int(leg_servos["femur"])
             Board.setBusServoPulse( femur_servo_id,femur_pulse, time_msec)
 
-            tibia_pulse = int(leg_pose["femur"])
-            tibia_servo_id = int(leg_servos["femur"])
+            tibia_pulse = int(leg_pose["tibia"])
+            tibia_servo_id = int(leg_servos["tibia"])
             Board.setBusServoPulse(tibia_servo_id,tibia_pulse,  time_msec)
 
 if __name__ == "__main__": 
     v2r = VirtualToReal()     
     time.sleep(0.5)
+    pulses2servos = v2r.join_pose2pulse(v2r.nutural_poses_deg)
+    v2r.SendBusServoPulse(1000,pulses2servos)
+    time.sleep(2)
+
+    coxia_poses_deg = {
+    0: {"coxia": 30, "femur": 0, "tibia": 0, "name": "right-middle", "id": 0},
+    1: {"coxia": 30, "femur": 0, "tibia": 0, "name": "right-front", "id": 1},
+    2: {"coxia": 30, "femur": 0, "tibia": 0, "name": "left-front", "id": 2},
+    3: {"coxia": 30, "femur": 0, "tibia": 0, "name": "left-middle", "id": 3},
+    4: {"coxia": 30, "femur": 0, "tibia": 0, "name": "left-back", "id": 4},
+    5: {"coxia": 30, "femur": 0, "tibia": 0, "name": "right-back", "id": 5},
+    }
+
+    pulses2servos = v2r.join_pose2pulse(coxia_poses_deg)
+    v2r.SendBusServoPulse(1000,pulses2servos)
+    time.sleep(2)
+
+    coxia_femur_poses_deg = {
+    0: {"coxia": 30, "femur": 30, "tibia": 0, "name": "right-middle", "id": 0},
+    1: {"coxia": 30, "femur": 30, "tibia": 0, "name": "right-front", "id": 1},
+    2: {"coxia": 30, "femur": 30, "tibia": 0, "name": "left-front", "id": 2},
+    3: {"coxia": 30, "femur": 30, "tibia": 0, "name": "left-middle", "id": 3},
+    4: {"coxia": 30, "femur": 30, "tibia": 0, "name": "left-back", "id": 4},
+    5: {"coxia": 30, "femur": 30, "tibia": 0, "name": "right-back", "id": 5},
+    }
+    pulses2servos = v2r.join_pose2pulse(coxia_femur_poses_deg)
+    v2r.SendBusServoPulse(1000,pulses2servos)
+    time.sleep(2)
+
+    coxia_femur_tibia_poses_deg = {
+    0: {"coxia": 30, "femur": 30, "tibia": 30, "name": "right-middle", "id": 0},
+    1: {"coxia": 30, "femur": 30, "tibia": 30, "name": "right-front", "id": 1},
+    2: {"coxia": 30, "femur": 30, "tibia": 30, "name": "left-front", "id": 2},
+    3: {"coxia": 30, "femur": 30, "tibia": 30, "name": "left-middle", "id": 3},
+    4: {"coxia": 30, "femur": 30, "tibia": 30, "name": "left-back", "id": 4},
+    5: {"coxia": 30, "femur": 30, "tibia": 30, "name": "right-back", "id": 5},
+    }
+    pulses2servos = v2r.join_pose2pulse(coxia_femur_tibia_poses_deg)
+    v2r.SendBusServoPulse(1000,pulses2servos)    
+    time.sleep(2)
+    # reset 
     pulses2servos = v2r.join_pose2pulse(v2r.nutural_poses_deg)
     v2r.SendBusServoPulse(1000,pulses2servos)
