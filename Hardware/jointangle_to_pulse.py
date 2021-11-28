@@ -199,7 +199,8 @@ class VirtualToReal:
             tibia_servo_id = int(leg_servos["tibia"])
             Board.setBusServoPulse(tibia_servo_id,tibia_pulse,  time_msec)
 
-if __name__ == "__main__": 
+
+def TestForwardKinematics():
     v2r = VirtualToReal()     
     time.sleep(0.5)
     pulses2servos = v2r.join_pose2pulse(v2r.nutural_poses_deg)
@@ -245,3 +246,7 @@ if __name__ == "__main__":
     # reset 
     pulses2servos = v2r.join_pose2pulse(v2r.nutural_poses_deg)
     v2r.SendBusServoPulse(1000,pulses2servos)
+
+if __name__ == "__main__": 
+
+    TestForwardKinematics()
