@@ -98,12 +98,12 @@ class VirtualToReal:
     
     # Pulses for each servo when alpha beta and gamma all equal to zero
     nutural_poses_pulse = {
-    0: {"coxia": 493, "femur": 500, "tibia": 690, "name": "right-middle", "id": 0},
-    1: {"coxia": 317, "femur": 460, "tibia": 685, "name": "right-front", "id": 1},
-    2: {"coxia": 704, "femur": 500, "tibia": 319, "name": "left-front", "id": 2},
-    3: {"coxia": 493, "femur": 500, "tibia": 288, "name": "left-middle", "id": 3},
-    4: {"coxia": 310, "femur": 500, "tibia": 322, "name": "left-back", "id": 4},
-    5: {"coxia": 690, "femur": 520, "tibia": 708, "name": "right-back", "id": 5},
+    0: {"coxia": 500, "femur": 500, "tibia": 690, "name": "right-middle", "id": 0},
+    1: {"coxia": 500, "femur": 460, "tibia": 685, "name": "right-front", "id": 1},
+    2: {"coxia": 500, "femur": 500, "tibia": 319, "name": "left-front", "id": 2},
+    3: {"coxia": 500, "femur": 500, "tibia": 288, "name": "left-middle", "id": 3},
+    4: {"coxia": 500, "femur": 500, "tibia": 322, "name": "left-back", "id": 4},
+    5: {"coxia": 500, "femur": 520, "tibia": 708, "name": "right-back", "id": 5},
     }
 
     nutural_poses_deg = {
@@ -121,9 +121,9 @@ class VirtualToReal:
     direction_poses_pulse = {
     0: {"coxia": 1, "femur": 1, "tibia": -1, "name": "right-middle", "id": 0},
     1: {"coxia": 1, "femur": 1, "tibia": -1, "name": "right-front", "id": 1},
-    2: {"coxia": -1, "femur": -1, "tibia": 1, "name": "left-front", "id": 2},
-    3: {"coxia": -1, "femur": -1, "tibia": 1, "name": "left-middle", "id": 3},
-    4: {"coxia": -1, "femur": -1, "tibia": 1, "name": "left-back", "id": 4},
+    2: {"coxia": 1, "femur": -1, "tibia": 1, "name": "left-front", "id": 2},
+    3: {"coxia": 1, "femur": -1, "tibia": 1, "name": "left-middle", "id": 3},
+    4: {"coxia": 1, "femur": -1, "tibia": 1, "name": "left-back", "id": 4},
     5: {"coxia": 1, "femur": 1, "tibia": -1, "name": "right-back", "id": 5},
     }
 
