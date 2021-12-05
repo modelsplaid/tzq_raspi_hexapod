@@ -85,6 +85,7 @@
 # For left side alpha : positive: move backward. negative: move forward.
 import time
 import sys
+from copy import deepcopy
 sys.path.append("../")
 from HiwonderSDK import Board
 
@@ -148,15 +149,30 @@ class VirtualToReal:
     5: {"coxia": 0, "femur": 0, "tibia": 0, "name": "right-back", "id": 5},
     }
 
+    def update_puses(self,poses_json_dict): 
+        poses = deepcopy(self.nutural_poses_deg)
+
+        for pose in poses_json_dict.values():
+            i = pose["id"]
+            poses[i]["coxia"] = pose["coxia"]
+            poses[i]["femur"] = pose["femur"]
+            poses[i]["tibia"] = pose["tibia"]
+
+        pulses2servos = self.join_pose2pulse(poses)
+        return pulses2servos
+
     # given joint angle of hexapod, get servo pulse for each joint
     def join_pose2pulse(self,poses):
         #1. Loop over each joint angle        
         #2. Find which joint id maps to which servo id         
         #3. Decide pulse number based on direction mapping, 
         #   Num pulses per deg  
+        print("length of poses: "+ str(len(poses)))
+        print(poses[0])
         for i in range(len(poses)): 
             pose = poses[i]
-            
+            print("poses number: " + str(i))
+            print(pose)
             # get input angles   
             print("Joint angles for pose id: "+str(poses[i]["id"])+ \
                                 " coxia: "+ str(pose["coxia"])+ \

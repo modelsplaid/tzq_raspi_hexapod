@@ -6,12 +6,14 @@ from hexapod.models import VirtualHexapod
 from hexapod.const import BASE_PLOTTER
 from widgets.pose_control.components import KINEMATICS_CALLBACK_INPUTS
 from pages import helpers, shared
+from copy import deepcopy
 
+import time
 import sys
 sys.path.append("../../")
 from Hardware import jointangle_to_pulse 
 
-print("-----------------------------------")
+print("--------tzq initing hexapod--------")
 jointangle_to_pulse.TestForwardKinematics()
 print("-----------------------------------")
 
@@ -53,8 +55,13 @@ def update_kinematics_page(dimensions_json, poses_json, relayout_data, figure):
     dimensions = helpers.load_params(dimensions_json, "dims")
     poses = helpers.load_params(poses_json, "pose")
     hexapod = VirtualHexapod(dimensions)
-    # tzq comment: the poses is where we need to send to real robot
 
+    # tzq comment: the poses is where we need to send to real robot
+    #jointangle_to_pulse.TestForwardKinematics()
+    v2r = jointangle_to_pulse.VirtualToReal()
+    time.sleep(0.1)
+    pulses2servos = v2r.update_puses(poses)
+    v2r.SendBusServoPulse(1000,pulses2servos)    
 
     # tzq todo here
     try:
