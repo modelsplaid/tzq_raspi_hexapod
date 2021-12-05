@@ -7,6 +7,15 @@ from hexapod.const import BASE_PLOTTER
 from widgets.pose_control.components import KINEMATICS_CALLBACK_INPUTS
 from pages import helpers, shared
 
+import sys
+sys.path.append("../../")
+from Hardware import jointangle_to_pulse 
+
+print("-----------------------------------")
+jointangle_to_pulse.TestForwardKinematics()
+print("-----------------------------------")
+
+
 if WHICH_POSE_CONTROL_UI == 1:
     from widgets.pose_control.generic_daq_slider_ui import KINEMATICS_WIDGETS_SECTION
 elif WHICH_POSE_CONTROL_UI == 2:
@@ -44,8 +53,10 @@ def update_kinematics_page(dimensions_json, poses_json, relayout_data, figure):
     dimensions = helpers.load_params(dimensions_json, "dims")
     poses = helpers.load_params(poses_json, "pose")
     hexapod = VirtualHexapod(dimensions)
-    # the poses is where we need to send to real robot
+    # tzq comment: the poses is where we need to send to real robot
 
+
+    # tzq todo here
     try:
         hexapod.update(poses, assume_ground_targets=False)
     except Exception as alert:

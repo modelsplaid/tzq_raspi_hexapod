@@ -144,10 +144,10 @@ class Linkage:
         new_frame = frame_zrotate_xytranslate(
             self.coxia_axis + self.alpha, self.new_origin.x, self.new_origin.y
         )
-        print("frame_01:"+str(frame_01))
+        #print("frame_01:"+str(frame_01))
         #print("frame_12:"+str(frame_12))
-        print("self.new_origin.x: "+str( self.new_origin.x))
-        print("self.new_origin.y: "+str( self.new_origin.y))
+        #print("self.new_origin.x: "+str( self.new_origin.x))
+        #print("self.new_origin.y: "+str( self.new_origin.y))
 
         # find points wrt to body contact point
         p0 = Vector(0, 0, 0)

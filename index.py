@@ -90,6 +90,7 @@ def display_page(pathname):
 # Run server
 # ....................
 if __name__ == "__main__":
-    app.run_server(
-        debug=True#debug=DEBUG_MODE, dev_tools_ui=DEBUG_MODE, dev_tools_props_check=DEBUG_MODE
-    )
+    #app.run_server(
+    #    debug=True#debug=DEBUG_MODE, dev_tools_ui=DEBUG_MODE, dev_tools_props_check=DEBUG_MODE
+    #)
+    app.run_server(host= '0.0.0.0', port = 8059)
