@@ -88,7 +88,8 @@ import sys
 from copy import deepcopy
 sys.path.append("../")
 from HiwonderSDK import Board
-
+import const_hardware
+from copy import deepcopy
 class VirtualToReal:
     
     #Number of pulses needed to rotate one degree 
@@ -98,14 +99,15 @@ class VirtualToReal:
     degs_per_pulse = 1.0/pulses_per_deg
     
     # Pulses for each servo when alpha beta and gamma all equal to zero
-    nutural_poses_pulse = {
-    0: {"coxia": 500, "femur": 500, "tibia": 690, "name": "right-middle", "id": 0},
-    1: {"coxia": 500, "femur": 460, "tibia": 685, "name": "right-front", "id": 1},
-    2: {"coxia": 500, "femur": 500, "tibia": 319, "name": "left-front", "id": 2},
-    3: {"coxia": 500, "femur": 500, "tibia": 288, "name": "left-middle", "id": 3},
-    4: {"coxia": 500, "femur": 500, "tibia": 322, "name": "left-back", "id": 4},
-    5: {"coxia": 500, "femur": 520, "tibia": 708, "name": "right-back", "id": 5},
-    }
+    nutural_poses_pulse = deepcopy(const_hardware.NUTURAL_POSES_PULSE)
+    #nutural_poses_pulse = {
+    #0: {"coxia": 500, "femur": 500, "tibia": 690, "name": "right-middle", "id": 0},
+    #1: {"coxia": 500, "femur": 460, "tibia": 685, "name": "right-front", "id": 1},
+    #2: {"coxia": 500, "femur": 500, "tibia": 319, "name": "left-front", "id": 2},
+    #3: {"coxia": 500, "femur": 500, "tibia": 288, "name": "left-middle", "id": 3},
+    #4: {"coxia": 500, "femur": 500, "tibia": 322, "name": "left-back", "id": 4},
+    #5: {"coxia": 500, "femur": 520, "tibia": 708, "name": "right-back", "id": 5},
+    #}
 
     nutural_poses_deg = {
     0: {"coxia": 0, "femur": 0, "tibia": 0, "name": "right-middle", "id": 0},

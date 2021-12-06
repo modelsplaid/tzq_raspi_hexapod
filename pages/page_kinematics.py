@@ -13,11 +13,6 @@ import sys
 sys.path.append("../../")
 from Hardware import jointangle_to_pulse 
 
-print("--------tzq initing hexapod--------")
-jointangle_to_pulse.TestForwardKinematics()
-print("-----------------------------------")
-
-
 if WHICH_POSE_CONTROL_UI == 1:
     from widgets.pose_control.generic_daq_slider_ui import KINEMATICS_WIDGETS_SECTION
 elif WHICH_POSE_CONTROL_UI == 2:
@@ -39,7 +34,6 @@ sidebar = shared.make_standard_page_sidebar(
 
 layout = shared.make_standard_page_layout(GRAPH_ID, sidebar)
 
-
 # ......................
 # Update page
 # ......................
@@ -47,7 +41,6 @@ layout = shared.make_standard_page_layout(GRAPH_ID, sidebar)
 outputs, inputs, states = shared.make_standard_page_callback_params(
     GRAPH_ID, PARAMETERS_SECTION_ID, MESSAGE_SECTION_ID
 )
-
 
 @app.callback(outputs, inputs, states)
 def update_kinematics_page(dimensions_json, poses_json, relayout_data, figure):
@@ -57,13 +50,11 @@ def update_kinematics_page(dimensions_json, poses_json, relayout_data, figure):
     hexapod = VirtualHexapod(dimensions)
 
     # tzq comment: the poses is where we need to send to real robot
-    #jointangle_to_pulse.TestForwardKinematics()
-    v2r = jointangle_to_pulse.VirtualToReal()
-    time.sleep(0.1)
+    global v2r
+    #time.sleep(0.1)
     pulses2servos = v2r.update_puses(poses)
-    v2r.SendBusServoPulse(1000,pulses2servos)    
+    v2r.SendBusServoPulse(500,pulses2servos)    
 
-    # tzq todo here
     try:
         hexapod.update(poses, assume_ground_targets=False)
     except Exception as alert:
@@ -72,7 +63,6 @@ def update_kinematics_page(dimensions_json, poses_json, relayout_data, figure):
     BASE_PLOTTER.update(figure, hexapod)
     helpers.change_camera_view(figure, relayout_data)
     return figure, ""
-
 
 # ......................
 # Update parameters
