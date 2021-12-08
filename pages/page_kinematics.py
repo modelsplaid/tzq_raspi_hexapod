@@ -4,6 +4,7 @@ from app import app
 from settings import WHICH_POSE_CONTROL_UI
 from hexapod.models import VirtualHexapod
 from hexapod.const import BASE_PLOTTER
+from hexapod.const import VIRTUAL_TO_REAL
 from widgets.pose_control.components import KINEMATICS_CALLBACK_INPUTS
 from pages import helpers, shared
 from copy import deepcopy
@@ -50,11 +51,11 @@ def update_kinematics_page(dimensions_json, poses_json, relayout_data, figure):
     hexapod = VirtualHexapod(dimensions)
 
     # tzq comment: the poses is where we need to send to real robot
-    global v2r
-    #time.sleep(0.1)
-    pulses2servos = v2r.update_puses(poses)
-    v2r.SendBusServoPulse(500,pulses2servos)    
+    global VIRTUAL_TO_REAL
+    pulses2servos = VIRTUAL_TO_REAL.update_puses(poses)
+    VIRTUAL_TO_REAL.SendBusServoPulse(300,pulses2servos)        
 
+    # tzq todo here
     try:
         hexapod.update(poses, assume_ground_targets=False)
     except Exception as alert:
@@ -63,6 +64,7 @@ def update_kinematics_page(dimensions_json, poses_json, relayout_data, figure):
     BASE_PLOTTER.update(figure, hexapod)
     helpers.change_camera_view(figure, relayout_data)
     return figure, ""
+
 
 # ......................
 # Update parameters

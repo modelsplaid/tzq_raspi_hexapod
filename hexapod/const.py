@@ -3,6 +3,11 @@ from hexapod.plotter import HexapodPlotter
 from hexapod.models import VirtualHexapod, Hexagon, Linkage
 from hexapod.templates.figure_template import HEXAPOD_FIGURE
 from hexapod.templates.pose_template import HEXAPOD_POSE
+import sys
+sys.path.append("../../")
+from Hardware import jointangle_to_pulse
+
+VIRTUAL_TO_REAL = jointangle_to_pulse.VirtualToReal()
 
 NAMES_LEG = Hexagon.VERTEX_NAMES
 NAMES_JOINT = Linkage.POINT_NAMES
