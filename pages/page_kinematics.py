@@ -63,6 +63,9 @@ def update_kinematics_page(dimensions_json, poses_json, relayout_data, figure):
 
     BASE_PLOTTER.update(figure, hexapod)
     helpers.change_camera_view(figure, relayout_data)
+
+    print("---tzq : dimensions_json: ")
+    print(dimensions_json)
     return figure, ""
 
 

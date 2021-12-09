@@ -13,14 +13,13 @@ NAMES_LEG = Hexagon.VERTEX_NAMES
 NAMES_JOINT = Linkage.POINT_NAMES
 
 BASE_DIMENSIONS = {
-    "front": 100,
-    "side": 100,
-    "middle": 100,
-    "coxia": 100,
-    "femur": 100,
-    "tibia": 100,
+    "front": 59,
+    "side": 119,
+    "middle": 183,
+    "coxia": 45,
+    "femur": 75,
+    "tibia": 140,
 }
-
 
 BASE_IK_PARAMS = {
     "hip_stance": 0,
