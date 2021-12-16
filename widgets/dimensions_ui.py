@@ -7,6 +7,9 @@ from settings import INPUT_DIMENSIONS_RESOLUTION
 from style_settings import NUMBER_INPUT_STYLE
 from widgets.section_maker import make_section_type3
 
+import sys
+sys.path.append("../")
+from hexapod import const
 
 def make_number_widget(_name, _value):
     return dcc.Input(
@@ -32,7 +35,14 @@ WIDGET_NAMES = ["front", "side", "middle", "coxia", "femur", "tibia"]
 DIMENSION_WIDGET_IDS = [f"widget-dimension-{name}" for name in WIDGET_NAMES]
 DIMENSION_CALLBACK_INPUTS = [Input(id, "value") for id in DIMENSION_WIDGET_IDS]
 
+print(const.BASE_DIMENSIONS["front"])
 widgets = [make_number_widget(widget_id, 100) for widget_id in DIMENSION_WIDGET_IDS]
+
+index_counter = 0
+for hexa_dim_id in const.BASE_DIMENSIONS :    
+    widgets[index_counter] = const.BASE_DIMENSIONS[hexa_dim_id]        
+    index_counter = index_counter+1
+
 sections = [
     make_section_type3(
         widgets[0],

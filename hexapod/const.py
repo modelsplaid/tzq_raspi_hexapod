@@ -7,6 +7,8 @@ import sys
 sys.path.append("../../")
 from Hardware import jointangle_to_pulse
 
+
+
 VIRTUAL_TO_REAL = jointangle_to_pulse.VirtualToReal()
 
 NAMES_LEG = Hexagon.VERTEX_NAMES
@@ -15,7 +17,7 @@ NAMES_JOINT = Linkage.POINT_NAMES
 BASE_DIMENSIONS = {
     "front": 59,
     "side": 119,
-    "middle": 183,
+    "middle": 93,
     "coxia": 45,
     "femur": 75,
     "tibia": 140,

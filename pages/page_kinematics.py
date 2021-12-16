@@ -47,6 +47,14 @@ outputs, inputs, states = shared.make_standard_page_callback_params(
 def update_kinematics_page(dimensions_json, poses_json, relayout_data, figure):
 
     dimensions = helpers.load_params(dimensions_json, "dims")
+    
+    print("---update kine page, dimensions_json: ")
+    print(dimensions_json)
+    print("---update kine page, dimensions: ")
+    print(dimensions)
+
+
+
     poses = helpers.load_params(poses_json, "pose")
     hexapod = VirtualHexapod(dimensions)
 
