@@ -5,12 +5,15 @@ from hexapod.templates.figure_template import HEXAPOD_FIGURE
 from hexapod.templates.pose_template import HEXAPOD_POSE
 import sys
 sys.path.append("../../")
-from Hardware import jointangle_to_pulse
+try: 
+    from Hardware import jointangle_to_pulse
+except: 
+    print("Hardware not found")
 
-
-
-VIRTUAL_TO_REAL = jointangle_to_pulse.VirtualToReal()
-
+try:
+    VIRTUAL_TO_REAL = jointangle_to_pulse.VirtualToReal()
+except: 
+    print("VIRTUAL_TO_REAL variable will not be created")
 NAMES_LEG = Hexagon.VERTEX_NAMES
 NAMES_JOINT = Linkage.POINT_NAMES
 
