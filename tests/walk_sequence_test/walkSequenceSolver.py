@@ -1,8 +1,12 @@
+
+def solveHexapodParams(dimensions, rawIKparams, true): 
+    a = 0
+
 def getWalkSequence(dimensions,params,gaitType = "tripod",walkMode = "walking"):
     print("in getWalkSequence") 
 
-    ik_parameters = {
-        "hip_stance": 25,
+    rawIKparams = {
+        "hip_stance": 0,
         "leg_stance": 0,
         "percent_x": 0.0,
         "percent_y": 0.0,
@@ -11,17 +15,12 @@ def getWalkSequence(dimensions,params,gaitType = "tripod",walkMode = "walking"):
         "rot_y": 0,
         "rot_z": 0,
     }
+   
+    rawIKparams["hip_stance"] = params["hipStance"]
+    rawIKparams["leg_stance"] = params["legStance"]
+    rawIKparams["percent_x"] = params["tx"]
+    rawIKparams["percent_z"] = params["tz"]
+    rawIKparams["rot_x"] = params["rx"]
+    rawIKparams["rot_y"] = params["ry"]
 
-    '''
-     const { hipStance, rx, ry, tx, tz, legStance } = params
-    const rawIKparams = {
-        tx,
-        ty: 0,
-        tz,
-        legStance,
-        hipStance,
-        rx,
-        ry,
-        rz: 0,
-    }
-    '''
+    #const [ikSolver] = solveHexapodParams(dimensions, rawIKparams, true)

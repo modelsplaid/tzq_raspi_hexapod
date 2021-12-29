@@ -1,5 +1,5 @@
 from walkSequenceSolver import getWalkSequence
-DEFAULT_DIMENSIONS = {
+dimensions = {
     "front": 100,
     "side": 100,
     "middle": 100,
@@ -23,11 +23,11 @@ gaitParams = {
     "rx": 0,
     "ry": 0,
     "legStance": 0,
-    "hipStance": 25,
-    "stepCount": 10,
-    "hipSwing": 25,
-    "liftSwing": 40,
+    "hipStance": 25.0,
+    "stepCount": 10.0,
+    "hipSwing": 25.0,
+    "liftSwing": 40.0,
 }
 
-getWalkSequence(DEFAULT_DIMENSIONS, gaitParams)
+getWalkSequence(dimensions, gaitParams)
 
