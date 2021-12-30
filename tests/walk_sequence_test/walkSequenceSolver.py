@@ -1,6 +1,28 @@
+from hexapodSolver import solveHexapodParams
 
-def solveHexapodParams(dimensions, rawIKparams, true): 
-    a = 0
+
+
+#const getHipSwingForward = aHipSwing => {
+#    return {
+#        leftFront: -aHipSwing,
+#        rightMiddle: aHipSwing,
+#        leftBack: -aHipSwing,
+#        rightFront: aHipSwing,
+#        leftMiddle: -aHipSwing,
+#        rightBack: aHipSwing,
+#    }
+#}
+
+#const getHipSwingRotate = aHipSwing => {
+#    return {
+#        leftFront: aHipSwing,
+#        rightMiddle: aHipSwing,
+#        leftBack: aHipSwing,
+#        rightFront: aHipSwing,
+#        leftMiddle: aHipSwing,
+#        rightBack: aHipSwing,
+#    }
+#}
 
 def getWalkSequence(dimensions,params,gaitType = "tripod",walkMode = "walking"):
     print("in getWalkSequence") 
@@ -23,4 +45,12 @@ def getWalkSequence(dimensions,params,gaitType = "tripod",walkMode = "walking"):
     rawIKparams["rot_x"] = params["rx"]
     rawIKparams["rot_y"] = params["ry"]
 
-    #const [ikSolver] = solveHexapodParams(dimensions, rawIKparams, true)
+    ikSolver_poses = solveHexapodParams(dimensions, rawIKparams)
+
+    ahipSwing = abs(params["hipSwing"])
+    aliftSwing = abs(params["aliftSwing"])
+
+    #const hipSwings =
+    #walkMode === "rotating"
+    #    ? getHipSwingRotate(aHipSwing)
+    #    : getHipSwingForward(aHipSwing)
