@@ -5,8 +5,11 @@ from hexapod.templates.figure_template import HEXAPOD_FIGURE
 from hexapod.templates.pose_template import HEXAPOD_POSE
 import sys
 sys.path.append("../../")
-from Hardware import jointangle_to_pulse
 
+try:
+    from Hardware import jointangle_to_pulse
+except: 
+    print ("cannot find Hardware")
 
 
 VIRTUAL_TO_REAL = jointangle_to_pulse.VirtualToReal()
