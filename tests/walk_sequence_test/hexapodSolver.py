@@ -15,8 +15,6 @@ def solveHexapodParams(dimensions, rawIKparams, rotateThenShift = True):
     
     return    ikSolver_poses
 
-
-
 if __name__ == '__main__':
     dimensions = {
         "front": 100,
@@ -26,7 +24,6 @@ if __name__ == '__main__':
         "femur": 100,
         "tibia": 100,
     }
-
 
     given_ik_parameters = {
         "hip_stance": 25,
