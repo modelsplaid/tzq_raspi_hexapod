@@ -8,7 +8,7 @@ sys.path.append("../../")
 try: 
     from Hardware import jointangle_to_pulse
 except: 
-    print("Hardware not found")
+    print("Hardware not found. Going to do software simulation.")
 
 try:
     VIRTUAL_TO_REAL = jointangle_to_pulse.VirtualToReal()
