@@ -42,8 +42,8 @@ def getWalkSequence(dimensions,params,gaitType = "tripod",walkMode = "walking"):
     rawIKparams["leg_stance"] = params["legStance"]
     rawIKparams["percent_x"] = params["tx"]
     rawIKparams["percent_z"] = params["tz"]
-    rawIKparams["rot_x"] = params["rx"]
-    rawIKparams["rot_y"] = params["ry"]
+    rawIKparams["rot_x"] =  params["rx"]
+    rawIKparams["rot_y"] =  params["ry"]
 
     ikSolver_poses = solveHexapodParams(dimensions, rawIKparams)
 
@@ -55,3 +55,5 @@ def getWalkSequence(dimensions,params,gaitType = "tripod",walkMode = "walking"):
         hipSwings = getHipSwingRotate(aHipSwing)
     else:    
         hipSwings = getHipSwingForward(aHipSwing)
+
+        
