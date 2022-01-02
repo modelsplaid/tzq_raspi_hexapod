@@ -9,12 +9,12 @@ dimensions = {
 }
 
 POSITION_NAMES_LIST = [
-    "rightMiddle",
-    "rightFront",
-    "leftFront",
-    "leftMiddle",
-    "leftBack",
-    "rightBack",
+    "left-front",
+    "right-middle",
+    "left-back",
+    "right-front",
+    "left-middle",
+    "right-back",
 ]
 
 gaitParams = {

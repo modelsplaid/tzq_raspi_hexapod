@@ -207,7 +207,7 @@ class VirtualHexapod:
     def _init_legs(self):
         self.legs = []
         for i in range(VirtualHexapod.LEG_COUNT):
-            print("init leg # "+str(i))
+            #print("init leg # "+str(i))
             linkage = Linkage(
                 self.coxia,
                 self.femur,
