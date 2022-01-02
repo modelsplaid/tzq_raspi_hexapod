@@ -24,9 +24,9 @@ gaitParams = {
     "ry": 0,
     "legStance": 0,
     "hipStance": 25.0,
-    "stepCount": 10.0,
+    "stepCount": 2.0,
     "hipSwing": 25.0,
-    "liftSwing": 40.0,
+    "liftSwing": 20.0,
 }
 
 getWalkSequence(dimensions, gaitParams)

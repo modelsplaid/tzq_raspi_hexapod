@@ -12,6 +12,7 @@ def getHipSwingForward(aHipSwing):
         "right-back": aHipSwing,
     }
 
+
 def getHipSwingRotate(aHipSwing):
 
     return {
@@ -23,55 +24,79 @@ def getHipSwingRotate(aHipSwing):
         "right-back": aHipSwing,
     }
 
+
 def buildSequence(startVal, delta, stepCount):
     step = delta / stepCount
 
     currentItem = startVal
     array = []
 
-    for i in range(stepCount):
+    for i in range(int(stepCount)):
         currentItem += step
-        array = array+[currentItem]
+        array = array + [currentItem]
 
     return array
+
 
 def buildTripodSequences(startPose, aLiftSwing, hipSwings, stepCount, walkMode):
     #print("building tripod sequences ...")
     #print("pose: " +str(pose) )
     #print("aLiftSwing: " +str(aLiftSwing))
-    
+
     doubleStepCount = 2 * stepCount
-    #const legPositions = Object.keys(startPose)
+    # const legPositions = Object.keys(startPose)
 
-
-    forwardAlphaSeqs = []
-    liftBetaSeqs = []
-    liftGammaSeqs = []
+    forwardAlphaSeqs = {}
+    liftBetaSeqs = {}
+    liftGammaSeqs = {}
     for legPositionsIndex in startPose:
         alpha = startPose[legPositionsIndex]['coxia']
         beta = startPose[legPositionsIndex]['femur']
         gamma = startPose[legPositionsIndex]['tibia']
         leg_name = startPose[legPositionsIndex]['name']
         deltaApha = deltaAlpha = hipSwings[leg_name]
-        print(deltaApha)
-        # the sequence is not right : todo :check it out
-        # 25.0
-        #25.0
-        #-25.0
-        #-25.0
-        #-25.0
-        #25.0
+        #print("name: "+leg_name + "deltaAplpha: "+ str(deltaApha))
+
+        # 1. build alpha sequence
+        forwardAlpha = buildSequence(
+            alpha - deltaAlpha,
+            2 * deltaAlpha,
+            doubleStepCount)
+        forwardAlphaSeqs[leg_name] = forwardAlpha
+
+        # 2. build beta  sequence
+        liftBeta = buildSequence(beta, aLiftSwing, stepCount)
+        liftBetaSeqs[leg_name] = liftBeta
+
+        # 3. build gamma sequence
+        liftGamma = buildSequence(gamma, -aLiftSwing / 2, stepCount)
+        liftGammaSeqs[leg_name] = liftGamma
+
+    return [forwardAlphaSeqs, liftBetaSeqs, liftGammaSeqs]
 
 
 def tripodSequence(pose, aLiftSwing, hipSwings, stepCount, walkMode):
-    buildTripodSequences(pose, aLiftSwing, hipSwings, stepCount, walkMode)
+    [forwardAlphaSeqs, liftBetaSeqs, liftGammaSeqs] = buildTripodSequences(
+                                                        pose, 
+                                                        aLiftSwing, 
+                                                        hipSwings, 
+                                                        stepCount, 
+                                                        walkMode)
+    
+    #print("---forwardAlphaSeqs: ")                                                        
+    #print(forwardAlphaSeqs)        
+    #print("---liftBetaSeqs: ")                                                        
+    #print(liftBetaSeqs)
+    #print("---liftGammaSeqs: ")                                                        
+    #print(liftGammaSeqs)    
 
-def rippleSequence(startPose, aLiftSwing, hipSwings, stepCount):    
+
+def rippleSequence(startPose, aLiftSwing, hipSwings, stepCount):
     b = 0
 
-def getWalkSequence(dimensions,params,gaitType = "tripod",walkMode = "walking"):
-    print("in getWalkSequence") 
 
+def getWalkSequence(dimensions, params, gaitType="tripod", walkMode="walking"):
+    print("in getWalkSequence")
 
     # initial value
     rawIKparams = {
@@ -84,14 +109,14 @@ def getWalkSequence(dimensions,params,gaitType = "tripod",walkMode = "walking"):
         "rot_y": 0,
         "rot_z": 0,
     }
-    
+
     # assign user specified value
     rawIKparams["hip_stance"] = params["hipStance"]
     rawIKparams["leg_stance"] = params["legStance"]
     rawIKparams["percent_x"] = params["tx"]
     rawIKparams["percent_z"] = params["tz"]
-    rawIKparams["rot_x"] =  params["rx"]
-    rawIKparams["rot_y"] =  params["ry"]
+    rawIKparams["rot_x"] = params["rx"]
+    rawIKparams["rot_y"] = params["ry"]
 
     ikSolver_poses = solveHexapodParams(dimensions, rawIKparams)
 
@@ -102,11 +127,10 @@ def getWalkSequence(dimensions,params,gaitType = "tripod",walkMode = "walking"):
     aHipSwing = params["hipSwing"]
     if walkMode == "rotating":
         hipSwings = getHipSwingRotate(aHipSwing)
-    else:    
+    else:
         hipSwings = getHipSwingForward(aHipSwing)
 
     if gaitType == "ripple":
-        rippleSequence(ikSolver_poses,aliftSwing,hipSwings, stepCount,walkMode)
-    else: 
-        tripodSequence(ikSolver_poses,aliftSwing,hipSwings, stepCount,walkMode)
-
+        rippleSequence(ikSolver_poses, aliftSwing, hipSwings, stepCount, walkMode)
+    else:
+        tripodSequence(ikSolver_poses, aliftSwing, hipSwings, stepCount, walkMode)
