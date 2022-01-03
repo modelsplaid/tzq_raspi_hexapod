@@ -29,5 +29,7 @@ gaitParams = {
     "liftSwing": 20.0,
 }
 
-getWalkSequence(dimensions, gaitParams)
-
+gaitType = "ripple"
+fullSequences = getWalkSequence(dimensions, gaitParams,gaitType)
+print("fullSequences: ")
+print(fullSequences)
