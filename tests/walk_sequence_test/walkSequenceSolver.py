@@ -74,6 +74,10 @@ def buildTripodSequences(startPose, aLiftSwing, hipSwings, stepCount, walkMode):
 
     return [forwardAlphaSeqs, liftBetaSeqs, liftGammaSeqs]
 
+def tripodASequence(forwardAlphaSeqs,liftGammaSeqs,liftBetaSeqs,doubleStepCount):
+    a = 0
+    # todo: here
+
 
 def tripodSequence(pose, aLiftSwing, hipSwings, stepCount, walkMode):
     [forwardAlphaSeqs, liftBetaSeqs, liftGammaSeqs] = buildTripodSequences(
@@ -89,6 +93,15 @@ def tripodSequence(pose, aLiftSwing, hipSwings, stepCount, walkMode):
     #print(liftBetaSeqs)
     #print("---liftGammaSeqs: ")                                                        
     #print(liftGammaSeqs)    
+    doubleStepCount = 2 * stepCount
+
+    # todo: build this sequence 
+    tripodASequence(
+        forwardAlphaSeqs,
+        liftGammaSeqs,
+        liftBetaSeqs,
+        doubleStepCount
+    )
 
 
 def rippleSequence(startPose, aLiftSwing, hipSwings, stepCount):
