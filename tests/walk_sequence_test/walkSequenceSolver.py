@@ -1,4 +1,5 @@
 from hexapodSolver import solveHexapodParams
+from copy import deepcopy
 
 
 def getHipSwingForward(aHipSwing):
@@ -74,6 +75,62 @@ def buildTripodSequences(startPose, aLiftSwing, hipSwings, stepCount, walkMode):
 
     return [forwardAlphaSeqs, liftBetaSeqs, liftGammaSeqs]
 
+def tripodASequence(forwardAlphaSeqs,liftGammaSeqs,
+                    liftBetaSeqs,doubleStepCount): 
+
+    correct_poses = {
+        0: {
+            "name": "right-middle",
+            "id": 0,
+            "coxia": [],
+            "femur": [],
+            "tibia": [],
+        },       
+        2: {
+            "name": "left-front",
+            "id": 2,
+            "coxia": [],
+            "femur": [],
+            "tibia": [],
+        },
+        4: {
+            "name": "left-back",
+            "id": 4,
+            "coxia": [],
+            "femur": [],
+            "tibia": [],
+        },
+    }
+
+    for id_num in correct_poses:
+        
+        print("id_num name---" + str(correct_poses[id_num]["name"]))
+
+        # 1. generating alpha sequences (coxia)
+        alpha = forwardAlphaSeqs[correct_poses[id_num]["name"]]
+        alpha_rev = deepcopy(alpha)
+        alpha_rev.reverse()
+        alpha = alpha + alpha_rev 
+    
+        # 2. generating beta sequences (femur)
+        beta = liftBetaSeqs[correct_poses[id_num]["name"]]
+        beta_rev = deepcopy(beta)
+        beta_rev.reverse()
+        fillArrayBeta = [beta[0]]*int(doubleStepCount)
+        beta = beta+beta_rev+fillArrayBeta
+
+        # 3. generating gamma sequences (tibia)
+
+        gamma = liftGammaSeqs[correct_poses[id_num]["name"]]
+        gamma_rev = deepcopy(gamma)
+        gamma_rev.reverse()
+        fillArrayGamma = [gamma[0]]*int(doubleStepCount)
+        gamma = gamma+gamma_rev+fillArrayGamma
+
+        # todo here    
+    print("forwardAlphaSeqs: ")
+    print(forwardAlphaSeqs)
+    
 
 def tripodSequence(pose, aLiftSwing, hipSwings, stepCount, walkMode):
     [forwardAlphaSeqs, liftBetaSeqs, liftGammaSeqs] = buildTripodSequences(
@@ -82,6 +139,11 @@ def tripodSequence(pose, aLiftSwing, hipSwings, stepCount, walkMode):
                                                         hipSwings, 
                                                         stepCount, 
                                                         walkMode)
+
+    doubleStepCount = stepCount * 2 
+
+    tripodASequence(forwardAlphaSeqs,liftGammaSeqs,
+                    liftBetaSeqs,doubleStepCount)                                                        
     
     #print("---forwardAlphaSeqs: ")                                                        
     #print(forwardAlphaSeqs)        
