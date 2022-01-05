@@ -231,9 +231,55 @@ def tripodSequence(pose, aLiftSwing, hipSwings, stepCount, walkMode):
     return tripodFull
 
 
-def rippleSequence(startPose, aLiftSwing, hipSwings, stepCount):
-    b = 0
+def buildRippleLegSequence(position, bLift, gLift, fw1, fw2, bk1, bk2, bk3, bk4):
+    stepCount = len(fw1)
+    revGLift = deepcopy(gLift)
+    revGLift.reverse()
 
+    revBLift = deepcopy(bLift)
+    revBLift.reverse()
+
+    b0 = bLift[0]
+    g0 = gLift[0]
+
+    bN = [b0] * stepCount
+    gN = [g0] * stepCount
+
+    alphaSeq = fw1+fw2+bk1+bk2+bk3+bk4
+    betaSeq = bLift+revBLift+bN+bN+bN+bN
+    gammaSeq = gLift+revGLift+gN+gN+gN+gN
+
+def rippleSequence(startPose, aLiftSwing, hipSwings, stepCount, walkMode):
+    print("In ripple sequence")
+
+
+    sequences = {}
+    betaLift = []
+    gammaLift = []
+    for legPositionsIndex in startPose:
+        print("legPositionsIndex")
+        print(legPositionsIndex)
+        alpha = startPose[legPositionsIndex]['coxia']
+        beta = startPose[legPositionsIndex]['femur']
+        gamma = startPose[legPositionsIndex]['tibia']
+
+        legPositionName = startPose[legPositionsIndex]['name']
+        delta = hipSwings[legPositionName]
+        halfDelta = delta / 2.0
+        # 1. build beta sequence
+        betaLift = buildSequence(beta, aLiftSwing, stepCount)
+        gammaLift = buildSequence(gamma, -aLiftSwing / 2.0, stepCount)
+
+        fw1 = buildSequence(alpha - delta, delta, stepCount)
+        fw2 = buildSequence(alpha, delta, stepCount)
+
+        bk1 = buildSequence(alpha + delta, -halfDelta, stepCount)
+        bk2 = buildSequence(alpha + halfDelta, -halfDelta, stepCount)
+        bk3 = buildSequence(alpha, -halfDelta, stepCount)
+        bk4 = buildSequence(alpha - halfDelta, -halfDelta, stepCount)
+
+        buildRippleLegSequence(legPositionName, 
+                betaLift, gammaLift, fw1, fw2, bk1, bk2, bk3, bk4)
 
 def getWalkSequence(dimensions, params, gaitType="tripod", walkMode="walking"):
     print("in getWalkSequence")
