@@ -78,7 +78,7 @@ def buildTripodSequences(startPose, aLiftSwing, hipSwings, stepCount, walkMode):
 def tripodASequence(forwardAlphaSeqs,liftGammaSeqs,
                     liftBetaSeqs,doubleStepCount): 
 
-    correct_poses = {
+    current_poses = {
         0: {
             "name": "right-middle",
             "id": 0,
@@ -102,34 +102,38 @@ def tripodASequence(forwardAlphaSeqs,liftGammaSeqs,
         },
     }
 
-    for id_num in correct_poses:
+    for id_num in current_poses:
         
-        print("id_num name---" + str(correct_poses[id_num]["name"]))
+        print("id_num name---" + str(current_poses[id_num]["name"]))
 
         # 1. generating alpha sequences (coxia)
-        alpha = forwardAlphaSeqs[correct_poses[id_num]["name"]]
+        alpha = forwardAlphaSeqs[current_poses[id_num]["name"]]
         alpha_rev = deepcopy(alpha)
         alpha_rev.reverse()
         alpha = alpha + alpha_rev 
+        current_poses[id_num]["coxia"] = alpha 
     
         # 2. generating beta sequences (femur)
-        beta = liftBetaSeqs[correct_poses[id_num]["name"]]
+        beta = liftBetaSeqs[current_poses[id_num]["name"]]
         beta_rev = deepcopy(beta)
         beta_rev.reverse()
         fillArrayBeta = [beta[0]]*int(doubleStepCount)
         beta = beta+beta_rev+fillArrayBeta
+        current_poses[id_num]["femur"] = beta
 
         # 3. generating gamma sequences (tibia)
 
-        gamma = liftGammaSeqs[correct_poses[id_num]["name"]]
+        gamma = liftGammaSeqs[current_poses[id_num]["name"]]
         gamma_rev = deepcopy(gamma)
         gamma_rev.reverse()
         fillArrayGamma = [gamma[0]]*int(doubleStepCount)
         gamma = gamma+gamma_rev+fillArrayGamma
+        current_poses[id_num]["tibia"] = gamma
 
-        # todo here    
-    print("forwardAlphaSeqs: ")
-    print(forwardAlphaSeqs)
+    print("---current_poses")
+    print(current_poses)
+    #print("forwardAlphaSeqs: ")
+    #print(forwardAlphaSeqs)
     
 
 def tripodSequence(pose, aLiftSwing, hipSwings, stepCount, walkMode):
