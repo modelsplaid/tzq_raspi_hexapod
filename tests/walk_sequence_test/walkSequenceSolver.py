@@ -1,6 +1,6 @@
 from hexapodSolver import solveHexapodParams
 from copy import deepcopy
-
+import numpy as np
 
 def getHipSwingForward(aHipSwing):
 
@@ -236,7 +236,14 @@ def modSequence(mod, seq):
     #//console.log(sequence)
 
     #return sequence.slice(mod, mod + 6).flat()
-    a = 0
+    sequence = seq + seq
+    sequence_np = np.array(sequence)
+    seqFlattenNp = sequence_np.flatten()
+    sequenceFlatten = seqFlattenNp.tolist()
+    sequenceMod = sequenceFlatten[mod:mod+6]
+    
+    return sequenceMod
+    #sequence.slice(mod, mod + 6).flat()
 
 def buildRippleLegSequence(position, bLift, gLift, fw1, fw2, bk1, bk2, bk3, bk4):
     stepCount = len(fw1)
@@ -256,8 +263,21 @@ def buildRippleLegSequence(position, bLift, gLift, fw1, fw2, bk1, bk2, bk3, bk4)
     betaSeq = [bLift]+[revBLift]+[bN]+[bN]+[bN]+[bN]
     gammaSeq = [gLift]+[revGLift]+[gN]+[gN]+[gN]+[gN]
 
-    print("---betaSeq")
-    print(betaSeq)
+
+    moduloMap = {
+        "left-back": 0,
+        "right-front": 1,
+        "left-middle": 2,
+        "right-back": 3,
+        "left-front": 4,
+        "right-middle": 5,
+    }
+
+    alpha = modSequence(moduloMap[position], alphaSeq) # todo here
+    beta = modSequence(moduloMap[position], betaSeq)
+    gamma = modSequence(moduloMap[position], gammaSeq)
+       
+    return [alpha,beta,gamma]
 
 def rippleSequence(startPose, aLiftSwing, hipSwings, stepCount, walkMode):
     print("In ripple sequence")
@@ -288,8 +308,12 @@ def rippleSequence(startPose, aLiftSwing, hipSwings, stepCount, walkMode):
         bk3 = buildSequence(alpha, -halfDelta, stepCount)
         bk4 = buildSequence(alpha - halfDelta, -halfDelta, stepCount)
 
-        buildRippleLegSequence(legPositionName, 
+        sequences[legPositionName] = buildRippleLegSequence(legPositionName, 
                 betaLift, gammaLift, fw1, fw2, bk1, bk2, bk3, bk4)
+
+        print("---sequences[legPositionName]: " +str(legPositionName)  )                
+        print(sequences[legPositionName])
+
 
 def getWalkSequence(dimensions, params, gaitType="tripod", walkMode="walking"):
     print("in getWalkSequence")
