@@ -230,6 +230,13 @@ def tripodSequence(pose, aLiftSwing, hipSwings, stepCount, walkMode):
         
     return tripodFull
 
+def modSequence(mod, seq):
+    #const sequence = [...seq, ...seq]
+    #//console.log("---sequence: ")
+    #//console.log(sequence)
+
+    #return sequence.slice(mod, mod + 6).flat()
+    a = 0
 
 def buildRippleLegSequence(position, bLift, gLift, fw1, fw2, bk1, bk2, bk3, bk4):
     stepCount = len(fw1)
@@ -245,9 +252,12 @@ def buildRippleLegSequence(position, bLift, gLift, fw1, fw2, bk1, bk2, bk3, bk4)
     bN = [b0] * stepCount
     gN = [g0] * stepCount
 
-    alphaSeq = fw1+fw2+bk1+bk2+bk3+bk4
-    betaSeq = bLift+revBLift+bN+bN+bN+bN
-    gammaSeq = gLift+revGLift+gN+gN+gN+gN
+    alphaSeq = [fw1]+[fw2]+[bk1]+[bk2]+[bk3]+[bk4]
+    betaSeq = [bLift]+[revBLift]+[bN]+[bN]+[bN]+[bN]
+    gammaSeq = [gLift]+[revGLift]+[gN]+[gN]+[gN]+[gN]
+
+    print("---betaSeq")
+    print(betaSeq)
 
 def rippleSequence(startPose, aLiftSwing, hipSwings, stepCount, walkMode):
     print("In ripple sequence")
