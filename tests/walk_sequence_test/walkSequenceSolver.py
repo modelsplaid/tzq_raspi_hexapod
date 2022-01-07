@@ -237,13 +237,12 @@ def modSequence(mod, seq):
 
     #return sequence.slice(mod, mod + 6).flat()
     sequence = seq + seq
-    sequence_np = np.array(sequence)
-    seqFlattenNp = sequence_np.flatten()
-    sequenceFlatten = seqFlattenNp.tolist()
-    sequenceMod = sequenceFlatten[mod:mod+6]
+    sequence_np = np.array(sequence)        
+    sequenceModNp = sequence_np[mod:mod+6]
+    seqFlattenNp = sequenceModNp.flatten()
+    sequenceModList = seqFlattenNp.tolist()
     
-    return sequenceMod
-    #sequence.slice(mod, mod + 6).flat()
+    return sequenceModList
 
 def buildRippleLegSequence(position, bLift, gLift, fw1, fw2, bk1, bk2, bk3, bk4):
     stepCount = len(fw1)
