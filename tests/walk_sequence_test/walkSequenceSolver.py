@@ -282,7 +282,53 @@ def rippleSequence(startPose, aLiftSwing, hipSwings, stepCount, walkMode):
     print("In ripple sequence")
 
 
-    sequences = {}
+    #sequences = {}
+
+    sequences = {
+        0: {
+            "name": "right-middle",
+            "id": 0,
+            "coxia": [],
+            "femur": [],
+            "tibia": [],
+        },
+        1: {
+            "name": "right-front",
+            "id": 1,
+            "coxia": [],
+            "femur": [],
+            "tibia": [],
+        },
+        2: {
+            "name": "left-front",
+            "id": 2,
+            "coxia": [],
+            "femur": [],
+            "tibia": [],
+        },
+        3: {
+            "name": "left-middle",
+            "id": 3,
+            "coxia": [],
+            "femur": [],
+            "tibia": [],
+        },
+        4: {
+            "name": "left-back",
+            "id": 4,
+            "coxia": [],
+            "femur": [],
+            "tibia": [],
+        },
+        5: {
+            "name": "right-back",
+            "id": 5,
+            "coxia": [],
+            "femur": [],
+            "tibia": [],
+        },
+    }
+
     betaLift = []
     gammaLift = []
     for legPositionsIndex in startPose:
@@ -307,12 +353,16 @@ def rippleSequence(startPose, aLiftSwing, hipSwings, stepCount, walkMode):
         bk3 = buildSequence(alpha, -halfDelta, stepCount)
         bk4 = buildSequence(alpha - halfDelta, -halfDelta, stepCount)
 
-        sequences[legPositionName] = buildRippleLegSequence(legPositionName, 
+        [alpha,beta,gamma] = buildRippleLegSequence(legPositionName, 
                 betaLift, gammaLift, fw1, fw2, bk1, bk2, bk3, bk4)
 
-        print("---sequences[legPositionName]: " +str(legPositionName)  )                
-        print(sequences[legPositionName])
-
+        sequences[legPositionsIndex]['coxia'] = alpha
+        sequences[legPositionsIndex]['femur'] = beta
+        sequences[legPositionsIndex]['tibia'] = gamma
+        
+        #print("---sequences[legPositionName]: " +str(legPositionName)  )                
+        #print(sequences[legPositionName])
+    return sequences
 
 def getWalkSequence(dimensions, params, gaitType="tripod", walkMode="walking"):
     print("in getWalkSequence")
