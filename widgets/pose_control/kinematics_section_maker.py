@@ -35,14 +35,15 @@ def code(name):
 
 
 def make_leg_section(name, joint_widgets, add_joint_names=False):
-    header = html.Label(dcc.Markdown(f"( `{name.upper()}` )"))
+    #header = html.Label(dcc.Markdown(f"( `{name.upper()}` )"))
+    header = html.Label(dcc.Markdown(f"( `{name}` )"))
     coxia = joint_widgets[name]["coxia"]
     femur = joint_widgets[name]["femur"]
     tibia = joint_widgets[name]["tibia"]
 
     if add_joint_names:
         section = make_section_type3(
-            coxia, femur, tibia, code("coxia"), code("femur"), code("tibia")
+            coxia, femur, tibia, code("coxia val"), code("femur val"), code("tibia val")
         )
     else:
         section = make_section_type3(coxia, femur, tibia)

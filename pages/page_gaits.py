@@ -18,10 +18,18 @@ except:
 sys.path.append("../../")
 
 if WHICH_POSE_CONTROL_UI == 1:
+    print("---1WHICH_POSE_CONTROL_UI: ")
+    print(WHICH_POSE_CONTROL_UI)
+
     from widgets.pose_control.generic_daq_slider_ui import KINEMATICS_WIDGETS_SECTION
 elif WHICH_POSE_CONTROL_UI == 2:
+    print("---2WHICH_POSE_CONTROL_UI: ")
+    print(WHICH_POSE_CONTROL_UI)
+
     from widgets.pose_control.generic_slider_ui import KINEMATICS_WIDGETS_SECTION
 else:
+    print("---else WHICH_POSE_CONTROL_UI: ")
+    print(WHICH_POSE_CONTROL_UI)
     from widgets.pose_control.generic_input_ui import KINEMATICS_WIDGETS_SECTION
 
 # ......................
@@ -35,7 +43,8 @@ PARAMETERS_SECTION_ID = "parameters-gaits"
 sidebar = shared.make_standard_page_sidebar(
     MESSAGE_SECTION_ID, PARAMETERS_SECTION_ID, KINEMATICS_WIDGETS_SECTION
 )
-
+print("---sidebar")
+print(sidebar)
 layout = shared.make_standard_page_layout(GRAPH_ID, sidebar)
 
 # ......................
