@@ -8,11 +8,12 @@ from texts import (
     IK_PAGE_PATH,
     PATTERNS_PAGE_PATH,
     ROOT_PATH,
+    PAGE_GAITS_PATH,
 )
 from settings import DEBUG_MODE
 from style_settings import GLOBAL_PAGE_STYLE
 from app import app
-from pages import page_inverse, page_kinematics, page_patterns, page_landing
+from pages import page_inverse, page_kinematics, page_patterns, page_landing, page_gaits
 
 server = app.server
 
@@ -29,6 +30,7 @@ div_header = html.Div(
         dcc.Link(html.H6("4. ● "), href=IK_PAGE_PATH, style=icon_link_style),
         dcc.Link(html.H6("5. ● "), href=KINEMATICS_PAGE_PATH, style=icon_link_style),
         dcc.Link(html.H6("6. ● "), href=ROOT_PATH, style=icon_link_style),
+        dcc.Link(html.H6("7. ● "), href=PAGE_GAITS_PATH, style=icon_link_style),
     ],
     style={"display": "flex", "flex-direction": "row"},
 )
@@ -45,6 +47,8 @@ div_footer = html.Div(
         html.Br(),
         dcc.Link("● Kinematics", href=KINEMATICS_PAGE_PATH),
         html.Br(),
+        dcc.Link("● Gaits", href=PAGE_GAITS_PATH),
+        html.Br(),        
         dcc.Link("● Root", href=ROOT_PATH),
         html.Br(),
     ],
@@ -68,10 +72,11 @@ app.layout = html.Div(
 # URL redirection
 # ....................
 PAGES = {
+    PAGE_GAITS_PATH: page_gaits.layout,
     IK_PAGE_PATH: page_inverse.layout,
     KINEMATICS_PAGE_PATH: page_kinematics.layout,
     PATTERNS_PAGE_PATH: page_patterns.layout,
-    ROOT_PATH: page_landing.layout,
+    ROOT_PATH: page_landing.layout,    
 }
 
 
@@ -93,4 +98,4 @@ if __name__ == "__main__":
     #app.run_server(
     #    debug=True#debug=DEBUG_MODE, dev_tools_ui=DEBUG_MODE, dev_tools_props_check=DEBUG_MODE
     #)
-    app.run_server(host= '0.0.0.0', port = 8059,debug=True)
+    app.run_server(host= '0.0.0.0', port = 8061,debug=True)
