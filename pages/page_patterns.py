@@ -3,7 +3,10 @@ from dash.dependencies import Output
 from app import app
 from hexapod.models import VirtualHexapod
 from hexapod.const import BASE_PLOTTER
-from hexapod.const import VIRTUAL_TO_REAL
+try:
+    from hexapod.const import VIRTUAL_TO_REAL
+except: 
+    print("page_patterns running in simulator")
 
 from widgets.leg_patterns_ui import PATTERNS_WIDGETS_SECTION, PATTERNS_CALLBACK_INPUTS
 from pages import helpers, shared
@@ -40,12 +43,13 @@ def update_patterns_page(dimensions_json, poses_json, relayout_data, figure):
     poses = helpers.load_params(poses_json, "pose")
     hexapod = VirtualHexapod(dimensions)
 
-
     # tzq comment: the poses is where we need to send to real robot
-    global VIRTUAL_TO_REAL
-    pulses2servos = VIRTUAL_TO_REAL.update_puses(poses)
-    VIRTUAL_TO_REAL.SendBusServoPulse(300,pulses2servos)        
-
+    try:
+        global VIRTUAL_TO_REAL
+        pulses2servos = VIRTUAL_TO_REAL.update_puses(poses)
+        VIRTUAL_TO_REAL.SendBusServoPulse(300,pulses2servos)        
+    except: 
+        print("In page_patterns.py. cannot update real robots ")
 
     try:
         hexapod.update(poses)

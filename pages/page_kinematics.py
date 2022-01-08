@@ -4,15 +4,22 @@ from app import app
 from settings import WHICH_POSE_CONTROL_UI
 from hexapod.models import VirtualHexapod
 from hexapod.const import BASE_PLOTTER
-from hexapod.const import VIRTUAL_TO_REAL
 from widgets.pose_control.components import KINEMATICS_CALLBACK_INPUTS
 from pages import helpers, shared
 from copy import deepcopy
 
 import time
 import sys
+
+try:
+    from hexapod.const import VIRTUAL_TO_REAL
+except: 
+    print("page_kinematics running in simulator")
 sys.path.append("../../")
-from Hardware import jointangle_to_pulse 
+#try:
+#    from Hardware import jointangle_to_pulse 
+#except: 
+#    print("import hardware failed! only running on simulator")
 
 if WHICH_POSE_CONTROL_UI == 1:
     from widgets.pose_control.generic_daq_slider_ui import KINEMATICS_WIDGETS_SECTION
@@ -48,21 +55,22 @@ def update_kinematics_page(dimensions_json, poses_json, relayout_data, figure):
 
     dimensions = helpers.load_params(dimensions_json, "dims")
     
-    print("---update kine page, dimensions_json: ")
-    print(dimensions_json)
-    print("---update kine page, dimensions: ")
-    print(dimensions)
-
-
+    #print("---update kine page, dimensions_json: ")
+    #print(dimensions_json)
+    #print("---update kine page, dimensions: ")
+    #print(dimensions)
 
     poses = helpers.load_params(poses_json, "pose")
+    
     hexapod = VirtualHexapod(dimensions)
 
     # tzq comment: the poses is where we need to send to real robot
-    global VIRTUAL_TO_REAL
-    pulses2servos = VIRTUAL_TO_REAL.update_puses(poses)
-    VIRTUAL_TO_REAL.SendBusServoPulse(300,pulses2servos)        
-
+    try:
+        global VIRTUAL_TO_REAL
+        pulses2servos = VIRTUAL_TO_REAL.update_puses(poses)
+        VIRTUAL_TO_REAL.SendBusServoPulse(300,pulses2servos)        
+    except: 
+        print("Page kinematics running in simulator")
     # tzq todo here
     try:
         hexapod.update(poses, assume_ground_targets=False)
@@ -72,8 +80,7 @@ def update_kinematics_page(dimensions_json, poses_json, relayout_data, figure):
     BASE_PLOTTER.update(figure, hexapod)
     helpers.change_camera_view(figure, relayout_data)
 
-    print("---tzq : dimensions_json: ")
-    print(dimensions_json)
+
     return figure, ""
 
 
