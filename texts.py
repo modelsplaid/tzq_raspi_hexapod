@@ -12,5 +12,6 @@ ROOT_PATH = "/"
 
 DIMENSIONS_WIDGETS_HEADER = "robot dimensions".upper()
 PATTERNS_WIDGETS_HEADER = "leg patterns".upper()
+GAITS_WIDGETS_HEADER = "walking gaits".upper()
 IK_WIDGETS_HEADER = "inverse kinematics".upper()
 KINEMATICS_WIDGETS_HEADER = "kinematics".upper()
