@@ -38,7 +38,7 @@ outputs, inputs, states = shared.make_standard_page_callback_params(
 
 @app.callback(outputs, inputs, states)
 def update_patterns_page(dimensions_json, poses_json, relayout_data, figure):
-
+    print("in update_patterns_page")
     dimensions = helpers.load_params(dimensions_json, "dims")
     poses = helpers.load_params(poses_json, "pose")
     hexapod = VirtualHexapod(dimensions)
@@ -71,4 +71,8 @@ input_parameters = PATTERNS_CALLBACK_INPUTS
 
 @app.callback(output_parameter, input_parameters)
 def update_poses_alpha_beta_gamma(alpha, beta, gamma):
+    print("alpha" +str(alpha))    
+    alpha = 0
+    beta = 0
+    gamma = 0
     return json.dumps(helpers.make_pose(alpha, beta, gamma))
