@@ -34,7 +34,8 @@ def make_slider(slider_id, name, max_angle):
         color={"default": SLIDER_COLOR},
         theme=SLIDER_THEME,
     )
-
+    
+    
     return html.Div(daq_slider, style={"padding": "2em"})
 
 
