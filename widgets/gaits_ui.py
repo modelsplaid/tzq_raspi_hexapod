@@ -2,6 +2,7 @@
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input
+import dash
 import dash_daq
 from texts import GAITS_WIDGETS_HEADER
 from settings import (
@@ -34,9 +35,10 @@ def make_slider(slider_id, name, max_angle):
         color={"default": SLIDER_COLOR},
         theme=SLIDER_THEME,
     )
+    testfont = dash.html.Font(name)
     
-    #return html.Div(daq_slider, style={"padding-top": "10%"})
-    return html.Div(daq_slider, style={"padding-top": "10%","padding-left": "5%"})
+    return html.Div([testfont,daq_slider], style={"padding": "2%"})
+    #return html.Div([testfont,daq_slider], style={"padding-top": "10%","padding-left": "5%"})
 
 
 # ................................
@@ -44,7 +46,7 @@ def make_slider(slider_id, name, max_angle):
 # ................................
 
 HEADER = html.Label(dcc.Markdown(f"**{GAITS_WIDGETS_HEADER}**"))
-WIDGET_NAMES = ["hipSwing", "liftSwing", "hipStance","liftStance","stepCount"]
+WIDGET_NAMES = ["hipSwing", "liftSwing", "hipStance","liftStance","stepCount","speed"]
 GAITS_WIDGET_IDS = [f"widget-{name}" for name in WIDGET_NAMES]
 GAITS_CALLBACK_INPUTS = [Input(i, "value") for i in GAITS_WIDGET_IDS]
 
@@ -67,11 +69,11 @@ forward_backward_sel_r_widges=dcc.RadioItems(
 )
 walk_radio_widgets = [gaits_type_r_widges,forward_backward_sel_r_widges]
 
-b1 = html.Button('Step by step', id='button')
-b2 = html.Button('Keep moving', id='button')
+b1 = html.Button('Step by step', id='button1')
+b2 = html.Button('Keep moving', id='button2')
 steps_moving_b_widges = [b1,b2]
 
-max_angles = [ALPHA_MAX_ANGLE, BETA_MAX_ANGLE, GAMMA_MAX_ANGLE,GAMMA_MAX_ANGLE]
+max_angles = [ALPHA_MAX_ANGLE, BETA_MAX_ANGLE, GAMMA_MAX_ANGLE,GAMMA_MAX_ANGLE,GAMMA_MAX_ANGLE,GAMMA_MAX_ANGLE]
 widgets = [
     make_slider(id, name, angle)
     for id, name, angle in zip(GAITS_WIDGET_IDS, WIDGET_NAMES, max_angles)
