@@ -35,8 +35,8 @@ def make_slider(slider_id, name, max_angle):
         theme=SLIDER_THEME,
     )
     
-    
-    return html.Div(daq_slider, style={"padding": "2em"})
+    #return html.Div(daq_slider, style={"padding-top": "10%"})
+    return html.Div(daq_slider, style={"padding-top": "10%","padding-left": "5%"})
 
 
 # ................................
@@ -44,13 +44,36 @@ def make_slider(slider_id, name, max_angle):
 # ................................
 
 HEADER = html.Label(dcc.Markdown(f"**{GAITS_WIDGETS_HEADER}**"))
-WIDGET_NAMES = ["hipSwing", "hipStance", "liftSwing","liftStance"]
+WIDGET_NAMES = ["hipSwing", "liftSwing", "hipStance","liftStance","stepCount"]
 GAITS_WIDGET_IDS = [f"widget-{name}" for name in WIDGET_NAMES]
 GAITS_CALLBACK_INPUTS = [Input(i, "value") for i in GAITS_WIDGET_IDS]
+
+gaits_type_r_widges=dcc.RadioItems(
+    options=[
+        {'label': 'tripod gaits', 'value': 'tripod'},
+        {'label': 'ripple gaits', 'value': 'ripple'},
+    ],
+    value='MTL',
+    labelStyle={'display': 'inline-block'}, # display of flex to create a vertical list, or of inline-block for horizontal.
+)
+
+forward_backward_sel_r_widges=dcc.RadioItems(
+    options=[
+        {'label': 'moving forward', 'value': 'forward'},
+        {'label': 'moving backward', 'value': 'backward'},
+    ],
+    value='MTL',
+    labelStyle={'display': 'inline-block'}, # display of flex to create a vertical list, or of inline-block for horizontal.
+)
+walk_radio_widgets = [gaits_type_r_widges,forward_backward_sel_r_widges]
+
+b1 = html.Button('Step by step', id='button')
+b2 = html.Button('Keep moving', id='button')
+steps_moving_b_widges = [b1,b2]
 
 max_angles = [ALPHA_MAX_ANGLE, BETA_MAX_ANGLE, GAMMA_MAX_ANGLE,GAMMA_MAX_ANGLE]
 widgets = [
     make_slider(id, name, angle)
     for id, name, angle in zip(GAITS_WIDGET_IDS, WIDGET_NAMES, max_angles)
 ]
-GAITS_WIDGETS_SECTION = html.Div([HEADER] + widgets)
+GAITS_WIDGETS_SECTION = html.Div([HEADER] +steps_moving_b_widges  + walk_radio_widgets+ widgets)
