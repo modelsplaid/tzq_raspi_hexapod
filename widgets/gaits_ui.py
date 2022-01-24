@@ -15,16 +15,7 @@ from settings import (
 from style_settings import SLIDER_THEME, SLIDER_HANDLE_COLOR, SLIDER_COLOR
 
 
-def make_radio(radio_id, label_name, value):
 
-    dcc.RadioItems(
-        options=[
-            {'label': 'moving forward', 'value': 'forward'},
-            {'label': 'moving backward', 'value': 'backward'},
-        ],
-        value='MTL',
-        labelStyle={'display': 'inline-block'}, # display of flex to create a vertical list, or of inline-block for horizontal.
-    )
 
 
 def make_button(button_id, button_name):
@@ -90,6 +81,24 @@ RADIO_OPTIONS_GAIT_TYPE_VALUES = ['tripod','ripple']
 
 RADIO_OPTIONS_MOVING_DIRS_LABELS = ['moving forward','moving backward']
 RADIO_OPTIONS_MOVING_DIR_VALUES = ['forward','backward']
+
+def make_radio(radio_id, label_name,label_val):
+    
+    num_options = len(label_name)
+
+    options = [{'label': label_name[0] , 'value': label_val[0]}]
+    for i in range(num_options-1):
+        options = options + [{'label': label_name[i+1] , 'value': label_val[i+1]}]
+
+    dcc.RadioItems(
+        options=[
+            {'label': 'moving forward', 'value': 'forward'},
+            {'label': 'moving backward', 'value': 'backward'},
+        ],
+        value='MTL',
+        labelStyle={'display': 'inline-block'}, # display of flex to create a vertical list, or of inline-block for horizontal.
+    )
+
 
 gaits_type_r_widges=dcc.RadioItems(
     options=[
