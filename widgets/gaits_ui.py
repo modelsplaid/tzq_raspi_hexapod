@@ -46,6 +46,21 @@ def make_slider(slider_id, name, max_angle):
     return html.Div([testfont,daq_slider], style={"padding": "2%"})
     #return html.Div([testfont,daq_slider], style={"padding-top": "10%","padding-left": "5%"})
 
+def make_radio(label_name,label_val):
+    
+    num_options = len(label_name)
+
+    options_append = [{'label': label_name[0] , 'value': label_val[0]}]
+    for i in range(num_options-1):
+        options_append = options_append + [{'label': label_name[i+1] , 'value': label_val[i+1]}]
+
+    return dcc.RadioItems(
+        options = options_append,
+        value ='MTL',
+        labelStyle = {'display': 'inline-block'}, # display of flex to create a vertical list, or of inline-block for horizontal.
+    )
+
+
 # ................................
 # COMPONENTS
 # ................................
@@ -73,51 +88,17 @@ button_widgets = [
 ]
 
 # 3. make radio widgets
-RADIO_NAMES = ['Gait types','Moving directions']
-RADIO_IDS = [f"radio-widget-{name}" for name in RADIO_NAMES]
+GAIT_TYPE_RADIO_OPTION_LABEL = ['tripod gaits','ripple gaits']
+GAIT_TYPE_RADIO_OPTION_VAL = ['tripod','ripple']
 
-RADIO_OPTIONS_GAIT_TYPE_LABELS = ['tripod gaits','ripple gaits']
-RADIO_OPTIONS_GAIT_TYPE_VALUES = ['tripod','ripple']
+MOVING_DIR_RADIO_OPTION_LABEL = ['moving forward','moving backward']
+MOVING_DIR_RADIO_OPTION_VAL = ['forward','backward']
 
-RADIO_OPTIONS_MOVING_DIRS_LABELS = ['moving forward','moving backward']
-RADIO_OPTIONS_MOVING_DIR_VALUES = ['forward','backward']
+radio_widgets = [
+    make_radio(option_label,option_val)
+    for option_label,option_val in zip(
+        [GAIT_TYPE_RADIO_OPTION_LABEL,MOVING_DIR_RADIO_OPTION_LABEL],
+        [GAIT_TYPE_RADIO_OPTION_VAL,MOVING_DIR_RADIO_OPTION_VAL])
+]
 
-def make_radio(radio_id, label_name,label_val):
-    
-    num_options = len(label_name)
-
-    options = [{'label': label_name[0] , 'value': label_val[0]}]
-    for i in range(num_options-1):
-        options = options + [{'label': label_name[i+1] , 'value': label_val[i+1]}]
-
-    dcc.RadioItems(
-        options=[
-            {'label': 'moving forward', 'value': 'forward'},
-            {'label': 'moving backward', 'value': 'backward'},
-        ],
-        value='MTL',
-        labelStyle={'display': 'inline-block'}, # display of flex to create a vertical list, or of inline-block for horizontal.
-    )
-
-
-gaits_type_r_widges=dcc.RadioItems(
-    options=[
-        {'label': 'tripod gaits', 'value': 'tripod'},
-        {'label': 'ripple gaits', 'value': 'ripple'},
-    ],
-    value='MTL',
-    labelStyle={'display': 'inline-block'}, # display of flex to create a vertical list, or of inline-block for horizontal.
-)
-
-forward_backward_sel_r_widges=dcc.RadioItems(
-    options=[
-        {'label': 'moving forward', 'value': 'forward'},
-        {'label': 'moving backward', 'value': 'backward'},
-    ],
-    value='MTL',
-    labelStyle={'display': 'inline-block'}, # display of flex to create a vertical list, or of inline-block for horizontal.
-)
-walk_radio_widgets = [gaits_type_r_widges,forward_backward_sel_r_widges]
-
-
-GAITS_WIDGETS_SECTION = html.Div([HEADER] +button_widgets + walk_radio_widgets+ widgets)
+GAITS_WIDGETS_SECTION = html.Div([HEADER] +button_widgets + radio_widgets + widgets)
