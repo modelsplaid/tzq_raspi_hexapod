@@ -4,13 +4,12 @@ from app import app
 from settings import WHICH_POSE_CONTROL_UI
 from hexapod.models import VirtualHexapod
 from hexapod.const import BASE_PLOTTER
-from widgets.pose_control.components import KINEMATICS_CALLBACK_INPUTS
 from pages import helpers, shared
 from copy import deepcopy
 
 import time
 import sys
-from widgets.gaits_ui import GAITS_WIDGETS_SECTION, GAITS_CALLBACK_INPUTS
+from widgets.gaits_ui import GAITS_WIDGETS_SECTION, GAITS_CALLBACK_INPUTS,GAITS_BUTTON_CALLBACK_INPUTS
 
 try:
     from hexapod.const import VIRTUAL_TO_REAL
@@ -73,15 +72,20 @@ def update_patterns_page(dimensions_json, poses_json, relayout_data, figure):
 
 
 # ......................
-# Update parameters
+# Update parameters sliders
 # ......................
 
 output_parameter = Output(PARAMETERS_SECTION_ID, "children")
 input_parameters = GAITS_CALLBACK_INPUTS
+in_param_startstop_button = GAITS_BUTTON_CALLBACK_INPUTS
 
-
-@app.callback(output_parameter, input_parameters)
-def update_poses_alpha_beta_gamma(hipSwing_val, liftSwing_val, hipStance,liftStance,stepCount,speed):
-    print("hipSwing" +str(hipSwing_val))    
-    return json.dumps(helpers.make_pose(hipSwing_val, liftSwing_val, hipStance))#,liftStance,stepCount,speed))
+@app.callback(output_parameter, input_parameters,in_param_startstop_button)
+def update_poses_alpha_beta_gamma(
+        hipSwing_val, liftSwing_val, hipStance_val,
+        liftStance,stepCount,speed,
+        buttonStartStop_nclicks,buttonKeepMov_nclicks):
+    print("buttonStartStop_nclicks: " +str(buttonStartStop_nclicks))    
+    print("buttonKeepMov_nclicks: " +str(buttonKeepMov_nclicks))    
+    
+    return json.dumps(helpers.make_pose(hipSwing_val, liftSwing_val, hipStance_val))
 

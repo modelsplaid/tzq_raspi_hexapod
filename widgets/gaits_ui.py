@@ -12,14 +12,18 @@ from settings import (
     UPDATE_MODE,
     SLIDER_ANGLE_RESOLUTION,
 )
-from style_settings import SLIDER_THEME, SLIDER_HANDLE_COLOR, SLIDER_COLOR
+from style_settings import SLIDER_THEME, SLIDER_HANDLE_COLOR, SLIDER_COLOR,BUTTON_COLOR
 
 
 
 
 
 def make_button(button_id, button_name):
-    return html.Button(button_name, id=button_id)
+    BUTTON_STYLE = {
+        "color": BUTTON_COLOR,        
+    }
+
+    return html.Button(button_name, id=button_id,style=BUTTON_STYLE)
 
 def make_slider(slider_id, name, max_angle):
 
@@ -86,6 +90,7 @@ button_widgets = [
     for id,name in zip(BUTTON_IDS,BUTTON_NAMES)
 
 ]
+GAITS_BUTTON_CALLBACK_INPUTS = [Input(i, 'n_clicks') for i in BUTTON_IDS]
 
 # 3. make radio widgets
 GAIT_TYPE_RADIO_OPTION_LABEL = ['tripod gaits','ripple gaits']

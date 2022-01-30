@@ -3,6 +3,7 @@ DARKMODE = True
 DARK_CSS_PATH = "https://mithi.github.io/hexapod-robot-simulator/dark.css"
 LIGHT_CSS_PATH = "https://mithi.github.io/hexapod-robot-simulator/light.css"
 
+
 EXTERNAL_STYLESHEETS = [DARK_CSS_PATH]
 if not DARKMODE:
     EXTERNAL_STYLESHEETS = [LIGHT_CSS_PATH]
@@ -64,6 +65,14 @@ if not DARKMODE:
     SLIDER_HANDLE_COLOR = "#2c3e50"
     SLIDER_COLOR = "#8e44ad"
 
+
+
+BUTTON_HANDLE_COLOR = "#2ecc71"
+BUTTON_COLOR = "#FC427B"
+
+if not DARKMODE:
+    BUTTON_HANDLE_COLOR = "#2c3e50"
+    BUTTON_COLOR = "#8e44ad"
 
 # ***************************************
 # HEXAPOD GRAPH
