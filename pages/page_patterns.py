@@ -30,7 +30,6 @@ layout = shared.make_standard_page_layout(GRAPH_ID, sidebar)
 # ......................
 # Update page
 # ......................
-
 outputs, inputs, states = shared.make_standard_page_callback_params(
     GRAPH_ID, PARAMETERS_SECTION_ID, MESSAGE_SECTION_ID
 )
@@ -71,8 +70,4 @@ input_parameters = PATTERNS_CALLBACK_INPUTS
 
 @app.callback(output_parameter, input_parameters)
 def update_poses_alpha_beta_gamma(alpha, beta, gamma):
-    print("alpha" +str(alpha))    
-    alpha = 0
-    beta = 0
-    gamma = 0
     return json.dumps(helpers.make_pose(alpha, beta, gamma))

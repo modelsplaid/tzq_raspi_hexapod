@@ -10,6 +10,7 @@ from copy import deepcopy
 
 import time
 import sys
+from widgets.gaits_ui import GAITS_WIDGETS_SECTION, GAITS_CALLBACK_INPUTS
 
 try:
     from hexapod.const import VIRTUAL_TO_REAL
@@ -32,7 +33,6 @@ else:
     print(WHICH_POSE_CONTROL_UI)
     from widgets.pose_control.generic_input_ui import KINEMATICS_WIDGETS_SECTION
 
-from widgets.gaits_ui import GAITS_WIDGETS_SECTION
 # ......................
 # Page layout
 # ......................
@@ -46,4 +46,42 @@ sidebar = shared.make_standard_page_sidebar(
 )
 
 layout = shared.make_standard_page_layout(GRAPH_ID, sidebar)
+
+
+# ......................
+# Update page
+# ......................
+outputs, inputs, states = shared.make_standard_page_callback_params(
+    GRAPH_ID, PARAMETERS_SECTION_ID, MESSAGE_SECTION_ID
+)
+
+@app.callback(outputs, inputs, states)
+def update_patterns_page(dimensions_json, poses_json, relayout_data, figure):
+    print("in update_patterns_page")
+    dimensions = helpers.load_params(dimensions_json, "dims")
+    poses = helpers.load_params(poses_json, "pose")
+    hexapod = VirtualHexapod(dimensions)
+
+    try:
+        hexapod.update(poses)
+    except Exception as alert:
+        return figure, helpers.make_alert_message(alert)
+
+    BASE_PLOTTER.update(figure, hexapod)
+    helpers.change_camera_view(figure, relayout_data)
+    return figure, ""
+
+
+# ......................
+# Update parameters
+# ......................
+
+output_parameter = Output(PARAMETERS_SECTION_ID, "children")
+input_parameters = GAITS_CALLBACK_INPUTS
+
+
+@app.callback(output_parameter, input_parameters)
+def update_poses_alpha_beta_gamma(hipSwing_val, liftSwing_val, hipStance,liftStance,stepCount,speed):
+    print("hipSwing" +str(hipSwing_val))    
+    return json.dumps(helpers.make_pose(hipSwing_val, liftSwing_val, hipStance))#,liftStance,stepCount,speed))
 
