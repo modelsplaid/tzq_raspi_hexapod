@@ -29,7 +29,32 @@ gaitParams = {
     "liftSwing": 20.0,
 }
 
+def extract_walkseqs(walk_seq,index_seq): 
+    poses_deg = {
+        0: {"coxia": 0, "femur": 0, "tibia": 0, "name": "right-middle", "id": 0},
+        1: {"coxia": 0, "femur": 0, "tibia": 0, "name": "right-front", "id": 1},
+        2: {"coxia": 0, "femur": 0, "tibia": 0, "name": "left-front", "id": 2},
+        3: {"coxia": 0, "femur": 0, "tibia": 0, "name": "left-middle", "id": 3},
+        4: {"coxia": 0, "femur": 0, "tibia": 0, "name": "left-back", "id": 4},
+        5: {"coxia": 0, "femur": 0, "tibia": 0, "name": "right-back", "id": 5},
+        }
+
+    num_legs = len(walk_seq)
+    for i in range(num_legs):
+
+        poses_deg[i]['coxia'] = walk_seq[i]['coxia'][index_seq]
+        poses_deg[i]['femur'] = walk_seq[i]['femur'][index_seq]
+        poses_deg[i]['tibia'] = walk_seq[i]['tibia'][index_seq]
+
+    return poses_deg
+
+
+
 gaitType = "ripple"
 fullSequences = getWalkSequence(dimensions, gaitParams,gaitType)
-print("fullSequences: ")
-print(fullSequences)
+print("fullSequences[0]['coxia'][0]: " + str(fullSequences[0]['coxia'][0]))
+print("number of walk sequences: " + str(len(fullSequences[0]['coxia'])))
+
+extracted_seq = extract_walkseqs(fullSequences,0)
+print("extracted_seq: ")
+print(extracted_seq)

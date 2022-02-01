@@ -61,7 +61,8 @@ def update_kinematics_page(dimensions_json, poses_json, relayout_data, figure):
     #print(dimensions)
 
     poses = helpers.load_params(poses_json, "pose")
-    
+    print("poses: ")
+    print(poses)
     hexapod = VirtualHexapod(dimensions)
 
     # tzq comment: the poses is where we need to send to real robot
