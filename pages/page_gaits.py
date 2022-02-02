@@ -85,7 +85,8 @@ def process_gait_seq():
         "liftSwing": 20.0,
     }
 
-    gaitType = "ripple"
+    #gaitType = "ripple"
+    gaitType = "tripod"
     fullSequences = getWalkSequence(dimensions, gaitParams,gaitType)
     #print("fullSequences: ")
     #print(fullSequences)
