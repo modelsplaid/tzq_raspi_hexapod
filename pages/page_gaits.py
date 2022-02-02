@@ -56,12 +56,12 @@ layout = shared.make_standard_page_layout(GRAPH_ID, sidebar)
 def process_gait_seq():
 
     dimensions = {
-    "front": 100,
-    "side": 100,
-    "middle": 100,
-    "coxia": 100,
-    "femur": 100,
-    "tibia": 100,
+    "front": 59,
+    "side": 119,
+    "middle": 93,
+    "coxia": 45,
+    "femur": 75,
+    "tibia": 140,
     }
 
     POSITION_NAMES_LIST = [
