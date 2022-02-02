@@ -114,12 +114,16 @@ def update_patterns_page(dimensions_json, poses_json, relayout_data, figure):
         global VIRTUAL_TO_REAL
 
         seqs = process_gait_seq()
-        one_pose = extract_walkseqs(seqs,0)
-        print("one_pose:")
-        print(one_pose)
-        pulses2servos = VIRTUAL_TO_REAL.update_puses(one_pose)
-        VIRTUAL_TO_REAL.SendBusServoPulse(300,pulses2servos)   
 
+        num_seqs =len(seqs[0]['coxia'])
+
+        for i in range(num_seqs):
+            one_pose = extract_walkseqs(seqs,i)
+            print("one_pose:")
+            print(one_pose)
+            pulses2servos = VIRTUAL_TO_REAL.update_puses(one_pose)
+            VIRTUAL_TO_REAL.SendBusServoPulse(300,pulses2servos)   
+            time.sleep(0.4)
 
     except: 
         print("Page kinematics running in simulator")
