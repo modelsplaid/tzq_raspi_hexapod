@@ -1,13 +1,4 @@
 
-C
-C
-C
-C
-C
-
-######tzq
-#hello tangzhiqiang : first comment
-
 [![](https://img.shields.io/badge/Buy%20me%20-coffee!-orange.svg?logo=buy-me-a-coffee&color=795548)](https://ko-fi.com/minimithi)
 [![Build Status](https://travis-ci.com/mithi/hexapod-robot-simulator.svg?branch=master)](https://travis-ci.com/github/mithi/hexapod-robot-simulator)
 [![codecov](https://codecov.io/gh/mithi/hexapod-robot-simulator/branch/master/graph/badge.svg)](https://codecov.io/gh/mithi/hexapod-robot-simulator)
