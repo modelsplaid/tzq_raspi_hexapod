@@ -82,11 +82,11 @@ def process_gait_seq():
         "hipStance": 25.0,
         "stepCount": 2.0,
         "hipSwing": 25.0,
-        "liftSwing": 20.0,
+        "liftSwing": 40.0,
     }
 
-    #gaitType = "ripple"
-    gaitType = "tripod"
+    gaitType = "ripple"
+    #gaitType = "tripod"
     fullSequences = getWalkSequence(dimensions, gaitParams,gaitType)
     #print("fullSequences: ")
     #print(fullSequences)
@@ -124,7 +124,7 @@ def update_patterns_page(dimensions_json, poses_json, relayout_data, figure):
             print(one_pose)
             pulses2servos = VIRTUAL_TO_REAL.update_puses(one_pose)
             VIRTUAL_TO_REAL.SendBusServoPulse(300,pulses2servos)   
-            time.sleep(0.4)
+            time.sleep(0.3)
 
     except: 
         print("Page kinematics running in simulator")
