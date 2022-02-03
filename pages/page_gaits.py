@@ -1,4 +1,7 @@
 import json
+#from types import NoneType
+
+#from types import NoneType
 from dash.dependencies import Output
 from app import app
 from settings import WHICH_POSE_CONTROL_UI
@@ -42,7 +45,8 @@ else:
 # ......................
 # Page layout
 # ......................
-
+BUTTON_STEPBYSTEP_COUNTER=0
+#button_compare = 0
 GRAPH_ID = "graph-gaits"
 MESSAGE_SECTION_ID = "message-gaits"
 PARAMETERS_SECTION_ID = "parameters-gaits"
@@ -54,6 +58,8 @@ sidebar = shared.make_standard_page_sidebar(
 layout = shared.make_standard_page_layout(GRAPH_ID, sidebar)
 
 def process_gait_seq():
+
+    
 
     dimensions = {
     "front": 59,
@@ -102,6 +108,7 @@ outputs, inputs, states = shared.make_standard_page_callback_params(
 
 @app.callback(outputs, inputs, states)
 def update_patterns_page(dimensions_json, poses_json, relayout_data, figure):
+    global glo_step_counter
     print("in update_patterns_page")
     dimensions = helpers.load_params(dimensions_json, "dims")
     poses = helpers.load_params(poses_json, "pose")
@@ -114,7 +121,20 @@ def update_patterns_page(dimensions_json, poses_json, relayout_data, figure):
         seqs = process_gait_seq()
 
         num_seqs =len(seqs[0]['coxia'])
+        
+        global BUTTON_STEPBYSTEP_COUNTER
+        
 
+        #if(BUTTON_STEPBYSTEP_COUNTER == None):
+        #    print("BUTTON_STEPBYSTEP_COUNTER is null")
+        #    raise Exception('BUTTON_STEPBYSTEP_COUNTER is null')
+        #
+        #elif BUTTON_STEPBYSTEP_COUNTER >= 1:            
+        print("BUTTON_STEPBYSTEP_COUNTER:"+str(BUTTON_STEPBYSTEP_COUNTER%num_seqs))
+        one_pose = extract_walkseqs(seqs,BUTTON_STEPBYSTEP_COUNTER%num_seqs)
+        pulses2servos = VIRTUAL_TO_REAL.update_puses(one_pose)
+        VIRTUAL_TO_REAL.SendBusServoPulse(300,pulses2servos)
+        time.sleep(0.3)
         #for i in range(num_seqs):
         #    one_pose = extract_walkseqs(seqs,i)
         #    print("one_pose:")
@@ -149,8 +169,22 @@ def update_poses_alpha_beta_gamma(
         hipSwing_val, liftSwing_val, hipStance_val,
         liftStance,stepCount,speed,
         buttonStartStop_nclicks,buttonKeepMov_nclicks):
-    print("buttonStartStop_nclicks: " +str(buttonStartStop_nclicks))    
+    print("buttonStartStop_nclicks: " +str(buttonStartStop_nclicks))        
     print("buttonKeepMov_nclicks: " +str(buttonKeepMov_nclicks))    
+    global BUTTON_STEPBYSTEP_COUNTER
+    #global  button_compare
+
+    if(buttonStartStop_nclicks is not None):
+        BUTTON_STEPBYSTEP_COUNTER = buttonStartStop_nclicks
+    else:
+        BUTTON_STEPBYSTEP_COUNTER = 0
+
+    #if(button_compare is not None and buttonStartStop_nclicks is not None):
+    #    if(buttonStartStop_nclicks>button_compare):
+    #        button_compare = buttonStartStop_nclicks 
+    #        BUTTON_STEPBYSTEP_COUNTER = BUTTON_STEPBYSTEP_COUNTER+1
+    #else:
+    #    button_compare = 0
     
     return json.dumps(helpers.make_pose(hipSwing_val, liftSwing_val, hipStance_val))
 
