@@ -82,7 +82,7 @@ def process_gait_seq():
         "hipStance": 25.0,
         "stepCount": 2.0,
         "hipSwing": 25.0,
-        "liftSwing": 40.0,
+        "liftSwing": 60.0,
     }
 
     gaitType = "ripple"
@@ -107,9 +107,6 @@ def update_patterns_page(dimensions_json, poses_json, relayout_data, figure):
     poses = helpers.load_params(poses_json, "pose")
     hexapod = VirtualHexapod(dimensions)
 
-
-
-
     # tzq comment: the poses is where we need to send to real robot
     try:
         global VIRTUAL_TO_REAL
@@ -118,16 +115,16 @@ def update_patterns_page(dimensions_json, poses_json, relayout_data, figure):
 
         num_seqs =len(seqs[0]['coxia'])
 
-        for i in range(num_seqs):
-            one_pose = extract_walkseqs(seqs,i)
-            print("one_pose:")
-            print(one_pose)
-            pulses2servos = VIRTUAL_TO_REAL.update_puses(one_pose)
-            VIRTUAL_TO_REAL.SendBusServoPulse(300,pulses2servos)   
-            time.sleep(0.3)
+        #for i in range(num_seqs):
+        #    one_pose = extract_walkseqs(seqs,i)
+        #    print("one_pose:")
+        #    print(one_pose)
+        #    pulses2servos = VIRTUAL_TO_REAL.update_puses(one_pose)
+        #    VIRTUAL_TO_REAL.SendBusServoPulse(300,pulses2servos)   
+        #    time.sleep(0.3)
 
     except: 
-        print("Page kinematics running in simulator")
+        print("Page gaits running in simulator")
 
     try:
         hexapod.update(poses)
@@ -154,9 +151,6 @@ def update_poses_alpha_beta_gamma(
         buttonStartStop_nclicks,buttonKeepMov_nclicks):
     print("buttonStartStop_nclicks: " +str(buttonStartStop_nclicks))    
     print("buttonKeepMov_nclicks: " +str(buttonKeepMov_nclicks))    
-
-
-
     
     return json.dumps(helpers.make_pose(hipSwing_val, liftSwing_val, hipStance_val))
 

@@ -332,8 +332,8 @@ def rippleSequence(startPose, aLiftSwing, hipSwings, stepCount, walkMode):
     betaLift = []
     gammaLift = []
     for legPositionsIndex in startPose:
-        print("legPositionsIndex")
-        print(legPositionsIndex)
+        #print("legPositionsIndex")
+        #print(legPositionsIndex)
         alpha = startPose[legPositionsIndex]['coxia']
         beta = startPose[legPositionsIndex]['femur']
         gamma = startPose[legPositionsIndex]['tibia']

@@ -96,8 +96,8 @@ GAITS_BUTTON_CALLBACK_INPUTS = [Input(i, 'n_clicks') for i in BUTTON_IDS]
 GAIT_TYPE_RADIO_OPTION_LABEL = ['tripod gaits','ripple gaits']
 GAIT_TYPE_RADIO_OPTION_VAL = ['tripod','ripple']
 
-MOVING_DIR_RADIO_OPTION_LABEL = ['moving forward','moving backward']
-MOVING_DIR_RADIO_OPTION_VAL = ['forward','backward']
+MOVING_DIR_RADIO_OPTION_LABEL = ['moving forward','moving backward','rotate left','rotate right']
+MOVING_DIR_RADIO_OPTION_VAL = ['forward','backward','rotate left','rotate right']
 
 radio_widgets = [
     make_radio(option_label,option_val)

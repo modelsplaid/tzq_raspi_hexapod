@@ -32,11 +32,12 @@ def _code(name):
 
 HEADER = html.Label(dcc.Markdown(f"**{DIMENSIONS_WIDGETS_HEADER}**"))
 WIDGET_NAMES = ["front", "side", "middle", "coxia", "femur", "tibia"]
+WIDGET_DIMS = [59.0,119.0,93.0,45.0,75.0,140.0]
 DIMENSION_WIDGET_IDS = [f"widget-dimension-{name}" for name in WIDGET_NAMES]
 DIMENSION_CALLBACK_INPUTS = [Input(id, "value") for id in DIMENSION_WIDGET_IDS]
 
 #print(const.BASE_DIMENSIONS["front"])
-widgets = [make_number_widget(widget_id, 100) for widget_id in DIMENSION_WIDGET_IDS]
+widgets = [make_number_widget(widget_id, widget_dim) for widget_id,widget_dim in zip(DIMENSION_WIDGET_IDS,WIDGET_DIMS)]
 
 #index_counter = 0
 #for hexa_dim_id in const.BASE_DIMENSIONS :    
