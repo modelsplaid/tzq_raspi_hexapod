@@ -12,7 +12,7 @@ from copy import deepcopy
 
 import time
 import sys
-from widgets.gaits_ui import GAITS_WIDGETS_SECTION, GAITS_CALLBACK_INPUTS,GAITS_BUTTON_CALLBACK_INPUTS
+from widgets.gaits_ui import GAITS_WIDGETS_SECTION, GAITS_CALLBACK_INPUTS,GAITS_BUTTON_CALLBACK_INPUTS,RADIOS_CALLBACK_INPUTS
 
 try:
     from hexapod.const import VIRTUAL_TO_REAL
@@ -55,9 +55,7 @@ sidebar = shared.make_standard_page_sidebar(
 
 layout = shared.make_standard_page_layout(GRAPH_ID, sidebar)
 
-def process_gait_seq():
-
-    
+def process_gait_seq(gaitType = "ripple"):
 
     dimensions = {
     "front": 59,
@@ -84,12 +82,12 @@ def process_gait_seq():
         "ry": 0,
         "legStance": 0,
         "hipStance": 25.0,
-        "stepCount": 4.0,
+        "stepCount": 2.0,
         "hipSwing": 25.0,
         "liftSwing": 60.0,
     }
 
-    gaitType = "ripple"
+    
     #gaitType = "tripod"
     fullSequences = getWalkSequence(dimensions, gaitParams,gaitType)
     #print("fullSequences: ")
@@ -131,15 +129,18 @@ def update_patterns_page(dimensions_json, poses_json, relayout_data, figure):
 output_parameter = Output(PARAMETERS_SECTION_ID, "children")
 input_parameters = GAITS_CALLBACK_INPUTS
 in_param_startstop_button = GAITS_BUTTON_CALLBACK_INPUTS
-
-@app.callback(output_parameter, input_parameters,in_param_startstop_button)
+in_param_radios = RADIOS_CALLBACK_INPUTS
+@app.callback(output_parameter, input_parameters,in_param_startstop_button,in_param_radios)
 def update_poses_alpha_beta_gamma(
         hipSwing_val, liftSwing_val, hipStance_val,
         liftStance,stepCount,speed,
-        buttonStartStop_nclicks,buttonKeepMov_nclicks):
+        buttonStartStop_nclicks,buttonKeepMov_nclicks,
+        radio_gaittype,radio_movedir):
     
     print("buttonStartStop_nclicks: " +str(buttonStartStop_nclicks))        
-    print("buttonKeepMov_nclicks: " +str(buttonKeepMov_nclicks))    
+    print("buttonKeepMov_nclicks: " +str(buttonKeepMov_nclicks))
+    print("radio_gaittype: " +str(radio_gaittype))
+    print("radio_movedir: " +str(radio_movedir))    
     
     one_pose = {
         0: {"coxia": 0, "femur": 0, "tibia": 0, "name": "right-middle", "id": 0},
@@ -159,7 +160,7 @@ def update_poses_alpha_beta_gamma(
     try:
 
         # generating gait sequences
-        seqs = process_gait_seq()
+        seqs = process_gait_seq(radio_gaittype)
 
         num_seqs =len(seqs[0]['coxia'])        
 
@@ -184,5 +185,4 @@ def update_poses_alpha_beta_gamma(
         print("Page gaits running in simulator")
 
     return json.dumps(one_pose)
-    #return json.dumps(helpers.make_pose(hipSwing_val, liftSwing_val, hipStance_val))
 

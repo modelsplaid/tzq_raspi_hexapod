@@ -50,7 +50,7 @@ def make_slider(slider_id, name, max_angle):
     return html.Div([testfont,daq_slider], style={"padding": "2%"})
     #return html.Div([testfont,daq_slider], style={"padding-top": "10%","padding-left": "5%"})
 
-def make_radio(label_name,label_val):
+def make_radio(label_id,label_name,label_val):
     
     num_options = len(label_name)
 
@@ -59,8 +59,9 @@ def make_radio(label_name,label_val):
         options_append = options_append + [{'label': label_name[i+1] , 'value': label_val[i+1]}]
 
     return dcc.RadioItems(
+        id = label_id,
         options = options_append,
-        value ='MTL',
+        value =label_val[0],
         labelStyle = {'display': 'inline-block'}, # display of flex to create a vertical list, or of inline-block for horizontal.
     )
 
@@ -93,15 +94,22 @@ button_widgets = [
 GAITS_BUTTON_CALLBACK_INPUTS = [Input(i, 'n_clicks') for i in BUTTON_IDS]
 
 # 3. make radio widgets
+GAIT_TYPE_NAME = 'gaittype'
 GAIT_TYPE_RADIO_OPTION_LABEL = ['tripod gaits','ripple gaits']
 GAIT_TYPE_RADIO_OPTION_VAL = ['tripod','ripple']
 
+MOVING_DIR_NAME = 'movdir'
 MOVING_DIR_RADIO_OPTION_LABEL = ['moving forward','moving backward','rotate left','rotate right']
 MOVING_DIR_RADIO_OPTION_VAL = ['forward','backward','rotate left','rotate right']
 
+RADIO_NAMES = [GAIT_TYPE_NAME,MOVING_DIR_NAME]
+RADIO_IDS = [f"radio-widget-{name}" for name in RADIO_NAMES]
+RADIOS_CALLBACK_INPUTS = [Input(i, 'value') for i in RADIO_IDS]
+
 radio_widgets = [
-    make_radio(option_label,option_val)
-    for option_label,option_val in zip(
+    make_radio(option_id,option_label,option_val)
+    for option_id,option_label,option_val in zip(
+        RADIO_IDS,
         [GAIT_TYPE_RADIO_OPTION_LABEL,MOVING_DIR_RADIO_OPTION_LABEL],
         [GAIT_TYPE_RADIO_OPTION_VAL,MOVING_DIR_RADIO_OPTION_VAL])
 ]
