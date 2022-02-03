@@ -39,7 +39,7 @@ def make_slider(slider_id, name, max_angle):
         max=max_angle,
         value=7.5,
         step=SLIDER_ANGLE_RESOLUTION,
-        size=300,
+        size=500,
         updatemode=UPDATE_MODE,
         handleLabel=handle_style,
         color={"default": SLIDER_COLOR},
@@ -99,10 +99,14 @@ GAIT_TYPE_RADIO_OPTION_LABEL = ['tripod gaits','ripple gaits']
 GAIT_TYPE_RADIO_OPTION_VAL = ['tripod','ripple']
 
 MOVING_DIR_NAME = 'movdir'
-MOVING_DIR_RADIO_OPTION_LABEL = ['moving forward','moving backward','rotate left','rotate right']
-MOVING_DIR_RADIO_OPTION_VAL = ['forward','backward','rotate left','rotate right']
+MOVING_DIR_RADIO_OPTION_LABEL = ['moving forward','moving backward']
+MOVING_DIR_RADIO_OPTION_VAL = ['forward','backward']
 
-RADIO_NAMES = [GAIT_TYPE_NAME,MOVING_DIR_NAME]
+WALKROT_NAME = 'walkrot'
+WALKROT_RADIO_OPTION_LABEL = ['walking mode','rotating mode']
+WALKROT_RADIO_OPTION_VAL = ['walking','rotating']
+
+RADIO_NAMES = [GAIT_TYPE_NAME,MOVING_DIR_NAME,WALKROT_NAME ]
 RADIO_IDS = [f"radio-widget-{name}" for name in RADIO_NAMES]
 RADIOS_CALLBACK_INPUTS = [Input(i, 'value') for i in RADIO_IDS]
 
@@ -110,8 +114,8 @@ radio_widgets = [
     make_radio(option_id,option_label,option_val)
     for option_id,option_label,option_val in zip(
         RADIO_IDS,
-        [GAIT_TYPE_RADIO_OPTION_LABEL,MOVING_DIR_RADIO_OPTION_LABEL],
-        [GAIT_TYPE_RADIO_OPTION_VAL,MOVING_DIR_RADIO_OPTION_VAL])
+        [GAIT_TYPE_RADIO_OPTION_LABEL,MOVING_DIR_RADIO_OPTION_LABEL,WALKROT_RADIO_OPTION_LABEL],
+        [GAIT_TYPE_RADIO_OPTION_VAL,MOVING_DIR_RADIO_OPTION_VAL,WALKROT_RADIO_OPTION_VAL])
 ]
 
 GAITS_WIDGETS_SECTION = html.Div([HEADER] +button_widgets + radio_widgets + widgets)

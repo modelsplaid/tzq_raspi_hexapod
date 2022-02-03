@@ -55,7 +55,7 @@ sidebar = shared.make_standard_page_sidebar(
 
 layout = shared.make_standard_page_layout(GRAPH_ID, sidebar)
 
-def process_gait_seq(gaitType = "ripple"):
+def process_gait_seq(gaitType = "ripple",walkMode = "walking"):
 
     dimensions = {
     "front": 59,
@@ -89,7 +89,7 @@ def process_gait_seq(gaitType = "ripple"):
 
     
     #gaitType = "tripod"
-    fullSequences = getWalkSequence(dimensions, gaitParams,gaitType)
+    fullSequences = getWalkSequence(dimensions, gaitParams,gaitType,walkMode)
     #print("fullSequences: ")
     #print(fullSequences)
     return fullSequences
@@ -135,12 +135,13 @@ def update_poses_alpha_beta_gamma(
         hipSwing_val, liftSwing_val, hipStance_val,
         liftStance,stepCount,speed,
         buttonStartStop_nclicks,buttonKeepMov_nclicks,
-        radio_gaittype,radio_movedir):
+        radio_gaittype,radio_movedir,radio_walkrot):
     
     print("buttonStartStop_nclicks: " +str(buttonStartStop_nclicks))        
     print("buttonKeepMov_nclicks: " +str(buttonKeepMov_nclicks))
     print("radio_gaittype: " +str(radio_gaittype))
-    print("radio_movedir: " +str(radio_movedir))    
+    print("radio_movedir: " +str(radio_movedir))
+    print("radio_walkrot: " +str(radio_walkrot))    
     
     one_pose = {
         0: {"coxia": 0, "femur": 0, "tibia": 0, "name": "right-middle", "id": 0},
@@ -160,7 +161,7 @@ def update_poses_alpha_beta_gamma(
     try:
 
         # generating gait sequences
-        seqs = process_gait_seq(radio_gaittype)
+        seqs = process_gait_seq(radio_gaittype,radio_walkrot)
 
         num_seqs =len(seqs[0]['coxia'])        
 
