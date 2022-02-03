@@ -138,8 +138,17 @@ def update_poses_alpha_beta_gamma(
         liftStance,stepCount,speed,
         buttonStartStop_nclicks,buttonKeepMov_nclicks):
     
-    #print("buttonStartStop_nclicks: " +str(buttonStartStop_nclicks))        
-    #print("buttonKeepMov_nclicks: " +str(buttonKeepMov_nclicks))    
+    print("buttonStartStop_nclicks: " +str(buttonStartStop_nclicks))        
+    print("buttonKeepMov_nclicks: " +str(buttonKeepMov_nclicks))    
+    
+    one_pose = {
+        0: {"coxia": 0, "femur": 0, "tibia": 0, "name": "right-middle", "id": 0},
+        1: {"coxia": 0, "femur": 0, "tibia": 0, "name": "right-front", "id": 1},
+        2: {"coxia": 0, "femur": 0, "tibia": 0, "name": "left-front", "id": 2},
+        3: {"coxia": 0, "femur": 0, "tibia": 0, "name": "left-middle", "id": 3},
+        4: {"coxia": 0, "femur": 0, "tibia": 0, "name": "left-back", "id": 4},
+        5: {"coxia": 0, "femur": 0, "tibia": 0, "name": "right-back", "id": 5},
+        }
 
     if(buttonStartStop_nclicks is not None):
         button_step_counter = buttonStartStop_nclicks
@@ -174,6 +183,6 @@ def update_poses_alpha_beta_gamma(
     except: 
         print("Page gaits running in simulator")
 
-    
-    return json.dumps(helpers.make_pose(hipSwing_val, liftSwing_val, hipStance_val))
+    return json.dumps(one_pose)
+    #return json.dumps(helpers.make_pose(hipSwing_val, liftSwing_val, hipStance_val))
 
