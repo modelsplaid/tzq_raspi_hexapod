@@ -86,7 +86,7 @@ def process_gait_seq():
         "ry": 0,
         "legStance": 0,
         "hipStance": 25.0,
-        "stepCount": 2.0,
+        "stepCount": 4.0,
         "hipSwing": 25.0,
         "liftSwing": 60.0,
     }
@@ -125,11 +125,6 @@ def update_patterns_page(dimensions_json, poses_json, relayout_data, figure):
         global BUTTON_STEPBYSTEP_COUNTER
         
 
-        #if(BUTTON_STEPBYSTEP_COUNTER == None):
-        #    print("BUTTON_STEPBYSTEP_COUNTER is null")
-        #    raise Exception('BUTTON_STEPBYSTEP_COUNTER is null')
-        #
-        #elif BUTTON_STEPBYSTEP_COUNTER >= 1:            
         print("BUTTON_STEPBYSTEP_COUNTER:"+str(BUTTON_STEPBYSTEP_COUNTER%num_seqs))
         one_pose = extract_walkseqs(seqs,BUTTON_STEPBYSTEP_COUNTER%num_seqs)
         pulses2servos = VIRTUAL_TO_REAL.update_puses(one_pose)
@@ -172,7 +167,6 @@ def update_poses_alpha_beta_gamma(
     print("buttonStartStop_nclicks: " +str(buttonStartStop_nclicks))        
     print("buttonKeepMov_nclicks: " +str(buttonKeepMov_nclicks))    
     global BUTTON_STEPBYSTEP_COUNTER
-    #global  button_compare
 
     if(buttonStartStop_nclicks is not None):
         BUTTON_STEPBYSTEP_COUNTER = buttonStartStop_nclicks
