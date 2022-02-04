@@ -12,7 +12,7 @@ from copy import deepcopy
 
 import time
 import sys
-from widgets.gaits_ui import GAITS_WIDGETS_SECTION, GAITS_CALLBACK_INPUTS,GAITS_BUTTON_CALLBACK_INPUTS,RADIOS_CALLBACK_INPUTS
+from widgets.gaits_ui import GAITS_WIDGETS_SECTION, GAITS_CALLBACK_INPUTS,GAITS_BUTTON_CALLBACK_INPUTS,RADIOS_CALLBACK_INPUTS,INTERVAL_CALLBACK_INPUTS,KEEPMOV_BUTTON_CALLBACK_INPUT,INTERVAL_ID
 
 try:
     from hexapod.const import VIRTUAL_TO_REAL
@@ -55,16 +55,8 @@ sidebar = shared.make_standard_page_sidebar(
 
 layout = shared.make_standard_page_layout(GRAPH_ID, sidebar)
 
+glob_interval = 500
 def process_gait_seq(gaitType = "ripple",walkMode = "walking",hipSwing=25,liftSwing=60,hipStance=25,legStance=1,stepCount=2,speed = 300):
-
-    #dimensions = {
-    #"front": 59,
-    #"side": 119,
-    #"middle": 93,
-    #"coxia": 45,
-    #"femur": 75,
-    #"tibia": 140,
-    #}
 
     POSITION_NAMES_LIST = [
         "left-front",
@@ -130,18 +122,20 @@ output_parameter = Output(PARAMETERS_SECTION_ID, "children")
 input_parameters = GAITS_CALLBACK_INPUTS
 in_param_startstop_button = GAITS_BUTTON_CALLBACK_INPUTS
 in_param_radios = RADIOS_CALLBACK_INPUTS
-@app.callback(output_parameter, input_parameters,in_param_startstop_button,in_param_radios)
+in_param_interval = INTERVAL_CALLBACK_INPUTS
+@app.callback(output_parameter, input_parameters,in_param_startstop_button,in_param_radios,in_param_interval)
 def update_poses_alpha_beta_gamma(
         hipSwing_val, liftSwing_val, hipStance_val,
         legStance,stepCount,speed,
-        buttonStartStop_nclicks,buttonKeepMov_nclicks,
-        radio_gaittype,radio_movedir,radio_walkrot):
+        buttonStartStop_nclicks,
+        radio_gaittype,radio_movedir,radio_walkrot,
+        n_inverval):
     
     print("buttonStartStop_nclicks: " +str(buttonStartStop_nclicks))        
-    print("buttonKeepMov_nclicks: " +str(buttonKeepMov_nclicks))
     print("radio_gaittype: " +str(radio_gaittype))
     print("radio_movedir: " +str(radio_movedir))
     print("radio_walkrot: " +str(radio_walkrot))    
+    print("n_inverval: " +str(n_inverval))    
     
     one_pose = {
         0: {"coxia": 0, "femur": 0, "tibia": 0, "name": "right-middle", "id": 0},
@@ -152,10 +146,19 @@ def update_poses_alpha_beta_gamma(
         5: {"coxia": 0, "femur": 0, "tibia": 0, "name": "right-back", "id": 5},
         }
 
+    global glob_interval
+    glob_interval = speed
     if(buttonStartStop_nclicks is not None):
         button_step_counter = buttonStartStop_nclicks
+        if(n_inverval is not None):
+            button_step_counter = button_step_counter + n_inverval
     else:
         button_step_counter = 0
+        if(n_inverval is not None):
+            button_step_counter = button_step_counter + n_inverval
+
+
+
 
     # tzq comment: the poses is where we need to send to real robot
     try:
@@ -187,3 +190,27 @@ def update_poses_alpha_beta_gamma(
 
     return json.dumps(one_pose)
 
+# ......................
+# Update parameters keepmoving
+# ......................
+
+
+interval_output_interval = Output(INTERVAL_ID, "interval")
+interval_output_disabled = Output(INTERVAL_ID, "disabled")
+keepmov_input_parameters = KEEPMOV_BUTTON_CALLBACK_INPUT
+@app.callback([interval_output_disabled,interval_output_interval], keepmov_input_parameters)
+def update_interval(buttonKeepMov_nclicks):
+    print("buttonKeepMov_nclicks: " +str(buttonKeepMov_nclicks))
+    global glob_interval
+
+    if (glob_interval == None):
+        glob_interval = 500
+    if(buttonKeepMov_nclicks == None):
+        return [True,glob_interval]
+    if(buttonKeepMov_nclicks%2 == 0):
+        interval_disable = True
+    else:
+        interval_disable = False
+
+    
+    return [interval_disable,glob_interval]

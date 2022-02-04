@@ -93,8 +93,8 @@ button_widgets = [
     for id,name in zip(BUTTON_IDS,BUTTON_NAMES)
 
 ]
-GAITS_BUTTON_CALLBACK_INPUTS = [Input(i, 'n_clicks') for i in BUTTON_IDS]
-
+GAITS_BUTTON_CALLBACK_INPUTS = [Input(BUTTON_IDS[0], 'n_clicks')]
+KEEPMOV_BUTTON_CALLBACK_INPUT = [Input(BUTTON_IDS[1], 'n_clicks')]
 # 3. make radio widgets
 GAIT_TYPE_NAME = 'gaittype'
 GAIT_TYPE_RADIO_OPTION_LABEL = ['tripod gaits','ripple gaits']
@@ -120,4 +120,8 @@ radio_widgets = [
         [GAIT_TYPE_RADIO_OPTION_VAL,MOVING_DIR_RADIO_OPTION_VAL,WALKROT_RADIO_OPTION_VAL])
 ]
 
-GAITS_WIDGETS_SECTION = html.Div([HEADER] +button_widgets + radio_widgets + widgets)
+INTERVAL_ID = 'interval1'
+interval_widget = dcc.Interval(id=INTERVAL_ID, interval=100, n_intervals=0,disabled = True)
+INTERVAL_CALLBACK_INPUTS = Input(INTERVAL_ID, 'n_intervals')
+
+GAITS_WIDGETS_SECTION = html.Div([HEADER] +button_widgets + radio_widgets + widgets+[interval_widget])
