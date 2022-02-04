@@ -6,7 +6,7 @@ from dash.dependencies import Output
 from app import app
 from settings import WHICH_POSE_CONTROL_UI
 from hexapod.models import VirtualHexapod
-from hexapod.const import BASE_PLOTTER
+from hexapod.const import BASE_PLOTTER,BASE_DIMENSIONS
 from pages import helpers, shared
 from copy import deepcopy
 
@@ -57,14 +57,14 @@ layout = shared.make_standard_page_layout(GRAPH_ID, sidebar)
 
 def process_gait_seq(gaitType = "ripple",walkMode = "walking",hipSwing=25,liftSwing=60,hipStance=25,legStance=1,stepCount=2,speed = 300):
 
-    dimensions = {
-    "front": 59,
-    "side": 119,
-    "middle": 93,
-    "coxia": 45,
-    "femur": 75,
-    "tibia": 140,
-    }
+    #dimensions = {
+    #"front": 59,
+    #"side": 119,
+    #"middle": 93,
+    #"coxia": 45,
+    #"femur": 75,
+    #"tibia": 140,
+    #}
 
     POSITION_NAMES_LIST = [
         "left-front",
@@ -89,7 +89,7 @@ def process_gait_seq(gaitType = "ripple",walkMode = "walking",hipSwing=25,liftSw
 
     
     #gaitType = "tripod"
-    fullSequences = getWalkSequence(dimensions, gaitParams,gaitType,walkMode)
+    fullSequences = getWalkSequence(BASE_DIMENSIONS, gaitParams,gaitType,walkMode)
     #print("fullSequences: ")
     #print(fullSequences)
     return fullSequences
