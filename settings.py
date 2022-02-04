@@ -29,7 +29,7 @@ HIP_STANCE_MAX_ANGLE = 45
 
 # Too slow? set UPDATE_MODE='mouseup'
 # Makes widgets only start updating when you release the mouse button
-UPDATE_MODE = "drag"
+UPDATE_MODE = "mouseup"
 
 DEBUG_MODE = False
 ASSERTION_ENABLED = False
@@ -49,7 +49,7 @@ PRINT_MODEL_ON_UPDATE = False
 WHICH_POSE_CONTROL_UI = 0
 
 # Make it more granular to prevent overloading the server
-SLIDER_ANGLE_RESOLUTION = 1.5
+SLIDER_ANGLE_RESOLUTION = 1
 INPUT_DIMENSIONS_RESOLUTION = 1
 
 UI_GRAPH_HEIGHT = "600px"

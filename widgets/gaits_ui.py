@@ -25,7 +25,7 @@ def make_button(button_id, button_name):
 
     return html.Button(button_name, id=button_id,style=BUTTON_STYLE)
 
-def make_slider(slider_id, name, max_angle):
+def make_slider(slider_id, name, max_val,min_val,default_val):
 
     handle_style = {
         "showCurrentValue": True,
@@ -34,16 +34,16 @@ def make_slider(slider_id, name, max_angle):
     }
 
     daq_slider = dash_daq.Slider(  # pylint: disable=not-callable
-        id=slider_id,
-        min=-max_angle,
-        max=max_angle,
-        value=7.5,
-        step=SLIDER_ANGLE_RESOLUTION,
-        size=500,
-        updatemode=UPDATE_MODE,
-        handleLabel=handle_style,
-        color={"default": SLIDER_COLOR},
-        theme=SLIDER_THEME,
+        id = slider_id,
+        min = min_val,
+        max = max_val,
+        value = default_val,
+        step = SLIDER_ANGLE_RESOLUTION,
+        size = 500,
+        updatemode = UPDATE_MODE,
+        handleLabel = handle_style,
+        color = {"default": SLIDER_COLOR},
+        theme = SLIDER_THEME,
     )
     testfont = dash.html.Font(name)
     
@@ -73,14 +73,16 @@ def make_radio(label_id,label_name,label_val):
 HEADER = html.Label(dcc.Markdown(f"**{GAITS_WIDGETS_HEADER}**"))
 
 # 1 make sliders widgets
-WIDGET_NAMES = ["hipSwing", "liftSwing", "hipStance","liftStance","stepCount","speed"]
+WIDGET_NAMES = ["hipSwing", "liftSwing", "hipStance","legStance","stepCount","speed"]
 GAITS_WIDGET_IDS = [f"widget-{name}" for name in WIDGET_NAMES]
 GAITS_CALLBACK_INPUTS = [Input(i, "value") for i in GAITS_WIDGET_IDS]
 
-max_angles = [ALPHA_MAX_ANGLE, BETA_MAX_ANGLE, GAMMA_MAX_ANGLE,GAMMA_MAX_ANGLE,GAMMA_MAX_ANGLE,GAMMA_MAX_ANGLE]
+max_vals =      [35, 90, 35,10,6,400]
+min_vals =      [15, 40, 15,-10,0,100]
+default_vals =  [25, 60, 25,1,2,300]
 widgets = [
-    make_slider(id, name, angle)
-    for id, name, angle in zip(GAITS_WIDGET_IDS, WIDGET_NAMES, max_angles)
+    make_slider(id, name, max_val,min_val,default_val)
+    for id, name, max_val,min_val,default_val in zip(GAITS_WIDGET_IDS, WIDGET_NAMES, max_vals,min_vals,default_vals)
 ]
 
 # 2. make button widgets

@@ -55,7 +55,7 @@ sidebar = shared.make_standard_page_sidebar(
 
 layout = shared.make_standard_page_layout(GRAPH_ID, sidebar)
 
-def process_gait_seq(gaitType = "ripple",walkMode = "walking"):
+def process_gait_seq(gaitType = "ripple",walkMode = "walking",hipSwing=25,liftSwing=60,hipStance=25,legStance=1,stepCount=2,speed = 300):
 
     dimensions = {
     "front": 59,
@@ -80,11 +80,11 @@ def process_gait_seq(gaitType = "ripple",walkMode = "walking"):
         "tz": 0,
         "rx": 0,
         "ry": 0,
-        "legStance": 0,
-        "hipStance": 25.0,
-        "stepCount": 2.0,
-        "hipSwing": 25.0,
-        "liftSwing": 60.0,
+        "legStance": legStance,
+        "hipStance": hipStance,
+        "stepCount": stepCount,
+        "hipSwing": hipSwing,
+        "liftSwing": liftSwing,
     }
 
     
@@ -133,7 +133,7 @@ in_param_radios = RADIOS_CALLBACK_INPUTS
 @app.callback(output_parameter, input_parameters,in_param_startstop_button,in_param_radios)
 def update_poses_alpha_beta_gamma(
         hipSwing_val, liftSwing_val, hipStance_val,
-        liftStance,stepCount,speed,
+        legStance,stepCount,speed,
         buttonStartStop_nclicks,buttonKeepMov_nclicks,
         radio_gaittype,radio_movedir,radio_walkrot):
     
@@ -161,7 +161,7 @@ def update_poses_alpha_beta_gamma(
     try:
 
         # generating gait sequences
-        seqs = process_gait_seq(radio_gaittype,radio_walkrot)
+        seqs = process_gait_seq(radio_gaittype,radio_walkrot,hipSwing_val, liftSwing_val, hipStance_val,legStance,stepCount)
 
         num_seqs =len(seqs[0]['coxia'])        
 
@@ -172,8 +172,8 @@ def update_poses_alpha_beta_gamma(
         # send to real robot
         global VIRTUAL_TO_REAL
         pulses2servos = VIRTUAL_TO_REAL.update_puses(one_pose)
-        VIRTUAL_TO_REAL.SendBusServoPulse(300,pulses2servos)
-        time.sleep(0.3)
+        VIRTUAL_TO_REAL.SendBusServoPulse(speed,pulses2servos)
+        #time.sleep(speed*0.001)
         #for i in range(num_seqs):
         #    one_pose = extract_walkseqs(seqs,i)
         #    print("one_pose:")
