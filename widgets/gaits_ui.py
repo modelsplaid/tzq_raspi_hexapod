@@ -121,7 +121,7 @@ radio_widgets = [
 ]
 
 INTERVAL_ID = 'interval1'
-interval_widget = dcc.Interval(id=INTERVAL_ID, interval=100, n_intervals=0,disabled = True)
+interval_widget = dcc.Interval(id=INTERVAL_ID, interval=500, n_intervals=0,disabled = True)
 INTERVAL_CALLBACK_INPUTS = Input(INTERVAL_ID, 'n_intervals')
 
 GAITS_WIDGETS_SECTION = html.Div([HEADER] +button_widgets + radio_widgets + widgets+[interval_widget])

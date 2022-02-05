@@ -176,7 +176,7 @@ def update_poses_alpha_beta_gamma(
         global VIRTUAL_TO_REAL
         pulses2servos = VIRTUAL_TO_REAL.update_puses(one_pose)
         VIRTUAL_TO_REAL.SendBusServoPulse(speed,pulses2servos)
-        #time.sleep(speed*0.001)
+        time.sleep(speed*0.001)
         #for i in range(num_seqs):
         #    one_pose = extract_walkseqs(seqs,i)
         #    print("one_pose:")
