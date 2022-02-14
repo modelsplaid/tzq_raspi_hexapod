@@ -13,6 +13,17 @@ def getHipSwingForward(aHipSwing):
         "right-back": aHipSwing,
     }
 
+# backward
+def getHipSwingBackward(aHipSwing):
+
+    return {
+        "left-front": aHipSwing,
+        "right-middle": -aHipSwing,
+        "left-back": aHipSwing,
+        "right-front": -aHipSwing,
+        "left-middle": aHipSwing,
+        "right-back": -aHipSwing,
+    }
 
 # rotate right
 def getHipSwingRotateRight(aHipSwing):
