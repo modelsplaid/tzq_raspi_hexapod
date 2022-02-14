@@ -14,6 +14,19 @@ def getHipSwingForward(aHipSwing):
     }
 
 
+# rotate right
+def getHipSwingRotateRight(aHipSwing):
+
+    return {
+        "left-front": -aHipSwing,
+        "right-middle": -aHipSwing,
+        "left-back": -aHipSwing,
+        "right-front": -aHipSwing,
+        "left-middle": -aHipSwing,
+        "right-back": -aHipSwing,
+    }
+
+# rotate left
 def getHipSwingRotate(aHipSwing):
 
     return {
@@ -201,6 +214,29 @@ def tripodBSequence(forwardAlphaSeqs,liftGammaSeqs,
     #print(forwardAlphaSeqs)   
     return current_poses 
 
+# left front leg will move first.      
+def tripodSequenceLeftFirst(pose, aLiftSwing, hipSwings, stepCount, walkMode):
+    [forwardAlphaSeqs, liftBetaSeqs, liftGammaSeqs] = buildTripodSequences(
+                                                        pose, 
+                                                        aLiftSwing, 
+                                                        hipSwings, 
+                                                        stepCount, 
+                                                        walkMode)
+
+    doubleStepCount = stepCount * 2 
+
+    tripodA = tripodASequence(forwardAlphaSeqs,liftGammaSeqs,
+                    liftBetaSeqs,doubleStepCount)    
+    
+    tripodB = tripodBSequence(forwardAlphaSeqs,liftGammaSeqs,
+                    liftBetaSeqs,doubleStepCount)                                                                          
+    
+    tripodFull = tripodB.update(tripodA)
+    tripodFull = deepcopy(tripodB)
+        
+    return tripodFull
+
+# right front leg will move first.
 def tripodSequence(pose, aLiftSwing, hipSwings, stepCount, walkMode):
     [forwardAlphaSeqs, liftBetaSeqs, liftGammaSeqs] = buildTripodSequences(
                                                         pose, 
