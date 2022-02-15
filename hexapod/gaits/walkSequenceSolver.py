@@ -1,7 +1,6 @@
 import sys
 sys.path.append("../../")
 from hexapod.gaits.hexapodSolver import solveHexapodParams
-
 from copy import deepcopy
 import numpy as np
 
@@ -16,8 +15,32 @@ def getHipSwingForward(aHipSwing):
         "right-back": aHipSwing,
     }
 
+# backward
+def getHipSwingBackward(aHipSwing):
 
-def getHipSwingRotate(aHipSwing):
+    return {
+        "left-front": aHipSwing,
+        "right-middle": -aHipSwing,
+        "left-back": aHipSwing,
+        "right-front": -aHipSwing,
+        "left-middle": aHipSwing,
+        "right-back": -aHipSwing,
+    }
+
+# rotate right
+def getHipSwingRotateRight(aHipSwing):
+
+    return {
+        "left-front": -aHipSwing,
+        "right-middle": -aHipSwing,
+        "left-back": -aHipSwing,
+        "right-front": -aHipSwing,
+        "left-middle": -aHipSwing,
+        "right-back": -aHipSwing,
+    }
+
+# rotate left
+def getHipSwingRotateLeft(aHipSwing):
 
     return {
         "left-front": aHipSwing,
@@ -204,6 +227,29 @@ def tripodBSequence(forwardAlphaSeqs,liftGammaSeqs,
     #print(forwardAlphaSeqs)   
     return current_poses 
 
+# left front leg will move first.      
+def tripodSequenceLeftFirst(pose, aLiftSwing, hipSwings, stepCount, walkMode):
+    [forwardAlphaSeqs, liftBetaSeqs, liftGammaSeqs] = buildTripodSequences(
+                                                        pose, 
+                                                        aLiftSwing, 
+                                                        hipSwings, 
+                                                        stepCount, 
+                                                        walkMode)
+
+    doubleStepCount = stepCount * 2 
+
+    tripodA = tripodASequence(forwardAlphaSeqs,liftGammaSeqs,
+                    liftBetaSeqs,doubleStepCount)    
+    
+    tripodB = tripodBSequence(forwardAlphaSeqs,liftGammaSeqs,
+                    liftBetaSeqs,doubleStepCount)                                                                          
+    
+    tripodFull = tripodB.update(tripodA)
+    tripodFull = deepcopy(tripodB)
+        
+    return tripodFull
+
+# right front leg will move first.
 def tripodSequence(pose, aLiftSwing, hipSwings, stepCount, walkMode):
     [forwardAlphaSeqs, liftBetaSeqs, liftGammaSeqs] = buildTripodSequences(
                                                         pose, 
@@ -368,6 +414,7 @@ def rippleSequence(startPose, aLiftSwing, hipSwings, stepCount, walkMode):
     return sequences
 
 def getWalkSequence(dimensions, params, gaitType="tripod", walkMode="walking"):
+    #walkMode options: "walkingforward" "walkingbackward" "rotatingleft" "rotatingright"
     print("in getWalkSequence")
 
     # initial value
@@ -397,10 +444,14 @@ def getWalkSequence(dimensions, params, gaitType="tripod", walkMode="walking"):
     stepCount = params["stepCount"]
 
     aHipSwing = params["hipSwing"]
-    if walkMode == "rotating":
-        hipSwings = getHipSwingRotate(aHipSwing)
-    else:
+    if walkMode == "rotatingleft":
+        hipSwings = getHipSwingRotateLeft(aHipSwing)
+    elif walkMode == "rotatingright":
+        hipSwings = getHipSwingRotateRight(aHipSwing)
+    elif walkMode == "walkingforward" :
         hipSwings = getHipSwingForward(aHipSwing)
+    elif walkMode == "walkingbackward" :
+        hipSwings = getHipSwingBackward(aHipSwing)
 
     if gaitType == "ripple":
         fullSequences = rippleSequence(ikSolver_poses, aliftSwing, hipSwings, stepCount, walkMode)
@@ -408,8 +459,6 @@ def getWalkSequence(dimensions, params, gaitType="tripod", walkMode="walking"):
         fullSequences = tripodSequence(ikSolver_poses, aliftSwing, hipSwings, stepCount, walkMode)
 
     return fullSequences
-
-
 
 
 def extract_walkseqs(walk_seq,index_seq): 

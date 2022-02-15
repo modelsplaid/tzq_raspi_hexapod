@@ -38,7 +38,7 @@ def getHipSwingRotateRight(aHipSwing):
     }
 
 # rotate left
-def getHipSwingRotate(aHipSwing):
+def getHipSwingRotateLeft(aHipSwing):
 
     return {
         "left-front": aHipSwing,
@@ -412,6 +412,7 @@ def rippleSequence(startPose, aLiftSwing, hipSwings, stepCount, walkMode):
     return sequences
 
 def getWalkSequence(dimensions, params, gaitType="tripod", walkMode="walking"):
+    #walkMode options: "walkingforward" "walkingbackward" "rotatingleft" "rotatingright"
     print("in getWalkSequence")
 
     # initial value
@@ -441,10 +442,14 @@ def getWalkSequence(dimensions, params, gaitType="tripod", walkMode="walking"):
     stepCount = params["stepCount"]
 
     aHipSwing = params["hipSwing"]
-    if walkMode == "rotating":
-        hipSwings = getHipSwingRotate(aHipSwing)
-    else:
+    if walkMode == "rotatingleft":
+        hipSwings = getHipSwingRotateLeft(aHipSwing)
+    elif walkMode == "rotatingright":
+        hipSwings = getHipSwingRotateRight(aHipSwing)
+    elif walkMode == "walkingforward" :
         hipSwings = getHipSwingForward(aHipSwing)
+    elif walkMode == "walkingbackward" :
+        hipSwings = getHipSwingBackward(aHipSwing)
 
     if gaitType == "ripple":
         fullSequences = rippleSequence(ikSolver_poses, aliftSwing, hipSwings, stepCount, walkMode)

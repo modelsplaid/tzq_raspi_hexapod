@@ -56,8 +56,10 @@ sidebar = shared.make_standard_page_sidebar(
 layout = shared.make_standard_page_layout(GRAPH_ID, sidebar)
 
 glob_interval = 500
-def process_gait_seq(gaitType = "ripple",walkMode = "walking",hipSwing=25,liftSwing=60,hipStance=25,legStance=1,stepCount=2,speed = 300):
+def process_gait_seq(gaitType = "ripple",walkMode = "walkingforward",hipSwing=25,liftSwing=60,hipStance=25,legStance=1,stepCount=2,speed = 300):
 
+    #walkMode = "walkingforward"
+    #walkMode = "rotatingleft"
     POSITION_NAMES_LIST = [
         "left-front",
         "right-middle",
@@ -128,13 +130,13 @@ def update_poses_alpha_beta_gamma(
         hipSwing_val, liftSwing_val, hipStance_val,
         legStance,stepCount,speed,
         buttonStartStop_nclicks,
-        radio_gaittype,radio_movedir,radio_walkrot,
+        radio_gaittype,radio_movedir,
         n_inverval):
     
     print("buttonStartStop_nclicks: " +str(buttonStartStop_nclicks))        
     print("radio_gaittype: " +str(radio_gaittype))
     print("radio_movedir: " +str(radio_movedir))
-    print("radio_walkrot: " +str(radio_walkrot))    
+    #print("radio_walkrot: " +str(radio_walkrot))    
     print("n_inverval: " +str(n_inverval))    
     
     one_pose = {
@@ -164,7 +166,7 @@ def update_poses_alpha_beta_gamma(
     try:
 
         # generating gait sequences
-        seqs = process_gait_seq(radio_gaittype,radio_walkrot,hipSwing_val, liftSwing_val, hipStance_val,legStance,stepCount)
+        seqs = process_gait_seq(radio_gaittype,radio_movedir,hipSwing_val, liftSwing_val, hipStance_val,legStance,stepCount)
 
         num_seqs =len(seqs[0]['coxia'])        
 
