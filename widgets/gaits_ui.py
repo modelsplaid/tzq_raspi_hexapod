@@ -86,8 +86,9 @@ widgets = [
 ]
 
 # 2. make button widgets
-BUTTON_NAMES = ['Step by step','Keep moving']
+BUTTON_NAMES = ['Step by step','Start keep moving']
 BUTTON_IDS = [f"button-widget-{name}" for name in BUTTON_NAMES]
+BUTTON_KEEPMOVING_ID = BUTTON_IDS[1]
 button_widgets = [
     make_button(id,name)
     for id,name in zip(BUTTON_IDS,BUTTON_NAMES)

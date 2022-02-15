@@ -12,7 +12,7 @@ from copy import deepcopy
 
 import time
 import sys
-from widgets.gaits_ui import GAITS_WIDGETS_SECTION, GAITS_CALLBACK_INPUTS,GAITS_BUTTON_CALLBACK_INPUTS,RADIOS_CALLBACK_INPUTS,INTERVAL_CALLBACK_INPUTS,KEEPMOV_BUTTON_CALLBACK_INPUT,INTERVAL_ID
+from widgets.gaits_ui import GAITS_WIDGETS_SECTION, GAITS_CALLBACK_INPUTS,GAITS_BUTTON_CALLBACK_INPUTS,RADIOS_CALLBACK_INPUTS,INTERVAL_CALLBACK_INPUTS,KEEPMOV_BUTTON_CALLBACK_INPUT,INTERVAL_ID,BUTTON_KEEPMOVING_ID
 
 try:
     from hexapod.const import VIRTUAL_TO_REAL
@@ -126,7 +126,7 @@ in_param_startstop_button = GAITS_BUTTON_CALLBACK_INPUTS
 in_param_radios = RADIOS_CALLBACK_INPUTS
 in_param_interval = INTERVAL_CALLBACK_INPUTS
 @app.callback(output_parameter, input_parameters,in_param_startstop_button,in_param_radios,in_param_interval)
-def update_poses_alpha_beta_gamma(
+def update_simulator_real_poses(
         hipSwing_val, liftSwing_val, hipStance_val,
         legStance,stepCount,speed,
         buttonStartStop_nclicks,
@@ -199,8 +199,10 @@ def update_poses_alpha_beta_gamma(
 
 interval_output_interval = Output(INTERVAL_ID, "interval")
 interval_output_disabled = Output(INTERVAL_ID, "disabled")
+output_button_stop_moving = Output(BUTTON_KEEPMOVING_ID,"children")
+
 keepmov_input_parameters = KEEPMOV_BUTTON_CALLBACK_INPUT
-@app.callback([interval_output_disabled,interval_output_interval], keepmov_input_parameters)
+@app.callback([interval_output_disabled,interval_output_interval,output_button_stop_moving], keepmov_input_parameters)
 def update_interval(buttonKeepMov_nclicks):
     print("buttonKeepMov_nclicks: " +str(buttonKeepMov_nclicks))
     global glob_interval
@@ -208,11 +210,13 @@ def update_interval(buttonKeepMov_nclicks):
     if (glob_interval == None):
         glob_interval = 500
     if(buttonKeepMov_nclicks == None):
-        return [True,glob_interval]
+        return [True,glob_interval,"Start keep moving"]
     if(buttonKeepMov_nclicks%2 == 0):
         interval_disable = True
+        keepmov_button_name = "Start keep moving"
     else:
-        interval_disable = False
+        interval_disable = False        
+        keepmov_button_name = "Stop keep moving"
 
     
-    return [interval_disable,glob_interval]
+    return [interval_disable,glob_interval,keepmov_button_name]

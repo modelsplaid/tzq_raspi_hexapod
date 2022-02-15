@@ -330,9 +330,6 @@ def buildRippleLegSequence(position, bLift, gLift, fw1, fw2, bk1, bk2, bk3, bk4)
 def rippleSequence(startPose, aLiftSwing, hipSwings, stepCount, walkMode):
     print("In ripple sequence")
 
-
-    #sequences = {}
-
     sequences = {
         0: {
             "name": "right-middle",

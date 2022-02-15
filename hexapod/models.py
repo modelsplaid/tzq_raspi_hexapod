@@ -141,6 +141,7 @@ class VirtualHexapod:
         if n_axis is None:
             raise Exception("❗Pose Unstable. COG not inside support polygon.")
 
+        print("n_axis: "+str(n_axis))    
         # Tilt and shift the hexapod based on new normal
         frame = frame_to_align_vector_a_to_b(n_axis, Vector(0, 0, 1))
         self.rotate_and_shift(frame, height)
@@ -149,9 +150,9 @@ class VirtualHexapod:
         # Twist around the new normal if you have to
         self.ground_contacts = [leg.ground_contact() for leg in legs]
 
-        if might_twist:
-            twist_frame = find_twist_frame(old_contacts, self.ground_contacts)
-            self.rotate_and_shift(twist_frame)
+        #if might_twist:
+        #    twist_frame = find_twist_frame(old_contacts, self.ground_contacts)
+        #    self.rotate_and_shift(twist_frame)
 
         might_print_hexapod(self, poses)
 
