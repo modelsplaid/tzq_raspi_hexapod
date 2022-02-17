@@ -25,7 +25,7 @@ icon_link_style = {"margin": "0 0 0 0.5em"}
 div_header = html.Div(
     [
         html.A(html.H6("1. 👾 "), href=URL_REPO, target="_blank", style=icon_link_style),
-        html.A(html.H6("2. ☕ "), href=URL_KOFI, target="_blank", style=icon_link_style),
+        html.A(html.H6("2. Official site  ☕ "), href=URL_KOFI, target="_blank", style=icon_link_style),
         dcc.Link(html.H6("3. ● "), href=PATTERNS_PAGE_PATH, style=icon_link_style),
         dcc.Link(html.H6("4. ● "), href=IK_PAGE_PATH, style=icon_link_style),
         dcc.Link(html.H6("5. ● "), href=KINEMATICS_PAGE_PATH, style=icon_link_style),
@@ -39,7 +39,7 @@ div_footer = html.Div(
     [
         html.A("👾 Source Code", href=URL_REPO, target="_blank"),
         html.Br(),
-        html.A("☕ Buy Mithi coffee", href=URL_KOFI, target="_blank"),
+        html.A("☕ Official site", href=URL_KOFI, target="_blank"),
         html.Br(),
         dcc.Link("● Leg Patterns", href=PATTERNS_PAGE_PATH),
         html.Br(),
@@ -98,4 +98,4 @@ if __name__ == "__main__":
     #app.run_server(
     #    debug=True#debug=DEBUG_MODE, dev_tools_ui=DEBUG_MODE, dev_tools_props_check=DEBUG_MODE
     #)
-    app.run_server(host= '0.0.0.0', port = 8061,debug=True)
+    app.run_server(host= '0.0.0.0', port = 8062,debug=True)

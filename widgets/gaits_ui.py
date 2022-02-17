@@ -23,7 +23,7 @@ def make_button(button_id, button_name):
         "color": BUTTON_COLOR,        
     }
 
-    return html.Button(button_name, id=button_id,style=BUTTON_STYLE)
+    return html.Button(button_name, id=button_id)#,style=BUTTON_STYLE)
 
 def make_slider(slider_id, name, max_val,min_val,default_val):
 

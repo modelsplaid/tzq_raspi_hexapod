@@ -1,7 +1,8 @@
 DARKMODE = True
 
 DARK_CSS_PATH = "https://mithi.github.io/hexapod-robot-simulator/dark.css"
-LIGHT_CSS_PATH = "https://mithi.github.io/hexapod-robot-simulator/light.css"
+DARK_CSS_PATH = "https://github.com/modelsplaid/tzq_raspi_hexapod/blob/master/external_css/dark.css"#"external_css/dark.css"
+LIGHT_CSS_PATH = "/home/tzq/tzqhexa/tzq_raspi_hexapod/external_css/light.css"
 
 
 EXTERNAL_STYLESHEETS = [DARK_CSS_PATH]
