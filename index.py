@@ -20,7 +20,7 @@ server = app.server
 # ....................
 # Navigation partials
 # ....................
-icon_link_style = {"margin": "0 0 0 0.5em"}
+icon_link_style = {"margin": "0 0 0 0.5em","font-size": "2rem"}
 
 div_header = html.Div(
     [
