@@ -20,10 +20,10 @@ from style_settings import SLIDER_THEME, SLIDER_HANDLE_COLOR, SLIDER_COLOR,BUTTO
 
 def make_button(button_id, button_name):
     BUTTON_STYLE = {
-        "color": BUTTON_COLOR,        
+        "margin": "0 0 0 0.5em"        
     }
 
-    return html.Button(button_name, id=button_id)#,style=BUTTON_STYLE)
+    return html.Button(button_name, id=button_id,style=BUTTON_STYLE)
 
 def make_slider(slider_id, name, max_val,min_val,default_val):
 
