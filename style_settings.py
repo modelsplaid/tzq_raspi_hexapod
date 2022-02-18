@@ -1,7 +1,8 @@
 DARKMODE = True
 
-DARK_CSS_PATH = "https://mithi.github.io/hexapod-robot-simulator/dark.css"
-DARK_CSS_PATH = "https://github.com/modelsplaid/tzq_raspi_hexapod/blob/master/external_css/dark.css"#"external_css/dark.css"
+#DARK_CSS_PATH = "https://mithi.github.io/hexapod-robot-simulator/dark.css"
+#DARK_CSS_PATH = "https://github.com/modelsplaid/tzq_raspi_hexapod/blob/master/external_css/dark.css"#"external_css/dark.css"
+DARK_CSS_PATH = "/home/tzq/tzqhexa/tzq_raspi_hexapod/external_css/dark.css"
 LIGHT_CSS_PATH = "/home/tzq/tzqhexa/tzq_raspi_hexapod/external_css/light.css"
 
 
@@ -34,10 +35,11 @@ if not DARKMODE:
 NUMBER_INPUT_STYLE = {
     "marginRight": "5%",
     "width": "95%",
+    "height": "30%",
     "marginBottom": "5%",
-    "borderRadius": "10px",
+    #"borderRadius": "10px",
     "border": "solid 1px",
-    "fontFamily": "Courier New",
+    #"fontFamily": "Courier New",
 }
 
 if DARKMODE:
