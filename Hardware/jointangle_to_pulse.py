@@ -94,7 +94,7 @@ from copy import deepcopy
 class VirtualToReal:
     
     #Number of pulses needed to rotate one degree 
-    pulses_per_deg = 395.0/90.0
+    pulses_per_deg = 4096.0/360.0
 
     #Number of degrees needed to rotate one pulse
     degs_per_pulse = 1.0/pulses_per_deg

@@ -1,10 +1,10 @@
 NUTURAL_POSES_PULSE = {
-0: {"coxia": 500, "femur": 500, "tibia": 690, "name": "right-middle", "id": 0},
-1: {"coxia": 500, "femur": 460, "tibia": 685, "name": "right-front", "id": 1},
-2: {"coxia": 500, "femur": 500, "tibia": 319, "name": "left-front", "id": 2},
-3: {"coxia": 500, "femur": 500, "tibia": 288, "name": "left-middle", "id": 3},
-4: {"coxia": 500, "femur": 500, "tibia": 322, "name": "left-back", "id": 4},
-5: {"coxia": 500, "femur": 520, "tibia": 708, "name": "right-back", "id": 5},
+0: {"coxia": 1971, "femur": 2017, "tibia": 1068, "name": "right-middle", "id": 0},
+1: {"coxia": 2088, "femur": 2070, "tibia": 940, "name": "right-front", "id": 1},
+2: {"coxia": 1908, "femur": 1989, "tibia": 3158, "name": "left-front", "id": 2},
+3: {"coxia": 2056, "femur": 2081, "tibia": 3172, "name": "left-middle", "id": 3},
+4: {"coxia": 2059, "femur": 2042, "tibia": 3181, "name": "left-back", "id": 4},
+5: {"coxia": 2054, "femur": 1887, "tibia": 914, "name": "right-back", "id": 5},
 }
 
 
