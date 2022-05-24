@@ -1,0 +1,3 @@
+[submodule "mini_socket"]
+	path = mini_socket
+	url = git@github.com:modelsplaid/mini_socket.git
