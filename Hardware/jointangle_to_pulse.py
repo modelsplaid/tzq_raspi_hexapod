@@ -85,11 +85,86 @@
 # For left side alpha : positive: move backward. negative: move forward.
 import time
 import sys
+import os
+import json
 from copy import deepcopy
 sys.path.append("../")
 from . import const_hardware
-from HiwonderSDK import Board
+#from HiwonderSDK import Board
+from mini_socket.mini_socket_sdk.libclient import MiniSocketClient 
 from copy import deepcopy
+
+
+class ClientServoCommu:
+    def __init__(self,socket_config_file_name='net_commu_config.json'):
+        self.m_sock_client = MiniSocketClient(socket_config_file_name)
+    
+    def load_servo_commu_template(self,servo_commu_template_file = "servo_commu.json"):    
+        print("loading servo communication template")
+        with open(servo_commu_template_file, "r") as fObj:
+            servo_commu_template = json.load(fObj)
+        #print("self.servo_commu_template: " + str(servo_commu_template))
+        strservo = json.dumps(servo_commu_template)
+        print("len of str servo commu: "+str(len(strservo)) )
+
+        return servo_commu_template
+
+    def test_recv_servos(self):
+        one_frame=self.m_sock_client.pop_receiver_queue()
+        while one_frame is not False:
+            one_frame=self.m_sock_client.pop_receiver_queue()
+            print("---- received from server data: "+str(one_frame))
+        time.sleep(0.01)
+
+    def test_send_servos(self):
+        servo_commu_template = self.load_servo_commu_template()
+        send_data = deepcopy(servo_commu_template)
+        while(True):
+            for i in send_data: 
+                send_data[i]['send_servo_valid'] = True
+                send_data[i]['send_servo_pos_val'] = 2000
+                send_data[i]['send_servo_speed_val'] = 1000
+                send_data[i]['send_servo_torque_val'] = 500
+            
+            str_send_data = json.dumps(send_data)
+            self.m_sock_client.push_sender_queu(str_send_data)        
+            time.sleep(1)
+
+            for i in send_data: 
+                send_data[i]['send_servo_valid'] = True
+                send_data[i]['send_servo_pos_val'] = 1000
+                send_data[i]['send_servo_speed_val'] = 1000
+                send_data[i]['send_servo_torque_val'] = 500
+            
+            str_send_data = json.dumps(send_data)
+            self.m_sock_client.push_sender_queu(str_send_data)
+            time.sleep(1)
+            self.test_recv_servos()
+
+    def compute_speed(pose_old,pose_new,run_time):
+        DEFAULT_SPEED = 500
+        VALID_MIN_SPEED = 1
+        VALID_MAX_SPEED = 3000
+        pose_diffs = abs(pose_new-pose_old) 
+        if(pose_diffs <= 0): 
+            speed_new = DEFAULT_SPEED
+            print("!!!Invalid servo pose diffs, use default speed")
+            return (pose_new,speed_new)
+        if(run_time <= 0):
+            speed_new = DEFAULT_SPEED
+            print("!!!Invalid servo speed, use default speed")
+            return (pose_new,speed_new)
+        
+        speed_new = (pose_diffs)/run_time
+        speed_new = int(speed_new)
+        #todo: check speed valid    
+        if((VALID_MIN_SPEED > speed_new) or (VALID_MAX_SPEED < speed_new)):
+            print("!!!Calculated speed out of valid range, use default speed")
+            speed_new = DEFAULT_SPEED
+            return (pose_new,speed_new)
+
+        return (pose_new,speed_new)
+
 
 class VirtualToReal:
     
