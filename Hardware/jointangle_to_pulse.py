@@ -192,6 +192,8 @@ class VirtualToReal:
      # the pulses will send to servo   
     pulses2servos = deepcopy(const_hardware.PULSES2SERVOS)
 
+    def __init__(self):
+        self.servo_commu = ClientServoCommu()
     def update_puses(self,poses_json_dict): 
         poses = deepcopy(self.nutural_poses_deg)
 
@@ -258,6 +260,14 @@ class VirtualToReal:
             Board.setBusServoPulse(tibia_servo_id,tibia_pulse,  time_msec)
 
 
+def TestNutualPositions():
+    v2r = VirtualToReal()     
+    time.sleep(0.5)
+
+    pulses2servos = v2r.join_pose2pulse(v2r.nutural_poses_deg)
+    v2r.SendBusServoPulse(1000,pulses2servos)
+    time.sleep(1)
+
 def TestForwardKinematics():
     v2r = VirtualToReal()     
     time.sleep(0.5)
@@ -307,4 +317,5 @@ def TestForwardKinematics():
 
 if __name__ == "__main__": 
 
-    TestForwardKinematics()
+    #TestForwardKinematics()
+    TestNutualPositions()
