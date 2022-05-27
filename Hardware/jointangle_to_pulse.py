@@ -89,19 +89,19 @@ import os
 import json
 from copy import deepcopy
 sys.path.append("../")
-#from . import const_hardware
-import const_hardware
+from . import const_hardware
+#import const_hardware
 from mini_socket.mini_socket_sdk.libclient import MiniSocketClient 
 from copy import deepcopy
 
 
 class ClientServoCommu:
-    def __init__(self,socket_config_file_name='net_commu_config.json'):
+    def __init__(self,socket_config_file_name='Hardware/net_commu_config.json'):
         self.m_sock_client = MiniSocketClient(socket_config_file_name)
         self.commu_template = []
         self.load_servo_commu_template()
     
-    def load_servo_commu_template(self,servo_commu_template_file = "servo_commu.json"):    
+    def load_servo_commu_template(self,servo_commu_template_file = "Hardware/servo_commu.json"):    
         print("loading servo communication template")
         with open(servo_commu_template_file, "r") as fObj:
             servo_commu_template = json.load(fObj)

@@ -7,13 +7,14 @@ import sys
 sys.path.append("../../")
 try: 
     from Hardware import jointangle_to_pulse
-except: 
+except Exception: 
     print("Hardware not found. Going to do software simulation.")
-
+    raise Exception
 try:
     VIRTUAL_TO_REAL = jointangle_to_pulse.VirtualToReal()
 except: 
     print("VIRTUAL_TO_REAL variable will not be created")
+    raise Exception
 NAMES_LEG = Hexagon.VERTEX_NAMES
 NAMES_JOINT = Linkage.POINT_NAMES
 
