@@ -174,7 +174,7 @@ class VirtualToReal:
 
     def __init__(self):
 
-        self.DEFAULT_PULSE_SPEED = 800
+        self.DEFAULT_PULSE_SPEED = 500
         self.DEFAULT_TORQUE_VALUE = 300
         self.VALID_MIN_PULSE_SPEED = 1
         self.VALID_MAX_PULSE_SPEED = 3000
@@ -314,7 +314,6 @@ def TestNutualPositions():
 
 def TestForwardKinematics():
     v2r = VirtualToReal()     
-    time.sleep(3)
     coxia_poses_deg = {
     0: {"coxia": 30, "femur": 0, "tibia": 0, "name": "right-middle", "id": 0},
     1: {"coxia": 30, "femur": 0, "tibia": 0, "name": "right-front", "id": 1},
@@ -352,9 +351,9 @@ def TestForwardKinematics():
     v2r.SendBusServoPulse(2000,pulses2servos)    
     time.sleep(2)
     # reset 
-    pulses2servos = v2r.join_pose2pulse(v2r.nutural_poses_deg)
-    v2r.SendBusServoPulse(2000,pulses2servos)
-    time.sleep(2)
+    #pulses2servos = v2r.join_pose2pulse(v2r.nutural_poses_deg)
+    #v2r.SendBusServoPulse(2000,pulses2servos)
+    #time.sleep(2)
     
 if __name__ == "__main__": 
 
