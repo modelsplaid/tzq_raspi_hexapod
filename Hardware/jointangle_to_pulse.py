@@ -89,8 +89,8 @@ import os
 import json
 from copy import deepcopy
 sys.path.append("../")
-from . import const_hardware
-#from HiwonderSDK import Board
+#from . import const_hardware
+import const_hardware
 from mini_socket.mini_socket_sdk.libclient import MiniSocketClient 
 from copy import deepcopy
 
@@ -98,6 +98,8 @@ from copy import deepcopy
 class ClientServoCommu:
     def __init__(self,socket_config_file_name='net_commu_config.json'):
         self.m_sock_client = MiniSocketClient(socket_config_file_name)
+        self.commu_template = []
+        self.load_servo_commu_template()
     
     def load_servo_commu_template(self,servo_commu_template_file = "servo_commu.json"):    
         print("loading servo communication template")
@@ -106,7 +108,7 @@ class ClientServoCommu:
         #print("self.servo_commu_template: " + str(servo_commu_template))
         strservo = json.dumps(servo_commu_template)
         print("len of str servo commu: "+str(len(strservo)) )
-
+        self.commu_template = servo_commu_template
         return servo_commu_template
 
     def test_recv_servos(self):
@@ -241,7 +243,10 @@ class VirtualToReal:
 
     # send servo pulse to real bot
     def SendBusServoPulse(self,time_msec,pulses2Servos):
-        
+        net_commu_servo_send = deepcopy(self.servo_commu.commu_template) 
+        #print("---net_commu_servo_send:"+str(net_commu_servo_send) )
+        #here
+
         for i in range(len(pulses2Servos)): 
             
             leg_pose =   pulses2Servos[i]
@@ -249,32 +254,43 @@ class VirtualToReal:
 
             coxia_pulse = int(leg_pose["coxia"])
             coxia_servo_id = int(leg_servos["coxia"])
-            Board.setBusServoPulse(coxia_servo_id, coxia_pulse, time_msec)            
+            net_commu_servo_index = "serial_servo_"+str(coxia_servo_id)
+            net_commu_servo_send[net_commu_servo_index]['send_servo_valid'] = True
+            net_commu_servo_send[net_commu_servo_index]['send_servo_pos_val'] = coxia_pulse
+            net_commu_servo_send[net_commu_servo_index]['send_servo_speed_val'] = 800 
+            net_commu_servo_send[net_commu_servo_index]['send_servo_torque_val'] = 200
 
             femur_pulse = int(leg_pose["femur"])
             femur_servo_id = int(leg_servos["femur"])
-            Board.setBusServoPulse( femur_servo_id,femur_pulse, time_msec)            
+            net_commu_servo_index = "serial_servo_"+str(femur_servo_id)
+            net_commu_servo_send[net_commu_servo_index]['send_servo_valid'] = True
+            net_commu_servo_send[net_commu_servo_index]['send_servo_pos_val'] = femur_pulse
+            net_commu_servo_send[net_commu_servo_index]['send_servo_speed_val'] = 800 
+            net_commu_servo_send[net_commu_servo_index]['send_servo_torque_val'] = 200
 
             tibia_pulse = int(leg_pose["tibia"])
             tibia_servo_id = int(leg_servos["tibia"])
-            Board.setBusServoPulse(tibia_servo_id,tibia_pulse,  time_msec)
-
-
+            #Board.setBusServoPulse(tibia_servo_id,tibia_pulse,  time_msec)
+            net_commu_servo_index = "serial_servo_"+str(tibia_servo_id)
+            net_commu_servo_send[net_commu_servo_index]['send_servo_valid'] = True
+            net_commu_servo_send[net_commu_servo_index]['send_servo_pos_val'] = tibia_pulse
+            net_commu_servo_send[net_commu_servo_index]['send_servo_speed_val'] = 800 
+            net_commu_servo_send[net_commu_servo_index]['send_servo_torque_val'] = 200
+            
+        str_send_data = json.dumps(net_commu_servo_send)
+        self.servo_commu.m_sock_client.push_sender_queu(str_send_data)
 def TestNutualPositions():
     v2r = VirtualToReal()     
     time.sleep(0.5)
-
+    print("sending to servo")
     pulses2servos = v2r.join_pose2pulse(v2r.nutural_poses_deg)
     v2r.SendBusServoPulse(1000,pulses2servos)
-    time.sleep(1)
+    time.sleep(3)
+    print("done sending to servo")
 
 def TestForwardKinematics():
     v2r = VirtualToReal()     
     time.sleep(0.5)
-    pulses2servos = v2r.join_pose2pulse(v2r.nutural_poses_deg)
-    v2r.SendBusServoPulse(1000,pulses2servos)
-    time.sleep(1)
-
     coxia_poses_deg = {
     0: {"coxia": 30, "femur": 0, "tibia": 0, "name": "right-middle", "id": 0},
     1: {"coxia": 30, "femur": 0, "tibia": 0, "name": "right-front", "id": 1},
@@ -283,10 +299,9 @@ def TestForwardKinematics():
     4: {"coxia": 30, "femur": 0, "tibia": 0, "name": "left-back", "id": 4},
     5: {"coxia": 30, "femur": 0, "tibia": 0, "name": "right-back", "id": 5},
     }
-
     pulses2servos = v2r.join_pose2pulse(coxia_poses_deg)
     v2r.SendBusServoPulse(1000,pulses2servos)
-    time.sleep(1)
+    time.sleep(3)
 
     coxia_femur_poses_deg = {
     0: {"coxia": 30, "femur": 30, "tibia": 0, "name": "right-middle", "id": 0},
@@ -298,7 +313,7 @@ def TestForwardKinematics():
     }
     pulses2servos = v2r.join_pose2pulse(coxia_femur_poses_deg)
     v2r.SendBusServoPulse(1000,pulses2servos)
-    time.sleep(1)
+    time.sleep(3)
 
     coxia_femur_tibia_poses_deg = {
     0: {"coxia": 30, "femur": 30, "tibia": 30, "name": "right-middle", "id": 0},
@@ -310,12 +325,13 @@ def TestForwardKinematics():
     }
     pulses2servos = v2r.join_pose2pulse(coxia_femur_tibia_poses_deg)
     v2r.SendBusServoPulse(1000,pulses2servos)    
-    time.sleep(1)
+    time.sleep(3)
     # reset 
     pulses2servos = v2r.join_pose2pulse(v2r.nutural_poses_deg)
     v2r.SendBusServoPulse(1000,pulses2servos)
-
+    time.sleep(3)
 if __name__ == "__main__": 
 
-    #TestForwardKinematics()
+    
     TestNutualPositions()
+    TestForwardKinematics()
