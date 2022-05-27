@@ -351,9 +351,9 @@ def TestForwardKinematics():
     v2r.SendBusServoPulse(2000,pulses2servos)    
     time.sleep(2)
     # reset 
-    #pulses2servos = v2r.join_pose2pulse(v2r.nutural_poses_deg)
-    #v2r.SendBusServoPulse(2000,pulses2servos)
-    #time.sleep(2)
+    pulses2servos = v2r.join_pose2pulse(v2r.nutural_poses_deg)
+    v2r.SendBusServoPulse(2000,pulses2servos)
+    time.sleep(2)
     
 if __name__ == "__main__": 
 
