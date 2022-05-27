@@ -143,29 +143,7 @@ class ClientServoCommu:
             time.sleep(1)
             self.test_recv_servos()
 
-    def compute_speed(pose_old,pose_new,run_time):
-        DEFAULT_SPEED = 500
-        VALID_MIN_SPEED = 1
-        VALID_MAX_SPEED = 3000
-        pose_diffs = abs(pose_new-pose_old) 
-        if(pose_diffs <= 0): 
-            speed_new = DEFAULT_SPEED
-            print("!!!Invalid servo pose diffs, use default speed")
-            return (pose_new,speed_new)
-        if(run_time <= 0):
-            speed_new = DEFAULT_SPEED
-            print("!!!Invalid servo speed, use default speed")
-            return (pose_new,speed_new)
-        
-        speed_new = (pose_diffs)/run_time
-        speed_new = int(speed_new)
-        #todo: check speed valid    
-        if((VALID_MIN_SPEED > speed_new) or (VALID_MAX_SPEED < speed_new)):
-            print("!!!Calculated speed out of valid range, use default speed")
-            speed_new = DEFAULT_SPEED
-            return (pose_new,speed_new)
 
-        return (pose_new,speed_new)
 
 
 class VirtualToReal:
@@ -195,7 +173,44 @@ class VirtualToReal:
     pulses2servos = deepcopy(const_hardware.PULSES2SERVOS)
 
     def __init__(self):
+
+        self.DEFAULT_PULSE_SPEED = 800
+        self.DEFAULT_TORQUE_VALUE = 300
+        self.VALID_MIN_PULSE_SPEED = 1
+        self.VALID_MAX_PULSE_SPEED = 3000
+
         self.servo_commu = ClientServoCommu()
+        time.sleep(0.1)
+        print("Going to netural position")
+        pulses2servos = self.join_pose2pulse(self.nutural_poses_deg)
+        self.pre_servo_pulses = deepcopy(pulses2servos)
+        self.SendBusServoPulse(1,pulses2servos)
+        time.sleep(3)
+
+
+    def compute_pulse_speed(self,pose_old,pose_new,run_time_sec):
+
+        pose_diffs = abs(pose_new-pose_old) 
+        if(pose_diffs < 0): 
+            speed_new = self.DEFAULT_PULSE_SPEED
+            print("!!!Invalid servo pose diffs, use default speed")
+            return speed_new
+        if(run_time_sec <= 0):
+            speed_new = self.DEFAULT_PULSE_SPEED
+            print("!!!Invalid servo speed, use default speed")
+            return speed_new
+        
+        speed_new = (pose_diffs)/run_time_sec
+        speed_new = int(speed_new)
+        #todo: check speed valid    
+        if((self.VALID_MIN_PULSE_SPEED > speed_new) or (self.VALID_MAX_PULSE_SPEED < speed_new)):
+            #print("!!!Calculated speed out of valid range, use default speed")
+            #print("speed_new:"+str(speed_new) )
+            speed_new = self.DEFAULT_PULSE_SPEED
+            return speed_new
+
+        return speed_new
+
     def update_puses(self,poses_json_dict): 
         poses = deepcopy(self.nutural_poses_deg)
 
@@ -214,17 +229,17 @@ class VirtualToReal:
         #2. Find which joint id maps to which servo id         
         #3. Decide pulse number based on direction mapping, 
         #   Num pulses per deg  
-        print("length of poses: "+ str(len(poses)))
-        print(poses[0])
+        #print("length of poses: "+ str(len(poses)))
+        #print(poses[0])
         for i in range(len(poses)): 
             pose = poses[i]
-            print("poses number: " + str(i))
-            print(pose)
+            #print("poses number: " + str(i))
+            #print(pose)
             # get input angles   
-            print("Joint angles for pose id: "+str(poses[i]["id"])+ \
-                                " coxia: "+ str(pose["coxia"])+ \
-                                " femur: "+ str( pose["femur"])+ \
-                                " tibia: " + str( pose["tibia"]))                        
+            #print("Joint angles for pose id: "+str(poses[i]["id"])+ \
+            #                    " coxia: "+ str(pose["coxia"])+ \
+            #                    " femur: "+ str( pose["femur"])+ \
+            #                    " tibia: " + str( pose["tibia"]))                        
 
             ### convert joint angle to sevo pulse 
             # compute coxia pulse
@@ -250,33 +265,42 @@ class VirtualToReal:
         for i in range(len(pulses2Servos)): 
             
             leg_pose =   pulses2Servos[i]
+            pre_leg_pose = self.pre_servo_pulses[i] 
             leg_servos = self.servo_id_mapping[i]
 
             coxia_pulse = int(leg_pose["coxia"])
+            pre_coxia_pulse = int(pre_leg_pose["coxia"])
             coxia_servo_id = int(leg_servos["coxia"])
             net_commu_servo_index = "serial_servo_"+str(coxia_servo_id)
             net_commu_servo_send[net_commu_servo_index]['send_servo_valid'] = True
             net_commu_servo_send[net_commu_servo_index]['send_servo_pos_val'] = coxia_pulse
-            net_commu_servo_send[net_commu_servo_index]['send_servo_speed_val'] = 800 
-            net_commu_servo_send[net_commu_servo_index]['send_servo_torque_val'] = 200
+            pulse_speed = self.compute_pulse_speed(pre_coxia_pulse,coxia_pulse,time_msec/1000)
+            net_commu_servo_send[net_commu_servo_index]['send_servo_speed_val'] = pulse_speed
+            net_commu_servo_send[net_commu_servo_index]['send_servo_torque_val'] = self.DEFAULT_TORQUE_VALUE
 
             femur_pulse = int(leg_pose["femur"])
+            pre_femur_pulse = int(pre_leg_pose["femur"])
             femur_servo_id = int(leg_servos["femur"])
             net_commu_servo_index = "serial_servo_"+str(femur_servo_id)
             net_commu_servo_send[net_commu_servo_index]['send_servo_valid'] = True
             net_commu_servo_send[net_commu_servo_index]['send_servo_pos_val'] = femur_pulse
-            net_commu_servo_send[net_commu_servo_index]['send_servo_speed_val'] = 800 
-            net_commu_servo_send[net_commu_servo_index]['send_servo_torque_val'] = 200
+            pulse_speed = self.compute_pulse_speed(pre_femur_pulse,femur_pulse,time_msec/1000)
+            net_commu_servo_send[net_commu_servo_index]['send_servo_speed_val'] = pulse_speed
+            net_commu_servo_send[net_commu_servo_index]['send_servo_torque_val'] = self.DEFAULT_TORQUE_VALUE
 
             tibia_pulse = int(leg_pose["tibia"])
+            pre_tibia_pulse = int(pre_leg_pose["tibia"])
             tibia_servo_id = int(leg_servos["tibia"])
             #Board.setBusServoPulse(tibia_servo_id,tibia_pulse,  time_msec)
             net_commu_servo_index = "serial_servo_"+str(tibia_servo_id)
             net_commu_servo_send[net_commu_servo_index]['send_servo_valid'] = True
             net_commu_servo_send[net_commu_servo_index]['send_servo_pos_val'] = tibia_pulse
-            net_commu_servo_send[net_commu_servo_index]['send_servo_speed_val'] = 800 
-            net_commu_servo_send[net_commu_servo_index]['send_servo_torque_val'] = 200
+            pulse_speed = self.compute_pulse_speed(pre_tibia_pulse,tibia_pulse,time_msec/1000)
+            net_commu_servo_send[net_commu_servo_index]['send_servo_speed_val'] = pulse_speed
+            net_commu_servo_send[net_commu_servo_index]['send_servo_torque_val'] = self.DEFAULT_TORQUE_VALUE
             
+        self.pre_servo_pulses = deepcopy(pulses2Servos)   
+
         str_send_data = json.dumps(net_commu_servo_send)
         self.servo_commu.m_sock_client.push_sender_queu(str_send_data)
 def TestNutualPositions():
@@ -290,7 +314,7 @@ def TestNutualPositions():
 
 def TestForwardKinematics():
     v2r = VirtualToReal()     
-    time.sleep(0.5)
+    time.sleep(3)
     coxia_poses_deg = {
     0: {"coxia": 30, "femur": 0, "tibia": 0, "name": "right-middle", "id": 0},
     1: {"coxia": 30, "femur": 0, "tibia": 0, "name": "right-front", "id": 1},
@@ -300,9 +324,10 @@ def TestForwardKinematics():
     5: {"coxia": 30, "femur": 0, "tibia": 0, "name": "right-back", "id": 5},
     }
     pulses2servos = v2r.join_pose2pulse(coxia_poses_deg)
-    v2r.SendBusServoPulse(1000,pulses2servos)
+    v2r.SendBusServoPulse(3000,pulses2servos)
     time.sleep(3)
 
+    
     coxia_femur_poses_deg = {
     0: {"coxia": 30, "femur": 30, "tibia": 0, "name": "right-middle", "id": 0},
     1: {"coxia": 30, "femur": 30, "tibia": 0, "name": "right-front", "id": 1},
@@ -312,8 +337,8 @@ def TestForwardKinematics():
     5: {"coxia": 30, "femur": 30, "tibia": 0, "name": "right-back", "id": 5},
     }
     pulses2servos = v2r.join_pose2pulse(coxia_femur_poses_deg)
-    v2r.SendBusServoPulse(1000,pulses2servos)
-    time.sleep(3)
+    v2r.SendBusServoPulse(2000,pulses2servos)
+    time.sleep(2)
 
     coxia_femur_tibia_poses_deg = {
     0: {"coxia": 30, "femur": 30, "tibia": 30, "name": "right-middle", "id": 0},
@@ -324,14 +349,14 @@ def TestForwardKinematics():
     5: {"coxia": 30, "femur": 30, "tibia": 30, "name": "right-back", "id": 5},
     }
     pulses2servos = v2r.join_pose2pulse(coxia_femur_tibia_poses_deg)
-    v2r.SendBusServoPulse(1000,pulses2servos)    
-    time.sleep(3)
+    v2r.SendBusServoPulse(2000,pulses2servos)    
+    time.sleep(2)
     # reset 
     pulses2servos = v2r.join_pose2pulse(v2r.nutural_poses_deg)
-    v2r.SendBusServoPulse(1000,pulses2servos)
-    time.sleep(3)
+    v2r.SendBusServoPulse(2000,pulses2servos)
+    time.sleep(2)
+    
 if __name__ == "__main__": 
 
-    
-    TestNutualPositions()
+    #TestNutualPositions()
     TestForwardKinematics()
