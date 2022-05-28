@@ -154,23 +154,7 @@ class VirtualToReal:
     #Number of degrees needed to rotate one pulse
     degs_per_pulse = 1.0/pulses_per_deg
     
-    # Pulses for each servo when alpha beta and gamma all equal to zero
-    nutural_poses_pulse = deepcopy(const_hardware.NUTURAL_POSES_PULSE)
 
-    nutural_poses_deg  = deepcopy(const_hardware.NUTURAL_POSES_DEG)
-
-    # If servo rotation direction same as model joint angle, set 1
-    # if opposite set -1.   
-    # todo: here
-    direction_poses_pulse = deepcopy(const_hardware.DIRECTION_POSES_PULSE)
-
-    # joint of our hexa model has different  ids with the real-world servo 
-    # each entry stands for corresponding servo id
-    #
-    servo_id_mapping = deepcopy(const_hardware.SERVO_ID_MAPPING)
-  
-     # the pulses will send to servo   
-    pulses2servos = deepcopy(const_hardware.PULSES2SERVOS)
 
     def __init__(self):
 
@@ -179,12 +163,32 @@ class VirtualToReal:
         self.VALID_MIN_PULSE_SPEED = 1
         self.VALID_MAX_PULSE_SPEED = 3000
 
+        # Pulses for each servo when alpha beta and gamma all equal to zero
+        self.nutural_poses_pulse = deepcopy(const_hardware.NUTURAL_POSES_PULSE)
+
+        self.nutural_poses_deg  = deepcopy(const_hardware.NUTURAL_POSES_DEG)
+
+        # If servo rotation direction same as model joint angle, set 1
+        # if opposite set -1.   
+        # todo: here
+        self.direction_poses_pulse = deepcopy(const_hardware.DIRECTION_POSES_PULSE)
+
+        # joint of our hexa model has different  ids with the real-world servo 
+        # each entry stands for corresponding servo id
+        #
+        self.servo_id_mapping = deepcopy(const_hardware.SERVO_ID_MAPPING)
+    
+        # the pulses will send to servo   
+        self.pulses2servos = deepcopy(const_hardware.PULSES2SERVOS)
+
         self.servo_commu = ClientServoCommu()
         time.sleep(0.1)
         print("Going to netural position")
-        pulses2servos = self.join_pose2pulse(self.nutural_poses_deg)
-        self.pre_servo_pulses = deepcopy(pulses2servos)
-        self.SendBusServoPulse(1,pulses2servos)
+        #print("++++++++self.nutural_poses_deg")
+        #print(self.nutural_poses_deg)
+        self.pulses2servos = self.join_pose2pulse(self.nutural_poses_deg)
+        self.pre_servo_pulses = deepcopy(self.pulses2servos)
+        self.SendBusServoPulse(1,self.pulses2servos)
         time.sleep(3)
 
 
@@ -220,8 +224,8 @@ class VirtualToReal:
             poses[i]["femur"] = pose["femur"]
             poses[i]["tibia"] = pose["tibia"]
 
-        pulses2servos = self.join_pose2pulse(poses)
-        return pulses2servos
+        self.pulses2servos = self.join_pose2pulse(poses)
+        return self.pulses2servos
 
     # given joint angle of hexapod, get servo pulse for each joint
     def join_pose2pulse(self,poses):
@@ -229,8 +233,9 @@ class VirtualToReal:
         #2. Find which joint id maps to which servo id         
         #3. Decide pulse number based on direction mapping, 
         #   Num pulses per deg  
-        #print("length of poses: "+ str(len(poses)))
-        #print(poses[0])
+        print("length of poses: "+ str(len(poses)))
+        print(poses[0])
+        print("poses: "+str(poses))
         for i in range(len(poses)): 
             pose = poses[i]
             #print("poses number: " + str(i))
@@ -307,7 +312,7 @@ def TestNutualPositions():
     v2r = VirtualToReal()     
     time.sleep(0.5)
     print("sending to servo")
-    pulses2servos = v2r.join_pose2pulse(v2r.nutural_poses_deg)
+    pulses2servos = v2r.join_pose2pulse(v2r.self.nutural_poses_deg)
     v2r.SendBusServoPulse(1000,pulses2servos)
     time.sleep(3)
     print("done sending to servo")
@@ -351,7 +356,7 @@ def TestForwardKinematics():
     v2r.SendBusServoPulse(2000,pulses2servos)    
     time.sleep(2)
     # reset 
-    pulses2servos = v2r.join_pose2pulse(v2r.nutural_poses_deg)
+    pulses2servos = v2r.join_pose2pulse(v2r.self.nutural_poses_deg)
     v2r.SendBusServoPulse(2000,pulses2servos)
     time.sleep(2)
     
