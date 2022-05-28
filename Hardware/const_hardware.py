@@ -1,3 +1,5 @@
+import json 
+
 NUTURAL_POSES_PULSE = {
 0: {"coxia": 1971, "femur": 2017, "tibia": 1068, "name": "right-middle", "id": 0},
 1: {"coxia": 2088, "femur": 2070, "tibia": 940, "name": "right-front", "id": 1},
@@ -52,5 +54,14 @@ PULSES2SERVOS = {
 
 
 if __name__ == "__main__":
-    print("IN const hardware  ")
+    dict_json = {'NUTURAL_POSES_PULSE': NUTURAL_POSES_PULSE,\
+            'NUTURAL_POSES_DEG': NUTURAL_POSES_DEG,\
+            'DIRECTION_POSES_PULSE': DIRECTION_POSES_PULSE,\
+            'SERVO_ID_MAPPING':SERVO_ID_MAPPING,
+            'PULSES2SERVOS':PULSES2SERVOS      
+            }
+
+    out_file = open("const_hardware_config.json", "w") 
+    json.dump(dict_json,out_file,indent = 4) 
+    print("IN const hardware:  ")
     #print(NUTURAL_POSES_PULSE)    

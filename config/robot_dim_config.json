@@ -1,0 +1,20 @@
+{
+    "BASE_DIMENSIONS": {
+        "front": 59,
+        "side": 119,
+        "middle":93,
+        "coxiaa":45,
+	    "femur":75,
+        "tibia":140
+    },
+    "BASE_IK_PARAMS": {
+        "hip_stance": 0,
+        "leg_stance": 0,
+        "percent_x": 0,
+        "percent_y": 0,
+        "percent_z": 0,
+        "rot_x": 0,
+        "rot_y": 0,
+        "rot_z": 0
+    }
+}
