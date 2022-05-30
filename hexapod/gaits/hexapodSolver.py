@@ -16,7 +16,7 @@ def solveHexapodParams(dimensions, rawIKparams, rotateThenShift = True):
     return    ikSolver_poses
 
 if __name__ == '__main__':
-    dimensions = {
+    dimensions = {  # todo here
         "front": 100,
         "side": 100,
         "middle": 100,
