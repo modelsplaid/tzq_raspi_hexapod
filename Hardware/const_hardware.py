@@ -22,7 +22,6 @@ def dum_config():
     #print(NUTURAL_POSES_PULSE)    
 
 
-
 out_file = open("./config/const_hardware_config.json", "r")
 config_json = json.load(out_file)
 NUTURAL_POSES_PULSE = str_key2int(config_json['NUTURAL_POSES_PULSE'])
