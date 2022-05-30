@@ -67,7 +67,7 @@ class Hexagon:
         "left-back",
         "right-back",
     )
-    COXIA_AXES = (0, 45, 135, 180, 225, 315)
+    COXIA_AXES = (0, 45, 135, 180, 225, 315) # todo here 
     __slots__ = ("f", "m", "s", "cog", "head", "vertices", "all_points")
 
     def __init__(self, f, m, s):

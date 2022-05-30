@@ -18,7 +18,7 @@ except:
 NAMES_LEG = Hexagon.VERTEX_NAMES
 NAMES_JOINT = Linkage.POINT_NAMES
 
-BASE_DIMENSIONS = {
+BASE_DIMENSIONS = { # todo here 
     "front": 59,
     "side": 119,
     "middle": 93,
