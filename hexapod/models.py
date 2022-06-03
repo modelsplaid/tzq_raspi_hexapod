@@ -67,7 +67,15 @@ class Hexagon:
         "left-back",
         "right-back",
     )
-    COXIA_AXES = (0, 45, 135, 180, 225, 315) # todo here 
+    out_file = open("./config/robot_dim_config.json", "r")
+    config_json = json.load(out_file)
+    COXIA_AXES_CONFIG = (config_json['COXIA_AXES'])
+    COXIA_AXES = (COXIA_AXES_CONFIG["right-middle"],\
+                COXIA_AXES_CONFIG["right-front"],\
+                COXIA_AXES_CONFIG["left-front"],\
+                COXIA_AXES_CONFIG["left-middle"],\
+                COXIA_AXES_CONFIG["left-back"], 
+                COXIA_AXES_CONFIG["right-back"]) # todo here 
     __slots__ = ("f", "m", "s", "cog", "head", "vertices", "all_points")
 
     def __init__(self, f, m, s):

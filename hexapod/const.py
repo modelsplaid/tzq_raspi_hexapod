@@ -19,7 +19,7 @@ except:
 NAMES_LEG = Hexagon.VERTEX_NAMES
 NAMES_JOINT = Linkage.POINT_NAMES
 
-# BASE_DIMENSIONS = { # todo here 
+# BASE_DIMENSIONS = {
 #     "front": 59,
 #     "side": 119,
 #     "middle": 93,
@@ -42,7 +42,8 @@ out_file = open("./config/robot_dim_config.json", "r")
 config_json = json.load(out_file)
 BASE_DIMENSIONS = (config_json['BASE_DIMENSIONS'])
 BASE_IK_PARAMS = (config_json['BASE_IK_PARAMS'])
-print(BASE_DIMENSIONS['front'] )
+COXIA_AXES_CONFIG = (config_json['COXIA_AXES'])
+#print(BASE_DIMENSIONS['front'] )
 
 
 print("instance BASE_POSE")
