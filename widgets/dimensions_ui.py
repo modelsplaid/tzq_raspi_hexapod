@@ -7,9 +7,10 @@ from settings import INPUT_DIMENSIONS_RESOLUTION
 from style_settings import NUMBER_INPUT_STYLE
 from widgets.section_maker import make_section_type3
 
-#import sys
-#sys.path.append("../")
-#from hexapod import const
+import sys
+sys.path.append("../")
+from hexapod import const 
+
 
 def make_number_widget(_name, _value):
     return dcc.Input(
@@ -32,7 +33,16 @@ def _code(name):
 
 HEADER = html.Label(dcc.Markdown(f"**{DIMENSIONS_WIDGETS_HEADER}**"))
 WIDGET_NAMES = ["front", "side", "middle", "coxia", "femur", "tibia"]
-WIDGET_DIMS = [59.0,119.0,93.0,45.0,75.0,140.0]
+
+
+WIDGET_DIMS = [const.BASE_DIMENSIONS["front"],\
+               const.BASE_DIMENSIONS["side"],\
+               const.BASE_DIMENSIONS["middle"],\
+               const.BASE_DIMENSIONS["coxia"],\
+               const.BASE_DIMENSIONS["femur"],\
+               const.BASE_DIMENSIONS["tibia"]]
+
+
 DIMENSION_WIDGET_IDS = [f"widget-dimension-{name}" for name in WIDGET_NAMES]
 DIMENSION_CALLBACK_INPUTS = [Input(id, "value") for id in DIMENSION_WIDGET_IDS]
 
