@@ -411,7 +411,7 @@ def rippleSequence(startPose, aLiftSwing, hipSwings, stepCount, walkMode):
         #print(sequences[legPositionName])
     return sequences
 
-def getWalkSequence(dimensions, params, gaitType="tripod", walkMode="walking"):
+def getWalkSequence(dimensions, params, gaitType="tripod", walkMode="walkingforward"):
     #walkMode options: "walkingforward" "walkingbackward" "rotatingleft" "rotatingright"
     print("in getWalkSequence")
 

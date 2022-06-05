@@ -10,7 +10,6 @@ from copy import deepcopy
 
 import time
 import sys
-
 try:
     from hexapod.const import VIRTUAL_TO_REAL
 except: 

@@ -136,14 +136,14 @@ def tripodASequence(forwardAlphaSeqs,liftGammaSeqs,
         alpha = forwardAlphaSeqs[current_poses[id_num]["name"]]
         alpha_rev = deepcopy(alpha)
         alpha_rev.reverse()
-        alpha = alpha + alpha_rev 
+        alpha = alpha + alpha_rev[1:] 
         current_poses[id_num]["coxia"] = alpha 
     
         # 2. generating beta sequences (femur)
         beta = liftBetaSeqs[current_poses[id_num]["name"]]
         beta_rev = deepcopy(beta)
         beta_rev.reverse()
-        fillArrayBeta = [beta[0]]*int(doubleStepCount)
+        fillArrayBeta = [beta[0]]*(int(doubleStepCount)-1)
         beta = beta+beta_rev+fillArrayBeta
         current_poses[id_num]["femur"] = beta
 
@@ -152,7 +152,7 @@ def tripodASequence(forwardAlphaSeqs,liftGammaSeqs,
         gamma = liftGammaSeqs[current_poses[id_num]["name"]]
         gamma_rev = deepcopy(gamma)
         gamma_rev.reverse()
-        fillArrayGamma = [gamma[0]]*int(doubleStepCount)
+        fillArrayGamma = [gamma[0]]*(int(doubleStepCount)-1)
         gamma = gamma+gamma_rev+fillArrayGamma
         current_poses[id_num]["tibia"] = gamma
 
@@ -201,14 +201,14 @@ def tripodBSequence(forwardAlphaSeqs,liftGammaSeqs,
         alpha = forwardAlphaSeqs[current_poses[id_num]["name"]]
         alpha_rev = deepcopy(alpha)
         alpha_rev.reverse()
-        alpha = alpha_rev + alpha 
+        alpha = alpha_rev + alpha[1:] 
         current_poses[id_num]["coxia"] = alpha 
     
         # 2. generating beta sequences (femur)
         beta = liftBetaSeqs[current_poses[id_num]["name"]]
         beta_rev = deepcopy(beta)
         beta_rev.reverse()
-        fillArrayBeta = [beta[0]]*int(doubleStepCount)
+        fillArrayBeta = [beta[0]]*(int(doubleStepCount)-1)
         beta = fillArrayBeta + beta+beta_rev
         current_poses[id_num]["femur"] = beta
 
@@ -217,7 +217,7 @@ def tripodBSequence(forwardAlphaSeqs,liftGammaSeqs,
         gamma = liftGammaSeqs[current_poses[id_num]["name"]]
         gamma_rev = deepcopy(gamma)
         gamma_rev.reverse()
-        fillArrayGamma = [gamma[0]]*int(doubleStepCount)
+        fillArrayGamma = [gamma[0]]*(int(doubleStepCount)-1)
         gamma = fillArrayGamma+gamma+gamma_rev
         current_poses[id_num]["tibia"] = gamma
 
@@ -244,6 +244,7 @@ def tripodSequenceLeftFirst(pose, aLiftSwing, hipSwings, stepCount, walkMode):
     tripodB = tripodBSequence(forwardAlphaSeqs,liftGammaSeqs,
                     liftBetaSeqs,doubleStepCount)                                                                          
     
+
     tripodFull = tripodB.update(tripodA)
     tripodFull = deepcopy(tripodB)
         
@@ -268,6 +269,8 @@ def tripodSequence(pose, aLiftSwing, hipSwings, stepCount, walkMode):
     
     tripodFull = tripodA.update(tripodB)
     tripodFull = deepcopy(tripodA)
+    print("+++++tripodA:"+str(tripodA))
+    print("+++++tripodB:"+str(tripodB))
     #print("---forwardAlphaSeqs: ")                                                        
     #print(forwardAlphaSeqs)        
     #print("---liftBetaSeqs: ")                                                        
@@ -475,4 +478,5 @@ def extract_walkseqs(walk_seq,index_seq):
         poses_deg[i]['femur'] = walk_seq[i]['femur'][index_seq]
         poses_deg[i]['tibia'] = walk_seq[i]['tibia'][index_seq]
 
+    print("walk_seq[0]['coxia']" +str(walk_seq[0]['coxia']))
     return poses_deg

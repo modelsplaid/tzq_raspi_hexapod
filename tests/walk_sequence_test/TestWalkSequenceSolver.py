@@ -52,9 +52,11 @@ def extract_walkseqs(walk_seq,index_seq):
 
 gaitType = "ripple"
 fullSequences = getWalkSequence(dimensions, gaitParams,gaitType)
-print("fullSequences[0]['coxia'][0]: " + str(fullSequences[0]['coxia'][0]))
+print("fullSequences[0]['coxia']: " + str(fullSequences[0]['coxia']))
+print("fullSequences[0]['femur'][0]: " + str(fullSequences[0]['femur']))
+
 print("number of walk sequences: " + str(len(fullSequences[0]['coxia'])))
 
-extracted_seq = extract_walkseqs(fullSequences,0)
-print("extracted_seq: ")
-print(extracted_seq)
+# extracted_seq = extract_walkseqs(fullSequences,0)
+# print("extracted_seq: ")
+# print(extracted_seq)

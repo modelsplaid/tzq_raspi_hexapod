@@ -168,7 +168,8 @@ def update_simulator_real_poses(
         # generating gait sequences
         seqs = process_gait_seq(radio_gaittype,radio_movedir,hipSwing_val, liftSwing_val, hipStance_val,legStance,stepCount)
 
-        num_seqs =len(seqs[0]['coxia'])        
+        # since last pose and first pose is the same, so just ignore last pose in this sequence.
+        num_seqs =len(seqs[0]['coxia'])-1        
 
         print("num_seqs:"+str(num_seqs))
         print("button_step_counter:"+str(button_step_counter%num_seqs))
