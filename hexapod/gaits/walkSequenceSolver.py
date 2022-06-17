@@ -3,7 +3,7 @@ sys.path.append("../../")
 from hexapod.gaits.hexapodSolver import solveHexapodParams
 from copy import deepcopy
 import numpy as np
-
+import pprint
 def getHipSwingForward(aHipSwing):
 
     return {
@@ -100,6 +100,7 @@ def buildTripodSequences(startPose, aLiftSwing, hipSwings, stepCount, walkMode):
         liftGammaSeqs[leg_name] = liftGamma
 
     return [forwardAlphaSeqs, liftBetaSeqs, liftGammaSeqs]
+
 
 def tripodASequence(forwardAlphaSeqs,liftGammaSeqs,
                     liftBetaSeqs,doubleStepCount): 
@@ -227,8 +228,9 @@ def tripodBSequence(forwardAlphaSeqs,liftGammaSeqs,
     #print(forwardAlphaSeqs)   
     return current_poses 
 
-# left front leg will move first.      
-def tripodSequenceLeftFirst(pose, aLiftSwing, hipSwings, stepCount, walkMode):
+
+# right front leg will move first.
+def tripodSequenceAdvanced(pose, aLiftSwing, hipSwings, stepCount, walkMode):
     [forwardAlphaSeqs, liftBetaSeqs, liftGammaSeqs] = buildTripodSequences(
                                                         pose, 
                                                         aLiftSwing, 
@@ -243,12 +245,50 @@ def tripodSequenceLeftFirst(pose, aLiftSwing, hipSwings, stepCount, walkMode):
     
     tripodB = tripodBSequence(forwardAlphaSeqs,liftGammaSeqs,
                     liftBetaSeqs,doubleStepCount)                                                                          
-    
+    # extract preA sequence
+    left_front_index = 2
+    left_front_sqs = tripodA[left_front_index] # extrace all moving seqs for left front leg
+    pprint.pprint("+++++left_front_sqs:"+str(left_front_sqs))
+    coxia_sqs = left_front_sqs["coxia"]
+    femur_sqs = left_front_sqs["femur"]
+    tibia_sqs = left_front_sqs["tibia"]
+    len_coxia_sqs = len(coxia_sqs) 
+   
+    #Append this move sequence as an independant move circle
+    pre_coxia_sqs = coxia_sqs[0:int((len_coxia_sqs-1)/2)+1]
+    pre_femur_sqs = femur_sqs[0:int((len_coxia_sqs-1)/2)+1]
+    pre_tibia_sqs = tibia_sqs[0:int((len_coxia_sqs-1)/2)+1]
+    len_pre_sqs = len(pre_coxia_sqs)
+    preFullPose = deepcopy(pose)
 
-    tripodFull = tripodB.update(tripodA)
-    tripodFull = deepcopy(tripodB)
+    #Generating static pose
+    for legPositionsIndex in pose:
+
+        alpha = pose[legPositionsIndex]['coxia']
+        beta = pose[legPositionsIndex]['femur']
+        gamma = pose[legPositionsIndex]['tibia']
+        leg_name = pose[legPositionsIndex]['name']
+
+        preFullPose[legPositionsIndex]['coxia'] = [alpha]*len_pre_sqs
+        preFullPose[legPositionsIndex]['femur'] = [beta]*len_pre_sqs
+        preFullPose[legPositionsIndex]['tibia'] = [gamma]*len_pre_sqs
+    # Append pre seqs
+    preFullPose[left_front_index]['coxia'] = pre_coxia_sqs
+    preFullPose[left_front_index]['femur'] = pre_femur_sqs
+    preFullPose[left_front_index]['tibia'] = pre_tibia_sqs
+
+    pprint.pprint("++++++preFullPose: " )
+    pprint.pprint(preFullPose)
+    
+    tripodFull = tripodA.update(tripodB)
+    tripodFull = deepcopy(tripodA)
+    #pprint.pprint("+++++tripodA:"+str(tripodA))
+
+    #pprint.pprint("+++++tripodB:"+str(tripodB))
+   
         
-    return tripodFull
+    return preFullPose
+
 
 # right front leg will move first.
 def tripodSequence(pose, aLiftSwing, hipSwings, stepCount, walkMode):
@@ -266,19 +306,12 @@ def tripodSequence(pose, aLiftSwing, hipSwings, stepCount, walkMode):
     
     tripodB = tripodBSequence(forwardAlphaSeqs,liftGammaSeqs,
                     liftBetaSeqs,doubleStepCount)                                                                          
-    
+
+    #pprint.pprint("+++++tripodA:"+str(tripodA))
+    #pprint.pprint("+++++tripodB:"+str(tripodB))    
     tripodFull = tripodA.update(tripodB)
     tripodFull = deepcopy(tripodA)
-    print("+++++tripodA:"+str(tripodA))
-    print("+++++tripodB:"+str(tripodB))
-    #print("---forwardAlphaSeqs: ")                                                        
-    #print(forwardAlphaSeqs)        
-    #print("---liftBetaSeqs: ")                                                        
-    #print(liftBetaSeqs)
-    #print("---liftGammaSeqs: ")                                                        
-    #print(liftGammaSeqs)    
-    #print("---tripodFull: ")
-    #print(tripodFull)    
+ 
         
     return tripodFull
 
@@ -457,8 +490,8 @@ def getWalkSequence(dimensions, params, gaitType="tripod", walkMode="walking"):
         fullSequences = rippleSequence(ikSolver_poses, aliftSwing, hipSwings, stepCount, walkMode)
     else:
         fullSequences = tripodSequence(ikSolver_poses, aliftSwing, hipSwings, stepCount, walkMode)
-
-    return fullSequences
+        pre_sqs = tripodSequenceAdvanced(ikSolver_poses, aliftSwing, hipSwings, stepCount, walkMode)
+    return pre_sqs
 
 
 def extract_walkseqs(walk_seq,index_seq): 
