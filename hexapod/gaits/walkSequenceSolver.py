@@ -264,12 +264,12 @@ def tripodSequenceAdvanced(pose, aLiftSwing, hipSwings, stepCount, walkMode):
     tibia_sqs = left_front_sqs["tibia"]
     len_coxia_sqs = len(coxia_sqs) 
    
-    #Append this move sequence as an independant move circle
+    #Append this move sequence as an independant move poses
     pre_coxia_sqs = coxia_sqs[0:int((len_coxia_sqs-1)/2)]
     pre_femur_sqs = femur_sqs[0:int((len_coxia_sqs-1)/2)]
     pre_tibia_sqs = tibia_sqs[0:int((len_coxia_sqs-1)/2)]
     len_pre_sqs = len(pre_coxia_sqs)
-    preFullPose = deepcopy(pose)
+    preFullPoses = deepcopy(pose)
 
     #Generating static posels
     for legPositionsIndex in first_pose:
@@ -279,27 +279,28 @@ def tripodSequenceAdvanced(pose, aLiftSwing, hipSwings, stepCount, walkMode):
         gamma =    first_pose[legPositionsIndex]['tibia']
         leg_name = first_pose[legPositionsIndex]['name']
 
-        preFullPose[legPositionsIndex]['coxia'] = [alpha]*len_pre_sqs
-        preFullPose[legPositionsIndex]['femur'] = [beta]*len_pre_sqs
-        preFullPose[legPositionsIndex]['tibia'] = [gamma]*len_pre_sqs
+        preFullPoses[legPositionsIndex]['coxia'] = [alpha]*len_pre_sqs
+        preFullPoses[legPositionsIndex]['femur'] = [beta]*len_pre_sqs
+        preFullPoses[legPositionsIndex]['tibia'] = [gamma]*len_pre_sqs
     # Append pre seqs
-    preFullPose[left_front_key]['coxia'] = pre_coxia_sqs
-    preFullPose[left_front_key]['femur'] = pre_femur_sqs
-    preFullPose[left_front_key]['tibia'] = pre_tibia_sqs
+    preFullPoses[left_front_key]['coxia'] = pre_coxia_sqs
+    preFullPoses[left_front_key]['femur'] = pre_femur_sqs
+    preFullPoses[left_front_key]['tibia'] = pre_tibia_sqs
 
-    pprint.pprint("++++++preFullPose: " )
-    pprint.pprint(preFullPose)
-    
-    ##todo: why start with not touch ground
-
-    tripodFull = tripodA.update(tripodB)
-    tripodFull = deepcopy(tripodA)
+    #pprint.pprint("++++++ preFullPoses: " )
+    #pprint.pprint( preFullPoses)
     #pprint.pprint("+++++tripodA:"+str(tripodA))
-
     #pprint.pprint("+++++tripodB:"+str(tripodB))
    
-        
-    return preFullPose
+    # Generating post poses
+    postFullPoses = deepcopy(tripodTmp)
+
+    for i in range(len_pre_sqs):
+        postFullPoses[left_front_key]['coxia'][i] = pre_coxia_sqs[-1]
+        postFullPoses[left_front_key]['femur'][i] = pre_femur_sqs[-1]
+        postFullPoses[left_front_key]['tibia'][i] = pre_tibia_sqs[-1]
+
+    return  [preFullPoses,postFullPoses]
 
 
 # right front leg will move first.
@@ -319,11 +320,12 @@ def tripodSequence(pose, aLiftSwing, hipSwings, stepCount, walkMode):
     tripodB = tripodBSequence(forwardAlphaSeqs,liftGammaSeqs,
                     liftBetaSeqs,doubleStepCount)                                                                          
 
-    #pprint.pprint("+++++tripodA:"+str(tripodA))
-    #pprint.pprint("+++++tripodB:"+str(tripodB))    
+    pprint.pprint("+++++tripodA:"+str(tripodA))
+    pprint.pprint("+++++tripodB:"+str(tripodB))    
     tripodA.update(tripodB)
     tripodFull = deepcopy(tripodA)
  
+    # remove last pose, since it is the same as first pose
     for id_key in tripodFull:
         tripodFull[id_key]["coxia"] = tripodFull[id_key]["coxia"][0:-1]
         tripodFull[id_key]["femur"] = tripodFull[id_key]["femur"][0:-1]
@@ -506,11 +508,11 @@ def getWalkSequence(dimensions, params, gaitType="tripod", walkMode="walking"):
         fullSequences = rippleSequence(ikSolver_poses, aliftSwing, hipSwings, stepCount, walkMode)
     else:
         fullSequences = tripodSequence(ikSolver_poses, aliftSwing, hipSwings, stepCount, walkMode)
-        pre_sqs = tripodSequenceAdvanced(ikSolver_poses, aliftSwing, hipSwings, stepCount, walkMode)
+        [pre_sqs,post_sqs] = tripodSequenceAdvanced(ikSolver_poses, aliftSwing, hipSwings, stepCount, walkMode)
 
         pprint.pprint("++++++fullSequences: ")
         pprint.pprint(fullSequences)
-    return pre_sqs
+    return fullSequences
 
 
 def extract_walkseqs(walk_seq,index_seq): 
@@ -532,3 +534,4 @@ def extract_walkseqs(walk_seq,index_seq):
 
     print("walk_seq[0]['coxia']" +str(walk_seq[0]['coxia']))
     return poses_deg
+
