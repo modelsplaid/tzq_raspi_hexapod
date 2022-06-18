@@ -174,7 +174,7 @@ def update_simulator_real_poses(
         print("num_seqs:"+str(num_seqs))
         print("button_step_counter:"+str(button_step_counter%num_seqs))
         one_pose = extract_walkseqs(seqs,button_step_counter%num_seqs)
-
+    
         # send to real robot
         global VIRTUAL_TO_REAL
         pulses2servos = VIRTUAL_TO_REAL.update_puses(one_pose)
