@@ -324,6 +324,10 @@ def tripodSequence(pose, aLiftSwing, hipSwings, stepCount, walkMode):
     tripodA.update(tripodB)
     tripodFull = deepcopy(tripodA)
  
+    for id_key in tripodFull:
+        tripodFull[id_key]["coxia"] = tripodFull[id_key]["coxia"][0:-1]
+        tripodFull[id_key]["femur"] = tripodFull[id_key]["femur"][0:-1]
+        tripodFull[id_key]["tibia"] = tripodFull[id_key]["tibia"][0:-1]
         
     return tripodFull
 
