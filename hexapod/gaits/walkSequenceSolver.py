@@ -299,8 +299,21 @@ def tripodSequenceAdvanced(pose, aLiftSwing, hipSwings, stepCount, walkMode):
         postFullPoses[left_front_key]['coxia'][i] = pre_coxia_sqs[-1]
         postFullPoses[left_front_key]['femur'][i] = pre_femur_sqs[-1]
         postFullPoses[left_front_key]['tibia'][i] = pre_tibia_sqs[-1]
+    
+    # remove first and  last pose, since it is the same as first pose
+    for id_key in postFullPoses:
+        postFullPoses[id_key]["coxia"] = postFullPoses[id_key]["coxia"][1:-1]
+        postFullPoses[id_key]["femur"] = postFullPoses[id_key]["femur"][1:-1]
+        postFullPoses[id_key]["tibia"] = postFullPoses[id_key]["tibia"][1:-1]
 
-    return  [preFullPoses,postFullPoses]
+    # append pre and post poses   
+    for id_key in postFullPoses:
+        postFullPoses[id_key]["coxia"] = preFullPoses[id_key]['coxia']+postFullPoses[id_key]["coxia"]
+        postFullPoses[id_key]["femur"] = preFullPoses[id_key]['femur']+postFullPoses[id_key]["femur"]
+        postFullPoses[id_key]["tibia"] = preFullPoses[id_key]['tibia']+postFullPoses[id_key]["tibia"]
+
+    fullPoses = deepcopy(postFullPoses)
+    return  fullPoses
 
 
 # right front leg will move first.
@@ -508,11 +521,11 @@ def getWalkSequence(dimensions, params, gaitType="tripod", walkMode="walking"):
         fullSequences = rippleSequence(ikSolver_poses, aliftSwing, hipSwings, stepCount, walkMode)
     else:
         fullSequences = tripodSequence(ikSolver_poses, aliftSwing, hipSwings, stepCount, walkMode)
-        [pre_sqs,post_sqs] = tripodSequenceAdvanced(ikSolver_poses, aliftSwing, hipSwings, stepCount, walkMode)
-
-        pprint.pprint("++++++fullSequences: ")
-        pprint.pprint(fullSequences)
-    return fullSequences
+        fullSequencesAdvanced = tripodSequenceAdvanced(ikSolver_poses, aliftSwing, hipSwings, stepCount, walkMode)
+        # todo here: append pre and post sqs
+        #pprint.pprint("++++++fullSequences: ")
+        #pprint.pprint(fullSequences)
+    return fullSequencesAdvanced
 
 
 def extract_walkseqs(walk_seq,index_seq): 
