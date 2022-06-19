@@ -228,6 +228,51 @@ def tripodBSequence(forwardAlphaSeqs,liftGammaSeqs,
     #print(forwardAlphaSeqs)   
     return current_poses 
 
+def tripodAPreSequence(tripodA,tripodB,pose):
+    tripodTmp = deepcopy(tripodA)                
+    tripodTmp.update(tripodB)
+    # extract first pose
+    first_pose = deepcopy(pose)
+
+    for id_key in first_pose:
+        first_pose[id_key]["coxia"] = tripodTmp[id_key]["coxia"][0]
+        first_pose[id_key]["femur"] = tripodTmp[id_key]["femur"][0]
+        first_pose[id_key]["tibia"] = tripodTmp[id_key]["tibia"][0]
+
+    # extract preA sequence
+    left_front_key = 2
+    left_front_sqs = tripodA[left_front_key] # extrace all moving seqs for left front leg
+    #pprint.pprint("+++++left_front_sqs:"+str(left_front_sqs))
+    coxia_sqs = left_front_sqs["coxia"]
+    femur_sqs = left_front_sqs["femur"]
+    tibia_sqs = left_front_sqs["tibia"]
+    len_coxia_sqs = len(coxia_sqs) 
+   
+    #Append this move sequence as an independant move poses
+    pre_coxia_sqs = coxia_sqs[0:int((len_coxia_sqs-1)/2)]
+    pre_femur_sqs = femur_sqs[0:int((len_coxia_sqs-1)/2)]
+    pre_tibia_sqs = tibia_sqs[0:int((len_coxia_sqs-1)/2)]
+    len_pre_sqs = len(pre_coxia_sqs)
+    preFullPoses = deepcopy(pose)
+
+    #Generating static posels
+    for legPositionsIndex in first_pose:
+
+        alpha =    first_pose[legPositionsIndex]['coxia']
+        beta =     first_pose[legPositionsIndex]['femur']
+        gamma =    first_pose[legPositionsIndex]['tibia']
+        leg_name = first_pose[legPositionsIndex]['name']
+
+        preFullPoses[legPositionsIndex]['coxia'] = [alpha]*len_pre_sqs
+        preFullPoses[legPositionsIndex]['femur'] = [beta]*len_pre_sqs
+        preFullPoses[legPositionsIndex]['tibia'] = [gamma]*len_pre_sqs
+
+    # Append pre seqs
+    preFullPoses[left_front_key]['coxia'] = pre_coxia_sqs
+    preFullPoses[left_front_key]['femur'] = pre_femur_sqs
+    preFullPoses[left_front_key]['tibia'] = pre_tibia_sqs
+
+    return preFullPoses
 
 # right front leg will move first.
 def tripodSequenceAdvanced(pose, aLiftSwing, hipSwings, stepCount, walkMode):
@@ -245,6 +290,84 @@ def tripodSequenceAdvanced(pose, aLiftSwing, hipSwings, stepCount, walkMode):
     
     tripodB = tripodBSequence(forwardAlphaSeqs,liftGammaSeqs,
                     liftBetaSeqs,doubleStepCount)    
+
+    preASqs = tripodAPreSequence(tripodA,tripodB,pose)
+
+
+    tripodTmp = deepcopy(tripodA)                
+    tripodTmp.update(tripodB)
+
+
+    # extract preB sequence
+    right_front_key = 1
+    right_front_sqs = tripodB[right_front_key] # extrace all moving seqs for left front leg
+    #pprint.pprint("+++++left_front_sqs:"+str(left_front_sqs))
+    coxia_sqs = right_front_sqs["coxia"]
+    femur_sqs = right_front_sqs["femur"]
+    tibia_sqs = right_front_sqs["tibia"]
+    len_coxia_sqs = len(coxia_sqs) 
+
+    # extract first pose for right leg
+    first_pose = deepcopy(pose)
+    for id_key in first_pose:
+        first_pose[id_key]["coxia"] = tripodTmp[id_key]["coxia"][int((len_coxia_sqs-1)/2)]
+        first_pose[id_key]["femur"] = tripodTmp[id_key]["femur"][int((len_coxia_sqs-1)/2)]
+        first_pose[id_key]["tibia"] = tripodTmp[id_key]["tibia"][int((len_coxia_sqs-1)/2)]
+
+    pprint.pprint("++++++right leg first_pose: ")
+    pprint.pprint(first_pose)
+
+    #Append this move sequence as an independant move poses
+    pprint.pprint("++++++right  len_coxia_sqs: ")
+    pprint.pprint( len_coxia_sqs)
+    pprint.pprint( coxia_sqs)
+    pre_coxia_sqs = coxia_sqs[int((len_coxia_sqs-1)/2):-1]
+    pre_femur_sqs = femur_sqs[int((len_coxia_sqs-1)/2):-1]
+    pre_tibia_sqs = tibia_sqs[int((len_coxia_sqs-1)/2):-1]
+    len_pre_sqs = len(pre_coxia_sqs)
+    preFullPoses = deepcopy(pose)
+   
+
+
+    #Generating static posels
+    for legPositionsIndex in first_pose:
+
+        alpha =    first_pose[legPositionsIndex]['coxia']
+        beta =     first_pose[legPositionsIndex]['femur']
+        gamma =    first_pose[legPositionsIndex]['tibia']
+        leg_name = first_pose[legPositionsIndex]['name']
+
+        preFullPoses[legPositionsIndex]['coxia'] = [alpha]*len_pre_sqs
+        preFullPoses[legPositionsIndex]['femur'] = [beta]*len_pre_sqs
+        preFullPoses[legPositionsIndex]['tibia'] = [gamma]*len_pre_sqs
+    # Append pre seqs
+    preFullPoses[right_front_key]['coxia'] = pre_coxia_sqs
+    preFullPoses[right_front_key]['femur'] = pre_femur_sqs
+    preFullPoses[right_front_key]['tibia'] = pre_tibia_sqs
+
+    pprint.pprint("++++++right leg preFullPoses: ")
+    pprint.pprint(preFullPoses)
+    return  preFullPoses
+
+
+
+# right front leg will move first.
+def tripodSequenceAdvanced_old(pose, aLiftSwing, hipSwings, stepCount, walkMode):
+    [forwardAlphaSeqs, liftBetaSeqs, liftGammaSeqs] = buildTripodSequences(
+                                                        pose, 
+                                                        aLiftSwing, 
+                                                        hipSwings, 
+                                                        stepCount, 
+                                                        walkMode)
+
+    doubleStepCount = stepCount * 2 
+
+    tripodA = tripodASequence(forwardAlphaSeqs,liftGammaSeqs,
+                    liftBetaSeqs,doubleStepCount)    
+    
+    tripodB = tripodBSequence(forwardAlphaSeqs,liftGammaSeqs,
+                    liftBetaSeqs,doubleStepCount)    
+
     tripodTmp = deepcopy(tripodA)                
     tripodTmp.update(tripodB)
     # extract first pose
@@ -287,10 +410,6 @@ def tripodSequenceAdvanced(pose, aLiftSwing, hipSwings, stepCount, walkMode):
     preFullPoses[left_front_key]['femur'] = pre_femur_sqs
     preFullPoses[left_front_key]['tibia'] = pre_tibia_sqs
 
-    #pprint.pprint("++++++ preFullPoses: " )
-    #pprint.pprint( preFullPoses)
-    #pprint.pprint("+++++tripodA:"+str(tripodA))
-    #pprint.pprint("+++++tripodB:"+str(tripodB))
    
     # Generating post poses
     postFullPoses = deepcopy(tripodTmp)
@@ -333,8 +452,8 @@ def tripodSequence(pose, aLiftSwing, hipSwings, stepCount, walkMode):
     tripodB = tripodBSequence(forwardAlphaSeqs,liftGammaSeqs,
                     liftBetaSeqs,doubleStepCount)                                                                          
 
-    pprint.pprint("+++++tripodA:"+str(tripodA))
-    pprint.pprint("+++++tripodB:"+str(tripodB))    
+    #pprint.pprint("+++++tripodA:"+str(tripodA))
+    #pprint.pprint("+++++tripodB:"+str(tripodB))    
     tripodA.update(tripodB)
     tripodFull = deepcopy(tripodA)
  
