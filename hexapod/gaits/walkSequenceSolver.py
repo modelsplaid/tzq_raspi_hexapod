@@ -389,9 +389,9 @@ def tripodSequenceAdvanced(pose, aLiftSwing, hipSwings, stepCount, walkMode):
     tripodRightSqs = tripodRightLegSeq(tripodA,tripodB,pose)
 
     for id_key in tripodLeftSqs:
-        tripodLeftSqs[id_key]["coxia"] = tripodLeftSqs[id_key]["coxia"]+tripodRightSqs[id_key]["coxia"]
-        tripodLeftSqs[id_key]["femur"] = tripodLeftSqs[id_key]["femur"]+tripodRightSqs[id_key]["femur"]
-        tripodLeftSqs[id_key]["tibia"] = tripodLeftSqs[id_key]["tibia"]+tripodRightSqs[id_key]["tibia"]
+        tripodLeftSqs[id_key]["coxia"] = tripodLeftSqs[id_key]["coxia"][0:-1]+tripodRightSqs[id_key]["coxia"]
+        tripodLeftSqs[id_key]["femur"] = tripodLeftSqs[id_key]["femur"][0:-1]+tripodRightSqs[id_key]["femur"]
+        tripodLeftSqs[id_key]["tibia"] = tripodLeftSqs[id_key]["tibia"][0:-1]+tripodRightSqs[id_key]["tibia"]
 
     return  tripodLeftSqs
 
@@ -690,7 +690,7 @@ def getWalkSequence(dimensions, params, gaitType="tripod", walkMode="walking"):
         # todo here: append pre and post sqs
         #pprint.pprint("++++++fullSequences: ")
         #pprint.pprint(fullSequences)
-    return fullSequences#Advanced
+    return fullSequencesAdvanced
 
 
 def extract_walkseqs(walk_seq,index_seq): 
