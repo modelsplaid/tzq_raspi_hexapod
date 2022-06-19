@@ -340,6 +340,14 @@ def tripodSequenceAdvanced(pose, aLiftSwing, hipSwings, stepCount, walkMode):
         preFullPoses[legPositionsIndex]['coxia'] = [alpha]*len_pre_sqs
         preFullPoses[legPositionsIndex]['femur'] = [beta]*len_pre_sqs
         preFullPoses[legPositionsIndex]['tibia'] = [gamma]*len_pre_sqs
+
+    # Generating post poses
+    tripodRightSqs = deepcopy(tripodTmp)
+    for i in range(len_pre_sqs):
+        tripodRightSqs[right_front_key]['coxia'][i+int((len_coxia_sqs-1)/2)] = pre_coxia_sqs[-1]
+        tripodRightSqs[right_front_key]['femur'][i+int((len_coxia_sqs-1)/2)] = pre_femur_sqs[-1]
+        tripodRightSqs[right_front_key]['tibia'][i+int((len_coxia_sqs-1)/2)] = pre_tibia_sqs[-1]
+    
     # Append pre seqs
     preFullPoses[right_front_key]['coxia'] = pre_coxia_sqs
     preFullPoses[right_front_key]['femur'] = pre_femur_sqs
@@ -347,7 +355,16 @@ def tripodSequenceAdvanced(pose, aLiftSwing, hipSwings, stepCount, walkMode):
 
     pprint.pprint("++++++right leg preFullPoses: ")
     pprint.pprint(preFullPoses)
-    return  preFullPoses
+    pprint.pprint("++++++right leg tripodRightSqs[id_key][coxia][int((len_coxia_sqs-1)/2):-1]: ")
+    pprint.pprint(tripodRightSqs[right_front_key]["coxia"][int((len_coxia_sqs-1)/2):-1])
+    # extract first pose for right leg
+
+    for id_key in tripodRightSqs:
+        tripodRightSqs[id_key]["coxia"] = preFullPoses[id_key]["coxia"] + tripodRightSqs[id_key]["coxia"][int((len_coxia_sqs-1)/2)+1:-1]
+        tripodRightSqs[id_key]["femur"] = preFullPoses[id_key]["femur"] + tripodRightSqs[id_key]["femur"][int((len_coxia_sqs-1)/2)+1:-1]
+        tripodRightSqs[id_key]["tibia"] = preFullPoses[id_key]["tibia"] + tripodRightSqs[id_key]["tibia"][int((len_coxia_sqs-1)/2)+1:-1]
+
+    return  tripodRightSqs
 
 
 
