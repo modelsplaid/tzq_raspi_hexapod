@@ -690,7 +690,7 @@ def getWalkSequence(dimensions, params, gaitType="tripod", walkMode="walking"):
         # todo here: append pre and post sqs
         #pprint.pprint("++++++fullSequences: ")
         #pprint.pprint(fullSequences)
-    return fullSequencesAdvanced
+    return fullSequences
 
 
 def extract_walkseqs(walk_seq,index_seq): 
